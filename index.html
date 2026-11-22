@@ -255,6 +255,7 @@ button.tilem:hover{border-color:var(--leaf)}
 
 /* ---------- control room ---------- */
 .cr{display:grid;grid-template-columns:210px 1fr;gap:20px;align-items:start}
+.cr>*{min-width:0}
 .crnav{position:sticky;top:64px;display:flex;flex-direction:column;gap:2px}
 .crnav button{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 12px;font-weight:700;font-size:14.5px;cursor:pointer;color:var(--ink);min-height:42px}
 .crnav button:hover{background:#e6eae3}
@@ -373,7 +374,8 @@ details summary{cursor:pointer}
 
 /* scan walkthrough */
 .scandemo{display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:center;margin-top:10px}
-@media (max-width:640px){.scandemo{grid-template-columns:1fr;justify-items:center}}
+.sd-mob{display:none;margin:0;max-width:340px;text-align:center}
+@media (max-width:640px){.scandemo{grid-template-columns:1fr;justify-items:center;gap:12px}.sd-mob{display:block;font-size:14px;color:var(--muted)}.sd-steps{width:100%;gap:4px}.sd-steps button{padding:8px 10px}.sd-steps li .d{display:none}.sd-steps li.on button{border-width:2px}}
 .phone{position:relative;width:240px;height:440px;border-radius:36px;background:var(--casing);padding:12px;box-shadow:0 18px 40px rgba(20,73,47,.25)}
 .phone .notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:84px;height:18px;border-radius:0 0 12px 12px;background:var(--casing);z-index:2}
 .phone .screen{width:100%;height:100%;border-radius:26px;overflow:hidden;background:#fff;position:relative;animation:sdin .45s ease-out}
@@ -3985,13 +3987,14 @@ function viewPayouts(app){
    ${tile({l:S.user.role==="dealer"?"Tagging fee":"Delivery-and-record allowance",v:inr(allowance),c:`₹${ALLOWANCE} for each battery you tagged that reached the yard`})}
    ${tile({l:"Comes off next payout",v:inr(pend),tone:pend?"amber":"",c:pend?"Weight gap at a recycler gate":"No deductions waiting"})}</div>
   ${pays.length?`<h2>Latest payment</h2>${payoutSlip(pays[0])}`:""}
-  <h2>Ledger</h2>
+  <h2>Ledger</h2><p class="small muted" style="margin:-4px 0 8px">Every line opens that battery's custody trail.</p>
   <div class="tablewrap rt"><table><thead><tr><th>Date</th><th>Battery</th><th class="num">kg</th><th class="num">Gross</th><th class="num">Deducted</th><th class="num">Paid</th><th>UPI ref</th><th>Status</th></tr></thead><tbody>
   ${rows.map(p=>p.kind==="deduction"
-    ?`<tr><td class="lead">${fmtDs(p.at)} · deduction ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Gap" class="num">${kg1(p.kgGap)}</td><td data-l="Gross"></td><td data-l="Amount" class="num">− ${inr(p.amount)}</td><td data-l="Paid"></td><td data-l="Why" class="wrap">${esc(p.reason)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`
-    :`<tr><td class="lead">${fmtDs(p.at)} · ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="kg" class="num">${kg1(p.kg)}</td><td data-l="Gross" class="num">${inr(p.gross)}</td><td data-l="Deducted" class="num">${(p.deductions||[]).length?"− "+inr(p.gross-p.net):""}</td><td data-l="Paid" class="num"><b>${inr(p.net)}</b></td><td data-l="UPI ref">${esc(p.upiRef)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="8">${S.user.role==="dealer"?emptyHTML("₹","Tagging fee only","Dealers aren't paid for batteries: the partner scrap vendor who collects them is. You earn the ₹10 tagging fee above."):emptyHTML("₹","No payouts yet","You're paid when a battery you logged is weighed in at the yard.")}</td></tr>`}
+    ?`<tr class="click" data-open="${esc(p.batteryId)}"><td class="lead">${fmtDs(p.at)} · deduction ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Gap" class="num">${kg1(p.kgGap)}</td><td data-l="Gross"></td><td data-l="Amount" class="num">− ${inr(p.amount)}</td><td data-l="Paid"></td><td data-l="Why" class="wrap">${esc(p.reason)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`
+    :`<tr class="click" data-open="${esc(p.batteryId)}"><td class="lead">${fmtDs(p.at)} · ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="kg" class="num">${kg1(p.kg)}</td><td data-l="Gross" class="num">${inr(p.gross)}</td><td data-l="Deducted" class="num">${(p.deductions||[]).length?"− "+inr(p.gross-p.net):""}</td><td data-l="Paid" class="num"><b>${inr(p.net)}</b></td><td data-l="UPI ref">${esc(p.upiRef)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="8">${S.user.role==="dealer"?emptyHTML("₹","Tagging fee only","Dealers aren't paid for batteries: the partner scrap vendor who collects them is. You earn the ₹10 tagging fee above."):emptyHTML("₹","No payouts yet","You're paid when a battery you logged is weighed in at the yard.")}</td></tr>`}
   </tbody></table></div>`;
   $("#back").onclick=()=>go("home");
+  app.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{ S.id=el.dataset.open; go("timeline"); });
 }
 
 /* ----- yard: dispatch a truckload ----- */
@@ -4378,7 +4381,7 @@ function crAlerts(AL,M){
    ${tile({l:"Oldest battery at a yard",v:oldest,u:"days",tone:oldest>TARGET_DAYS?"amber":"",bar:{v:oldest,max:Math.max(30,oldest),t:TARGET_DAYS,col:oldest>TARGET_DAYS?"var(--saffron)":"var(--leaf)"},c:`Target ${TARGET_DAYS} d, limit ${STORAGE_LIMIT_DAYS} d · ${inC.length} in custody`})}
    ${tile({l:"Cash out with recyclers",v:inr(M.outstanding),go:"money",tone:M.overdue?"bad":"",c:M.overdue?`${inr(M.overdue)} overdue`:"Nothing overdue"})}
    ${tile({l:"kg to recyclers this month",v:Math.round(kgM).toLocaleString("en-IN"),u:"kg",bar:{v:kgM,max:Math.max(kgM,kgP,1),t:kgP},c:`Tick marks last month: ${Math.round(kgP).toLocaleString("en-IN")} kg`})}</div>
-  <h2>Needs action (${open.length})</h2>${open.map(row).join("")||`<div class="banner ok">No open alerts.</div>`}
+  <h2>Needs action (${open.length})</h2>${open.map(row).join("")||emptyHTML("✓","Nothing needs action","Weight flags, batteries over 10 or 90 days, missing scans and overdue repayments land here, each with an owner and a next step.")}
   ${done.length?`<details style="margin-top:10px"><summary class="small muted">Reviewed (${done.length})</summary>${done.map(row).join("")}</details>`:""}`;
 }
 function crBatteries(){
@@ -4414,11 +4417,11 @@ function crMoney(M){
    <div class="sheet" style="margin:0"><h3>Deductions from partners</h3>${M.deductions.length?M.deductions.map(d=>`<div class="row" style="justify-content:space-between;margin:8px 0;gap:8px"><span><b>${esc(d.id)}</b> ${esc(d.vendorId)}, ${esc(d.batteryId)}<div class="small muted">${esc(d.reason)}</div></span><span style="text-align:right"><b>${inr(d.amount)}</b><br>${payStatusMark(d)}</span></div>`).join(""):`<p class="small muted">None. A gate weight more than ±${thr()}% under the yard weight raises one.</p>`}</div></div>
   <h2>Settlement statements</h2>
   <div class="tablewrap rt"><table><thead><tr><th>Statement</th><th>Recycler</th><th>Truckload</th><th class="num">Partner payments</th><th class="num">Fee</th><th class="num">Total</th><th>Status</th></tr></thead><tbody>
-   ${sts.map(s=>`<tr class="click" data-settle="${esc(s.id)}"><td class="lead">${esc(s.id)}</td><td data-l="Recycler">${esc(s.recyclerId)}</td><td data-l="Truckload">${esc(s.manifestNo)}</td><td data-l="Partner payments" class="num">${inr(s.vendorPayments)}</td><td data-l="Fee" class="num">${inr2(s.fee)}</td><td data-l="Total" class="num"><b>${inr2(s.total)}</b></td><td data-l="Status">${settleMark(s)}</td></tr>`).join("")}
+   ${sts.map(s=>`<tr class="click" data-settle="${esc(s.id)}"><td class="lead">${esc(s.id)}</td><td data-l="Recycler">${esc(s.recyclerId)}</td><td data-l="Truckload">${esc(s.manifestNo)}</td><td data-l="Partner payments" class="num">${inr(s.vendorPayments)}</td><td data-l="Fee" class="num">${inr2(s.fee)}</td><td data-l="Total" class="num"><b>${inr2(s.total)}</b></td><td data-l="Status">${settleMark(s)}</td></tr>`).join("")||`<tr><td colspan="7">${emptyHTML("▤","No settlements yet","A statement is issued when every battery on a truckload has been gate-checked.")}</td></tr>`}
   </tbody></table></div>
   <h2>Partner payout ledger</h2>
   <div class="tablewrap rt"><table><thead><tr><th>Payout</th><th>Date</th><th>Partner</th><th>Battery</th><th>Yard</th><th class="num">kg</th><th class="num">Paid</th><th>UPI ref</th><th>Status</th></tr></thead><tbody>
-   ${pays.map(p=>`<tr><td class="lead">${esc(p.id)}</td><td data-l="Date">${fmtDs(p.at)}</td><td data-l="Partner">${esc(p.vendorId)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Yard">${esc(p.yardId||"")}</td><td data-l="kg" class="num">${p.kind==="payout"?kg1(p.kg):kg1(p.kgGap)}</td><td data-l="Paid" class="num">${p.kind==="payout"?inr(p.net):"− "+inr(p.amount)}</td><td data-l="UPI ref">${esc(p.upiRef||"")}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")}
+   ${pays.map(p=>`<tr><td class="lead">${esc(p.id)}</td><td data-l="Date">${fmtDs(p.at)}</td><td data-l="Partner">${esc(p.vendorId)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Yard">${esc(p.yardId||"")}</td><td data-l="kg" class="num">${p.kind==="payout"?kg1(p.kg):kg1(p.kgGap)}</td><td data-l="Paid" class="num">${p.kind==="payout"?inr(p.net):"− "+inr(p.amount)}</td><td data-l="UPI ref">${esc(p.upiRef||"")}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="9">${emptyHTML("₹","No partner payouts yet","Partners are paid at the yard weigh-in. Deductions for gate weight gaps appear here too.")}</td></tr>`}
   </tbody></table></div>`;
 }
 function crPartners(){
@@ -4481,7 +4484,7 @@ function crAudit(){
    <div class="small muted" style="margin-top:6px">Weight corrections re-run the ±${thr()}% checks for that record.</div></div>
   <h2>Audit log</h2>
   <div class="tablewrap rt"><table><thead><tr><th>When</th><th>Who</th><th>Action</th><th>Record</th><th>Detail</th><th>Before → after</th><th>Reason</th></tr></thead><tbody>
-  ${L.map(a=>`<tr><td class="lead">${fmtDT(a.at)}</td><td data-l="Who">${esc(a.by)}</td><td data-l="Action">${esc(a.action)}</td><td data-l="Record">${esc(a.target)}</td><td data-l="Detail" class="wrap">${esc(a.detail)}</td><td data-l="Before → after">${a.before!=null||a.after!=null?esc((a.before??"")+" → "+(a.after??"")):""}</td><td data-l="Reason" class="wrap">${esc(a.reason||"")}</td></tr>`).join("")||`<tr><td colspan="7" class="muted">Nothing logged yet.</td></tr>`}
+  ${L.map(a=>`<tr><td class="lead">${fmtDT(a.at)}</td><td data-l="Who">${esc(a.by)}</td><td data-l="Action">${esc(a.action)}</td><td data-l="Record">${esc(a.target)}</td><td data-l="Detail" class="wrap">${esc(a.detail)}</td><td data-l="Before → after">${a.before!=null||a.after!=null?esc((a.before??"")+" → "+(a.after??"")):""}</td><td data-l="Reason" class="wrap">${esc(a.reason||"")}</td></tr>`).join("")||`<tr><td colspan="7">${emptyHTML("✎","Nothing logged yet","Every scan, payment, correction and alert review writes a line here.")}</td></tr>`}
   </tbody></table></div>`;
 }
 function crSettings(){
@@ -4712,6 +4715,7 @@ function viewScanDemo(app){
   <p class="sub">The QR sticker is the whole interface for people in the field. Here is what one scan does.</p>
   <div class="scandemo">
     <div class="phone" aria-live="polite"><div class="notch"></div><div class="screen" key="${SD.i}">${scanPhone(SD.i,fresh)}</div></div>
+    <p class="sd-mob small"><b>Step ${SD.i+1} of ${SCAN_STEPS.length}</b> ${esc(st.d)}</p>
     <div class="sd-side">
       <ol class="sd-steps">${SCAN_STEPS.map((s,k)=>`<li class="${k===SD.i?"on":k<SD.i?"done":""}"><button data-sd="${k}"><span class="n">${k+1}</span><span><b>${esc(s.t)}</b>${k===SD.i?`<span class="d">${esc(s.d)}</span>`:""}</span></button></li>`).join("")}</ol>
       <div class="row" style="gap:8px;margin-top:6px"><button class="btn small sec" id="sdPause" style="margin:0">${SD.paused?"▶ Play":"❚❚ Pause"}</button><button class="btn small sec" id="sdNext" style="margin:0">Next ›</button></div>
