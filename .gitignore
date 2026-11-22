@@ -1,0 +1,7 @@
+tests/node_modules/
+tests/test.html
+tests/shots/
+__pycache__/
+*.pyc
+.vercel
+LeadLoop_demo_QR_sheet.pdf

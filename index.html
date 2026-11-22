@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LeadLoop Checkpoint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Figtree:wght@400;500;600;700;800&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<style>
+:root{
+  --forest:#14492f; --leaf:#1f7a4d; --leafSoft:#e2efe6; --saffron:#e0962a; --saffronSoft:#fbecd2; --saffronInk:#7a4600;
+  --hivis:#d8f04a; --casing:#2b3236; --casing2:#3a4348; --paper:#f1f3ee; --card:#ffffff; --ink:#1b2420; --muted:#5b665f; --line:#d9dfd8;
+  --red:#b3261e; --redSoft:#fbe4e1; --blue:#245a8f; --blueSoft:#e4edf7;
+  --slab:"Zilla Slab",Georgia,serif; --sans:"Figtree","Hind",system-ui,sans-serif;
+  --r-panel:22px; --r-sheet:14px; --r-slip:6px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45}
+body.demo-on,body.tour-on{padding-bottom:160px}
+.tourbar .prog i{position:relative;overflow:hidden}
+.tourbar .prog b{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--hivis);animation:tfill linear forwards}
+@keyframes tfill{to{width:100%}}
+.tourbar .go{min-width:120px}
+:lang(hi), .hi{font-family:"Hind",var(--sans)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px 48px}
+.wide .wrap{max-width:1200px}
+.mid .wrap{max-width:880px}
+.mid header.top .in{max-width:880px}
+.num,td.num,th.num{font-variant-numeric:tabular-nums}
+
+/* ---------- header ---------- */
+header.top{position:sticky;top:0;z-index:15;background:var(--forest);color:#fff}
+header.top .in{max-width:560px;margin:0 auto;padding:8px 12px 8px 16px;display:flex;align-items:center;gap:8px}
+.wide header.top .in{max-width:1200px}
+.logo{font-family:var(--slab);font-weight:700;font-size:21px;display:flex;align-items:center;gap:7px;background:none;border:0;color:#fff;cursor:pointer;padding:4px 0}
+.hd-actions{margin-left:auto;display:flex;align-items:center;gap:6px}
+.hbtn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:5px 11px;font-size:13px;font-weight:700;cursor:pointer;min-height:34px;white-space:nowrap}
+.hbtn svg{width:20px;height:20px}
+.hbtn.solid{background:var(--hivis);color:var(--casing);border-color:var(--hivis)}
+.hbtn.on{background:rgba(255,255,255,.14)}
+.hbtn .lbs{display:none}
+@media (max-width:560px){.hbtn .lbl{display:none}.hbtn .lbs{display:inline}.hbtn{padding:5px 9px}}
+
+/* role switcher sheet */
+.switch h2{margin:0 0 2px}
+.chain{display:grid;gap:12px;margin-top:10px}
+.stage{display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:start}
+.stage .sn{font-family:var(--slab);font-weight:600;color:var(--forest);font-size:15px;padding-top:9px;line-height:1.15}
+.stage .sn small{display:block;font-family:var(--sans);font-weight:600;color:var(--muted);font-size:11.5px}
+.who-row{display:flex;flex-wrap:wrap;gap:8px}
+.whob{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:6px 12px 6px 6px;cursor:pointer;min-height:48px;text-align:left}
+.whob svg{width:32px;height:32px;flex:none}
+.whob b{display:block;font-size:14.5px;line-height:1.1}
+.whob span span{display:block;font-size:11.5px;color:var(--muted);line-height:1.2}
+.whob.cur{border-color:var(--forest);box-shadow:inset 0 0 0 1.5px var(--forest)}
+.whob:hover{border-color:var(--leaf)}
+
+/* ---------- type ---------- */
+h1{font-family:var(--slab);font-weight:700;font-size:28px;line-height:1.1;margin:18px 0 6px;letter-spacing:-.2px}
+h2{font-family:var(--slab);font-weight:600;font-size:20px;margin:22px 0 10px;line-height:1.2}
+h3{font-size:15px;margin:0 0 6px}
+p.sub{color:var(--muted);margin:0 0 14px;font-size:15px;max-width:60ch}
+.muted{color:var(--muted)} .small{font-size:13px}
+.hidden{display:none!important}
+
+/* ---------- three surfaces: sheet (records), slip (money/manifests), panel (live scans) ---------- */
+.sheet{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sheet);padding:16px;margin:12px 0}
+.sheet.tight{padding:12px 14px}
+.sheet.accent{border:2px solid var(--forest)}
+.slip{position:relative;background:#fffdf7;border:1px solid #e6dcc6;border-left:5px solid var(--saffron);border-radius:var(--r-slip);padding:14px 16px;margin:12px 0;
+  background-image:radial-gradient(circle at 0 0,transparent 0,transparent 0)}
+.slip:after{content:"";position:absolute;left:10px;right:10px;bottom:-1px;height:6px;background:radial-gradient(circle at 5px 6px,var(--paper) 3.2px,transparent 3.6px) 0 0/12px 6px repeat-x}
+.slip .sh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.slip .ref{font-family:var(--slab);font-weight:700;font-size:19px;letter-spacing:.3px}
+.slip .amt{font-family:var(--slab);font-weight:700;font-size:26px;line-height:1}
+.slip dl{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;margin:10px 0 0;font-size:14px}
+.slip dt{color:var(--muted)} .slip dd{margin:0;font-weight:600}
+.slip .tot{border-top:1.5px dashed #d8ccb0;margin-top:10px;padding-top:8px;display:flex;justify-content:space-between;font-weight:800}
+.panel{background:var(--casing);color:#fff;border-radius:var(--r-panel);padding:16px;margin:12px 0}
+
+/* ---------- buttons & inputs ---------- */
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:14px;border:0;background:var(--forest);color:#fff;font-weight:700;font-size:17px;cursor:pointer;padding:10px 16px;margin:8px 0;text-align:center;transition:transform .08s}
+.btn:active{transform:scale(.985)}
+.btn.sec{background:#fff;color:var(--forest);border:2px solid var(--forest)}
+.btn.ghost{background:transparent;color:var(--muted);border:1.5px dashed var(--line);font-weight:600;font-size:15px;min-height:46px}
+.btn.hv{background:var(--hivis);color:var(--casing)}
+.btn.small{min-height:40px;font-size:14px;width:auto;display:inline-flex;margin:4px 6px 4px 0;padding:8px 14px;border-radius:10px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.link{background:none;border:0;color:var(--forest);font-weight:700;cursor:pointer;padding:10px 0;display:inline-flex;align-items:center;gap:6px;font-size:15px}
+label.f{display:block;font-weight:700;margin:20px 0 8px;font-size:15px}
+label.f .opt{font-weight:500;color:var(--muted);font-size:13px}
+input.t,select.t,textarea.t{width:100%;min-height:54px;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;background:#fff;font-size:18px}
+textarea.t{min-height:80px;font-size:15px}
+input.t:focus,select.t:focus,textarea.t:focus{outline:none;border-color:var(--leaf);box-shadow:0 0 0 3px var(--leafSoft)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{flex:1 1 auto;min-height:52px;min-width:28%;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;cursor:pointer;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+.chip svg{width:26px;height:26px;flex:none}
+.chip.tile{flex-direction:column;gap:4px;min-height:82px;min-width:30%;font-size:14px}
+.chip.tile svg{width:40px;height:30px}
+.chip.n{min-width:56px;flex:0 1 auto;font-size:18px}
+.chip.on{background:var(--forest);border-color:var(--forest);color:#fff}
+.chip.on.warn{background:var(--red);border-color:var(--red)}
+.row{display:flex;gap:10px;align-items:center}
+.wrapr{flex-wrap:wrap}
+.banner{border-radius:12px;padding:12px 14px;margin:10px 0;font-size:15px}
+.banner.err{background:var(--redSoft);color:var(--red)}
+.banner.warn{background:var(--saffronSoft);color:#6e4200}
+.banner.ok{background:var(--leafSoft);color:var(--forest)}
+.banner.info{background:var(--blueSoft);color:var(--blue)}
+
+/* ---------- status marks: scan pips, flags, custody clock ---------- */
+.st{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;white-space:nowrap;color:var(--ink)}
+.pips{display:inline-flex;gap:2px}
+.pips i{width:9px;height:9px;border-radius:2px;border:1.5px solid currentColor;display:block}
+.pips i.f{background:currentColor}
+.st-unused{color:#5b665f} .st-picked_up{color:#9a5a00} .st-at_yard{color:var(--blue)} .st-closed{color:var(--forest)}
+.st .t{color:var(--ink)}
+.mk{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;white-space:nowrap;border-radius:6px;padding:2px 8px 2px 5px}
+.mk svg{width:14px;height:14px;flex:none}
+.mk.flag{background:var(--redSoft);color:var(--red)}
+.mk.warn{background:var(--saffronSoft);color:var(--saffronInk)}
+.mk.ok{background:var(--leafSoft);color:var(--forest)}
+.mk.info{background:var(--blueSoft);color:var(--blue)}
+.mk.neutral{background:#eceee9;color:#4f5a54}
+.clock{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.clock .bar{position:relative;width:46px;height:6px;border-radius:3px;background:#e3e7e1;overflow:hidden}
+.clock .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.clock .bar b{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--casing);left:11%}
+
+/* sticker id */
+.sticker{white-space:nowrap;display:inline-flex;align-items:center;gap:8px;background:var(--hivis);color:var(--casing);border-radius:8px;padding:5px 12px 5px 8px;font-family:var(--slab);font-weight:700;font-size:24px;letter-spacing:.5px;box-shadow:inset 0 0 0 2px rgba(43,50,54,.15)}
+.sticker svg{width:22px;height:22px}
+.sticker.sm{font-size:15px;padding:2px 8px 2px 5px;border-radius:6px}
+.sticker.sm svg{width:14px;height:14px}
+
+/* ---------- metric tiles with context ---------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.tilem{background:#fff;border:1px solid var(--line);border-radius:var(--r-sheet);padding:12px 14px;text-align:left;display:flex;flex-direction:column;gap:4px;min-height:108px}
+button.tilem{cursor:pointer;font:inherit;color:inherit}
+button.tilem:hover{border-color:var(--leaf)}
+.tilem .l{font-size:13px;color:var(--muted);font-weight:600}
+.tilem .v{font-family:var(--slab);font-size:30px;font-weight:700;line-height:1}
+.tilem .v small{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--muted);margin-left:4px}
+.tilem .c{font-size:12.5px;color:var(--muted);margin-top:auto}
+.tilem.bad .v{color:var(--red)} .tilem.amber .v{color:var(--saffronInk)}
+.bullet{position:relative;height:8px;border-radius:4px;background:#e9ece6;margin-top:6px;overflow:hidden}
+.bullet i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--leaf)}
+.bullet b{position:absolute;top:0;bottom:0;width:2px;background:var(--casing)}
+@media (max-width:560px){.tiles{grid-template-columns:1fr 1fr}.tilem .v{font-size:26px}}
+
+/* ---------- hero / login ---------- */
+.hero{background:var(--forest);color:#fff;border-radius:20px;overflow:hidden;margin:14px 0 18px}
+.hero .txt{padding:18px 18px 4px}
+.hero h1{margin:0 0 6px;color:#fff;font-size:30px}
+.hero p{margin:0;color:#cfe3d6;font-size:15px;max-width:44ch}
+.hero svg.scene{display:block;width:100%;height:auto}
+.fresh{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+
+/* scan button */
+.scanbtn{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;min-height:200px;border:0;border-radius:var(--r-panel);background:var(--casing);color:#fff;cursor:pointer;margin:10px 0 6px;overflow:hidden;font-weight:700;font-size:20px}
+.scanbtn .vf{position:relative;width:110px;height:110px}
+.scanbtn .vf svg{width:110px;height:110px}
+.scanbtn .vf:after{content:"";position:absolute;left:10px;right:10px;top:12px;height:3px;border-radius:3px;background:var(--hivis);box-shadow:0 0 12px var(--hivis);animation:sweep 2.2s ease-in-out infinite}
+@keyframes sweep{0%,100%{transform:translateY(0)}50%{transform:translateY(84px)}}
+.scanbtn small{font-weight:500;font-size:13px;color:#c8d0cc}
+.scanbtn.busy .vf:after{animation-duration:.7s}
+.rolehead{display:flex;align-items:center;gap:14px;margin:16px 0 4px}
+.rolehead .ri{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.rolehead .ri svg{width:38px;height:38px}
+.rolehead h1{margin:0}
+.rolehead .who2{font-size:13px;color:var(--muted);font-weight:600}
+
+/* list rows */
+.lrow{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;cursor:pointer;width:100%;text-align:left;font:inherit;color:inherit}
+.lrow:hover{border-color:var(--leaf)}
+.lrow .meta{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.lrow .sub2{font-size:12.5px;color:var(--muted)}
+
+/* form header */
+.formhead{display:flex;align-items:center;gap:12px;margin-top:12px}
+.ring{position:relative;width:62px;height:62px;flex:none}
+.ring svg{width:62px;height:62px;transform:rotate(-90deg)}
+.ring .n{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:800;font-size:16px;line-height:1}
+.ring .n small{font-size:10px;font-weight:600;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:14px;margin-top:6px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:600}
+.lang{display:flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+.lang button{border:0;background:transparent;padding:7px 14px;cursor:pointer;font-weight:700;font-size:14px}
+.lang button.on{background:var(--forest);color:#fff}
+.weigh{display:grid;grid-template-columns:1fr 150px;gap:12px;align-items:center}
+.dial svg{width:150px;height:auto;display:block}
+.dial .needle{transition:transform .5s cubic-bezier(.3,1.4,.5,1);transform-origin:75px 78px}
+.photo-box{border:2px dashed #b9c4bc;border-radius:16px;min-height:120px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;cursor:pointer;background:#fafbf8;padding:12px;text-align:center;width:100%;font-weight:600}
+.photo-box.sm{min-height:84px}
+.photo-box svg{width:44px;height:44px}
+.photo-box img{max-width:100%;max-height:230px;border-radius:10px}
+.money-in{position:relative}
+.money-in span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:700;color:var(--muted);font-size:18px}
+.money-in input{padding-left:32px}
+
+/* done */
+.donescreen{text-align:center;padding-top:24px}
+.donescreen .big{width:150px;height:150px;margin:0 auto}
+.donescreen .big svg{width:150px;height:150px}
+.donescreen .big .chk{stroke-dasharray:60;stroke-dashoffset:60;animation:draw .5s .25s ease-out forwards}
+.donescreen .big .arc{animation:grow .8s ease-out}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes grow{from{stroke-dashoffset:302}}
+
+/* custody track */
+.track{background:var(--forest);color:#fff;border-radius:var(--r-panel);padding:16px 12px 14px;margin:12px 0}
+.track .head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:0 4px 10px}
+.track .st,.track .st .t{color:#fff}
+.trk{display:grid;grid-template-columns:1fr 1fr 1fr;position:relative}
+.trk .road{position:absolute;left:16.6%;right:16.6%;top:27px;height:6px;border-radius:6px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.28) 0 10px,transparent 10px 18px)}
+.trk .road i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:var(--hivis);transition:width .8s ease}
+.trk .seg{position:absolute;top:36px;font-size:11.5px;font-weight:700;transform:translateX(-50%);background:rgba(0,0,0,.25);padding:1px 7px;border-radius:999px;white-space:nowrap}
+.trk .seg.bad{background:var(--red)}
+.node{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px}
+.node .dot{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#24583c;border:3px solid rgba(255,255,255,.25)}
+.node .dot svg{width:34px;height:34px}
+.node.done .dot{background:#fff;border-color:var(--hivis)}
+.node.now .dot{background:var(--saffron);border-color:#fff;animation:pulse 1.8s ease-out infinite}
+.node.flag .dot{border-color:#ff8a80}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,150,42,.6)}100%{box-shadow:0 0 0 14px rgba(224,150,42,0)}}
+.node .nm{font-size:12.5px;font-weight:700;margin-top:12px}
+.node .w{font-family:var(--slab);font-size:19px;font-weight:700;line-height:1}
+.node .w.pending{color:rgba(255,255,255,.45);font-size:14px;font-family:var(--sans)}
+.track .truckline{margin:12px 4px 0;font-size:12.5px;color:#cfe3d6;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+
+/* timeline */
+.tl{position:relative;margin:6px 0 0 12px;padding-left:26px;border-left:3px dotted #b9c4bc}
+.tl .ev{position:relative;margin:0 0 16px}
+.tl .ev .pin{position:absolute;left:-46px;top:10px;width:36px;height:36px;border-radius:50%;background:#fff;border:2px solid var(--line);display:flex;align-items:center;justify-content:center}
+.tl .ev .pin svg{width:22px;height:22px}
+.tl .ev.flag .pin{border-color:var(--red);background:var(--redSoft)}
+.tl .ev .sheet{margin:0}
+.tl img.ph{width:100%;max-width:320px;border-radius:12px;margin-top:10px;display:block;border:1px solid var(--line)}
+.noph{margin-top:10px;font-size:12px;color:var(--muted);border:1px dashed var(--line);border-radius:10px;padding:10px;max-width:320px;display:flex;gap:10px;align-items:center}
+.noph svg{width:34px;height:26px;flex:none;opacity:.6}
+
+/* ---------- control room ---------- */
+.cr{display:grid;grid-template-columns:210px 1fr;gap:20px;align-items:start}
+.crnav{position:sticky;top:64px;display:flex;flex-direction:column;gap:2px}
+.crnav button{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;border:0;background:transparent;border-radius:10px;padding:10px 12px;font-weight:700;font-size:14.5px;cursor:pointer;color:var(--ink);min-height:42px}
+.crnav button:hover{background:#e6eae3}
+.crnav button.on{background:var(--forest);color:#fff}
+.crnav .cnt{font-size:12px;border-radius:999px;padding:1px 8px;background:var(--redSoft);color:var(--red)}
+.crnav button.on .cnt{background:#fff}
+.crnav hr{border:0;border-top:1px solid var(--line);margin:8px 4px}
+@media (max-width:860px){
+  .cr{grid-template-columns:1fr;gap:6px}
+  .crnav{position:sticky;top:50px;z-index:6;flex-direction:row;overflow-x:auto;background:var(--paper);padding:8px 0;margin:0 -16px;padding-left:16px;scrollbar-width:none}
+  .crnav::-webkit-scrollbar{display:none}
+  .crnav button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;min-height:38px}
+  .crnav hr{display:none}
+}
+.crhead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.crhead h1{margin:6px 0 0}
+.alert{display:grid;grid-template-columns:6px 1fr auto;gap:12px;align-items:stretch;background:#fff;border:1px solid var(--line);border-radius:12px;margin:8px 0;overflow:hidden}
+.alert .sev{background:var(--red)}
+.alert.amber .sev{background:var(--saffron)} .alert.info .sev{background:var(--blue)}
+.alert .bd{padding:10px 0}
+.alert .bd b{display:block;font-size:15px}
+.alert .bd .why{font-size:13.5px;color:var(--muted);margin-top:2px}
+.alert .bd .meta{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;margin-top:6px;color:var(--ink)}
+.alert .bd .meta span{display:inline-flex;gap:4px}
+.alert .bd .meta em{font-style:normal;color:var(--muted)}
+.alert .act{display:flex;flex-direction:column;justify-content:center;gap:6px;padding:10px 12px 10px 0}
+@media (max-width:560px){.alert{grid-template-columns:6px 1fr}.alert .act{grid-column:2;flex-direction:row;padding:0 0 10px}}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.filters label{font-size:12.5px;color:var(--muted);font-weight:700}
+td .sel{min-width:170px}
+.filters select,.filters input,.sel{width:100%;min-height:40px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff;font-size:14px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:var(--r-sheet);background:#fff}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;vertical-align:middle}
+th{background:#f6f8f4;position:sticky;top:0;font-size:12.5px;color:var(--muted);font-weight:700}
+td.num,th.num{text-align:right}
+td.wrap{white-space:normal;min-width:180px}
+tr.click{cursor:pointer} tr.click:hover td{background:#f4f9f5}
+tfoot td{font-weight:800;background:#f6f8f4}
+@media (max-width:720px){
+  .rt{border:0;background:transparent;overflow:visible}
+  .rt table,.rt tbody,.rt tr,.rt td,.rt tfoot{display:block;width:100%}
+  .rt thead{display:none}
+  .rt tr{background:#fff;border:1px solid var(--line);border-radius:12px;margin:8px 0;padding:6px 0}
+  .rt td{border:0;padding:4px 12px;display:flex;justify-content:space-between;gap:12px;white-space:normal;text-align:right}
+  .rt td:before{content:attr(data-l);color:var(--muted);font-weight:600;text-align:left;font-size:12.5px}
+  .rt td.lead{font-weight:700;justify-content:flex-start}
+  .rt td.lead:before{display:none}
+  .rt td:empty{display:none}
+  .rt tfoot tr{background:#f6f8f4}
+}
+.chart{position:relative}
+.chart svg{width:100%;height:auto;display:block}
+.tip{position:absolute;pointer-events:none;background:var(--casing);color:#fff;font-size:12.5px;padding:6px 9px;border-radius:8px;white-space:nowrap;transform:translate(-50%,-110%);opacity:0;transition:opacity .1s}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend b{color:var(--ink)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.pipe{display:flex;height:18px;border-radius:999px;overflow:hidden;gap:2px;margin:10px 0 8px;background:var(--paper)}
+.pipe span{display:block;height:100%}
+.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.qrgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.qrc{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.qrc.fresh{border:2px dashed var(--leaf)}
+.qrc svg{width:100%;height:auto;max-width:140px}
+.qrc .sticker{margin:6px 0}
+
+/* how it works */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+@media (max-width:860px){.how{grid-template-columns:1fr}}
+.scancol{background:#fff;border:1px solid var(--line);border-radius:var(--r-sheet);overflow:hidden}
+.scancol .top{background:var(--forest);color:#fff;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.scancol .top .n{width:40px;height:40px;border-radius:10px;background:var(--hivis);color:var(--casing);display:flex;align-items:center;justify-content:center;font-family:var(--slab);font-weight:700;font-size:22px;flex:none}
+.scancol .top b{display:block;font-family:var(--slab);font-size:18px}
+.scancol .top span{font-size:12.5px;color:#cfe3d6}
+.stp{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}
+.stp:first-of-type{border-top:0}
+.stp .k{width:28px;height:28px;border-radius:50%;border:2px solid var(--forest);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--forest)}
+.stp.scan .k{background:var(--hivis);border-color:var(--casing);color:var(--casing)}
+.stp b{font-size:14.5px}
+.stp .who3{font-size:12px;color:var(--muted);font-weight:700}
+.stp p{margin:2px 0 0;font-size:13.5px;color:var(--ink)}
+.stp .try{margin-top:6px}
+.stp .try button{font-size:13px;padding:4px 10px;min-height:32px}
+
+/* demo bar */
+.demobar{position:fixed;left:0;right:0;bottom:0;z-index:18;background:var(--casing);color:#fff;box-shadow:0 -6px 24px rgba(0,0,0,.18)}
+.demobar .in{max-width:820px;margin:0 auto;padding:10px 14px 12px;display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center}
+.demobar .prog{grid-column:1/-1;display:flex;gap:4px;align-items:center}
+.demobar .prog i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.18)}
+.demobar .prog i.d{background:var(--leaf)} .demobar .prog i.c{background:var(--hivis)}
+.demobar .stepn{font-size:12.5px;color:#c8d0cc;font-weight:700;display:flex;gap:10px;align-items:center}
+.demobar .stepn .okk{color:var(--hivis)}
+.demobar .txt{font-size:15px;font-weight:600;line-height:1.3}
+.demobar .ctl{display:flex;gap:6px;align-items:center;grid-row:2/4;grid-column:2}
+.demobar .go{background:var(--hivis);color:var(--casing);border:0;border-radius:12px;font-weight:800;padding:10px 14px;cursor:pointer;min-height:48px;font-size:14.5px;max-width:240px}
+.demobar .nv{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:10px;width:40px;height:40px;cursor:pointer;font-size:18px;font-weight:800}
+.demobar .x{position:absolute;right:8px;top:6px;background:none;border:0;color:#c8d0cc;cursor:pointer;font-size:13px;font-weight:700;padding:4px 8px}
+@media (max-width:560px){.demobar .in{grid-template-columns:1fr}.demobar .ctl{grid-row:auto;grid-column:1}.demobar .go{flex:1;max-width:none}}
+
+/* modal / toast */
+.overlay{position:fixed;inset:0;background:rgba(14,30,22,.55);display:flex;align-items:flex-end;justify-content:center;z-index:20;padding:12px}
+@media (min-width:600px){.overlay{align-items:center}}
+.modal{background:#fff;border-radius:20px;padding:20px;max-width:480px;width:100%;max-height:86vh;overflow:auto}
+.modal.wide{max-width:640px}
+.modal h2{margin-top:0}
+.foot{margin-top:30px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;display:flex;gap:10px;align-items:flex-start}
+.foot svg{width:22px;height:22px;flex:none;margin-top:1px}
+.spinner{width:22px;height:22px;border:3px solid var(--leafSoft);border-top-color:var(--leaf);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:30;background:var(--casing);color:#fff;padding:12px 18px;border-radius:12px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+body.demo-on .toast,body.tour-on .toast{bottom:170px}
+.model td{white-space:normal}
+details summary{cursor:pointer}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* scan walkthrough */
+.scandemo{display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:center;margin-top:10px}
+@media (max-width:640px){.scandemo{grid-template-columns:1fr;justify-items:center}}
+.phone{position:relative;width:240px;height:440px;border-radius:36px;background:var(--casing);padding:12px;box-shadow:0 18px 40px rgba(20,73,47,.25)}
+.phone .notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:84px;height:18px;border-radius:0 0 12px 12px;background:var(--casing);z-index:2}
+.phone .screen{width:100%;height:100%;border-radius:26px;overflow:hidden;background:#fff;position:relative;animation:sdin .45s ease-out}
+@keyframes sdin{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.ph-cam{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,#55605a,#20262a);display:flex;align-items:center;justify-content:center}
+.ph-battery{position:relative;width:170px}
+.ph-battery svg{width:170px;height:auto;display:block}
+.ph-sticker{position:absolute;left:24px;top:46px;display:inline-flex;align-items:center;gap:4px;background:var(--hivis);color:var(--casing);font-family:var(--slab);font-weight:700;font-size:13px;padding:3px 6px;border-radius:4px}
+.ph-sticker svg{width:13px;height:13px}
+.ph-vf{position:absolute;left:12px;top:34px;width:112px;height:46px;border:3px solid var(--hivis);border-radius:10px;box-shadow:0 0 0 999px rgba(0,0,0,.35);animation:vfz 1.6s ease-out both}
+@keyframes vfz{from{transform:scale(1.6);opacity:0}to{transform:none;opacity:1}}
+.ph-link{position:absolute;left:12px;right:12px;bottom:26px;background:#fff;color:var(--ink);border-radius:12px;padding:8px 10px;font-size:11px;font-weight:700;word-break:break-all;box-shadow:0 6px 18px rgba(0,0,0,.3);animation:sdin .4s 1.4s both}
+.ph-app{position:absolute;inset:0;display:flex;flex-direction:column}
+.ph-bar{background:var(--forest);color:#fff;display:flex;align-items:center;gap:6px;padding:26px 10px 8px;font-family:var(--slab);font-size:14px}
+.ph-bar svg{width:18px;height:18px}
+.ph-bar span{margin-left:auto;background:var(--hivis);color:var(--casing);font-family:var(--sans);font-size:11px;font-weight:800;border-radius:999px;padding:1px 8px}
+.ph-body{padding:10px;display:flex;flex-direction:column;gap:7px;font-size:12px}
+.ph-stk{align-self:flex-start;display:inline-flex;align-items:center;gap:4px;background:var(--hivis);font-family:var(--slab);font-weight:700;padding:2px 7px;border-radius:5px}
+.ph-stk svg{width:12px;height:12px}
+.ph-title{display:flex;align-items:center;gap:6px;font-family:var(--slab);font-weight:700;font-size:15px}
+.ph-title svg{width:26px;height:26px}
+.ph-row{display:flex;justify-content:space-between;border:1px solid var(--line);border-radius:8px;padding:6px 8px;animation:sdin .35s both}
+.ph-row:nth-child(4){animation-delay:.3s}.ph-row:nth-child(5){animation-delay:.6s}.ph-row:nth-child(6){animation-delay:.9s}.ph-row:nth-child(7){animation-delay:1.2s}
+.ph-row span{color:var(--muted)}
+.ph-cap{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:11px;font-weight:700;color:var(--muted)}
+.ph-done{align-items:center;text-align:center;padding-top:26px}
+.ph-check{width:62px;height:62px;border-radius:50%;background:var(--leafSoft);color:var(--forest);display:flex;align-items:center;justify-content:center}
+.ph-check svg{width:34px;height:34px}
+.ph-pips{display:flex;gap:4px}.ph-pips i{width:14px;height:14px;border-radius:3px;border:2px solid var(--forest)}.ph-pips i.f{background:var(--forest)}
+.ph-block{margin-top:8px;background:var(--redSoft);color:var(--red);border-radius:8px;padding:6px 8px;font-weight:700;display:flex;gap:6px;align-items:flex-start;text-align:left;animation:sdin .4s 1.2s both}
+.ph-block svg{width:14px;height:14px;flex:none;margin-top:1px}
+.ph-trio{position:absolute;inset:0;background:var(--forest);display:flex;flex-direction:column;justify-content:center;gap:12px;padding:18px}
+.ph-mini{background:#fff;border-radius:14px;padding:10px;display:grid;grid-template-columns:40px 1fr;grid-template-rows:auto auto;column-gap:8px;align-items:center;animation:sdin .4s both}
+.ph-mini svg{width:38px;height:38px;grid-row:1/3}
+.ph-mini b{font-size:14px}.ph-mini span{font-size:11px;color:var(--muted);grid-column:2}.ph-mini em{grid-column:2;font-style:normal;font-weight:700;font-size:12px;color:var(--forest)}
+.sd-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.sd-steps button{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;font:inherit;color:inherit}
+.sd-steps .n{width:26px;height:26px;border-radius:50%;border:2px solid var(--forest);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:none;color:var(--forest)}
+.sd-steps li.on button{border-color:var(--forest);box-shadow:inset 0 0 0 1px var(--forest)}
+.sd-steps li.on .n{background:var(--hivis);border-color:var(--casing);color:var(--casing)}
+.sd-steps li.done .n{background:var(--forest);color:#fff}
+.sd-steps .d{display:block;font-size:13.5px;color:var(--muted);margin-top:3px}
+.livqr{text-align:center;flex:none}
+.livqr svg{width:150px;height:150px;display:block;margin-bottom:4px}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <button class="logo" id="logoBtn" aria-label="LeadLoop home"><svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="8" width="24" height="17" rx="4" fill="none" stroke="#fff" stroke-width="2.4"/><rect x="7" y="4" width="5" height="4" rx="1" fill="#fff"/><rect x="18" y="4" width="5" height="4" rx="1" fill="#fff"/><path d="M9 17.5a6 6 0 0 1 10.5-3.5M21 15.5a6 6 0 0 1-10.5 3.5" fill="none" stroke="#d8f04a" stroke-width="2.4" stroke-linecap="round"/></svg>LeadLoop</button>
+  <div class="hd-actions" id="hdActions"></div>
+</div></header>
+<div class="wrap" id="app"><div class="row" style="margin-top:30px;justify-content:center"><div class="spinner"></div><span class="muted">Loading…</span></div></div>
+<input type="file" id="fileScan" accept="image/*" capture="environment" class="hidden">
+<input type="file" id="filePhoto" accept="image/*" capture="environment" class="hidden">
+<div id="demoRoot"></div>
+<div id="tourRoot"></div>
+<div id="modalRoot"></div>
+<script>
+"use strict";
+/* ---------- constants ---------- */
+const ARTIFACT_URL = "https://claude.ai/artifact/S1ZChCxMxwtGoVZqjVyeEN";
+/* QR codes point at wherever this copy is hosted (Vercel), or at the Claude artifact */
+let topLevel=false; try{ topLevel = window.top===window.self; }catch(e){ topLevel=false; }
+const STANDALONE = topLevel && /^https?:$/.test(location.protocol); // e.g. Vercel; inside Claude the page runs in a frame
+const APP_URL = STANDALONE ? location.origin+location.pathname.replace(/index\.html$/,"") : ARTIFACT_URL;
+const USERS = [
+  {id:"V-101", role:"vendor",  label:"Scrap vendor V-101", area:"Shahdara, East Delhi"},
+  {id:"V-102", role:"vendor",  label:"Scrap vendor V-102", area:"Sector 29, Gurugram"},
+  {id:"D-201", role:"dealer",  label:"Battery dealer D-201 (phase 2)", area:"Laxmi Nagar, Delhi"},
+  {id:"Y-01",  role:"yard",    label:"LeadLoop yard Y-01", area:"Gurugram, collection centre for R-301", recycler:"R-301"},
+  {id:"Y-02",  role:"yard",    label:"LeadLoop yard Y-02", area:"East Delhi, collection centre for R-302", recycler:"R-302"},
+  {id:"R-301", role:"recycler",label:"Registered recycler R-301", area:"Manesar"},
+  {id:"R-302", role:"recycler",label:"Registered recycler R-302", area:"Bawana"},
+  {id:"A-01",  role:"admin",   label:"LeadLoop control room", area:"Alerts, money, partners, reports"}
+];
+const ROLE_NAME = {vendor:"Scrap vendor",dealer:"Dealer",yard:"LeadLoop yard",recycler:"Recycler",admin:"Control room"};
+const STATUS = {unused:"Fresh sticker",picked_up:"Picked up",at_yard:"At collection centre",closed:"Closed at recycler"};
+const SCANS = {unused:0,picked_up:1,at_yard:2,closed:3};
+const SOURCES = ["e-rickshaw","inverter","bike","car","other"];
+const BRANDS = ["major","regional","local","unreadable"];
+const DIED = ["this_week","this_month","older"];
+const FEE_PER_KG = 4;          // recycler pays LeadLoop
+const WHOLESALE_PER_KG = 67;   // paid to scrap vendor on recycler's behalf
+const MATCH_PER_KG = 2;        // match on top of wholesale
+const RATE = WHOLESALE_PER_KG + MATCH_PER_KG;
+const STORAGE_LIMIT_DAYS = 90, TARGET_DAYS = 10, REPAY_DAYS = 10, ALLOWANCE = 10;
+const NO_YARD_SCAN_DAYS = 7, TRUCK_GATE_DAYS = 2;
+const ID_RE = /LL-\d{4}/;
+
+const T = {
+ en:{pickupTitle:"Battery pickup",takebackTitle:"Dealer take-back",source:"Battery came from",
+     src:{"e-rickshaw":"E-rickshaw",inverter:"Inverter",bike:"Bike",car:"Car",other:"Other"},
+     brand:"Brand on the label",brandO:{major:"Major brand",regional:"Regional brand",local:"Local / unbranded",unreadable:"Label unreadable"},
+     vehicle:"Vehicle number",optional:"optional",vehHint:"Stored masked, e.g. DL**…1234",
+     died:"Roughly when did it die?",diedO:{this_week:"This week",this_month:"This month",older:"Older"},
+     weight:"Weight on your scale (kg)",photo:"Photo of battery on the scale",tapPhoto:"Tap to take photo",retake:"Tap to retake",
+     label:"Photo of the label or serial",labelHint:"Deck step 2. If the label is worn, photograph what is left of it",
+     leaking:"Is it leaking?",yes:"Yes",no:"No",submit:"Save pickup",submitT:"Save take-back",
+     paid:"Amount paid to driver (₹)",rateHint:"Local rate ₹60–62/kg",exch:"Exchange: the driver's old battery is credited against the new one. A partner scrap vendor collects your crate weekly; you get ₹10 for each battery you tag.",saleT:"Batteries exchanged",upi:"UPI reference",upiHint:"From your payment app, e.g. 412345678901",sale:"Batteries in this sale",
+     need:"Please fill:",auto:"Recorded automatically",time:"Time",gps:"GPS",
+     saved:"Saved",loggedIn:"Logged in",sec:"s",next:"Scan next battery",of:"of",done:"done",
+     gpsWait:"getting location…",gpsNo:"not available on this host"},
+ hi:{pickupTitle:"बैटरी पिकअप",takebackTitle:"डीलर टेक-बैक",source:"बैटरी कहाँ से आई",
+     src:{"e-rickshaw":"ई-रिक्शा",inverter:"इन्वर्टर",bike:"बाइक",car:"कार",other:"अन्य"},
+     brand:"लेबल पर ब्रांड",brandO:{major:"बड़ा ब्रांड",regional:"क्षेत्रीय ब्रांड",local:"लोकल / बिना ब्रांड",unreadable:"लेबल पढ़ा नहीं जाता"},
+     vehicle:"गाड़ी नंबर",optional:"वैकल्पिक",vehHint:"छिपाकर सेव होगा, जैसे DL**…1234",
+     died:"बैटरी लगभग कब खराब हुई?",diedO:{this_week:"इस हफ़्ते",this_month:"इस महीने",older:"उससे पहले"},
+     weight:"आपके काँटे पर वज़न (किलो)",photo:"काँटे पर रखी बैटरी की फ़ोटो",tapPhoto:"फ़ोटो लेने के लिए दबाएँ",retake:"दोबारा फ़ोटो लें",
+     label:"लेबल या सीरियल नंबर की फ़ोटो",labelHint:"लेबल घिसा हो तो जितना दिखे उतने की फ़ोटो लें",
+     leaking:"क्या बैटरी लीक हो रही है?",yes:"हाँ",no:"नहीं",submit:"पिकअप सेव करें",submitT:"टेक-बैक सेव करें",
+     paid:"ड्राइवर को दी गई रकम (₹)",rateHint:"लोकल रेट ₹60–62/किलो",exch:"एक्सचेंज: ड्राइवर की पुरानी बैटरी नई बैटरी में एडजस्ट होती है। पार्टनर स्क्रैप वेंडर हर हफ़्ते आपका क्रेट ले जाता है; हर टैग की गई बैटरी पर आपको ₹10 मिलते हैं।",saleT:"बदली गई बैटरियाँ",upi:"UPI रेफ़रेंस",upiHint:"पेमेंट ऐप से, जैसे 412345678901",sale:"इस सौदे में कितनी बैटरियाँ",
+     need:"कृपया भरें:",auto:"अपने-आप दर्ज",time:"समय",gps:"GPS",
+     saved:"सेव हो गया",loggedIn:"लगा समय",sec:"सेकंड",next:"अगली बैटरी स्कैन करें",of:"में से",done:"पूरे",
+     gpsWait:"लोकेशन ली जा रही है…",gpsNo:"इस होस्ट पर उपलब्ध नहीं"}
+};
+
+/* ---------- state ---------- */
+const S = {
+  user:null, lang:"en", view:"login", id:null, ref:null,
+  batteries:new Map(), payouts:new Map(), trucks:new Map(), settlements:new Map(), partners:new Map(), audit:new Map(), reviews:new Map(),
+  settings:{weightThresholdPct:5},
+  db:null, dbState:"loading", downloads:null,
+  form:null, gpsPromise:null, gpsResult:undefined, scanAt:null, timerInt:null,
+  crTab:"alerts", filters:{from:"",to:"",source:"",recycler:"",status:"",flagged:""},
+  demo:{on:false, step:0, id:null}, pendingId:null
+};
+try{ const u = localStorage.getItem("ll_user"); if(u) S.user = USERS.find(x=>x.id===u)||null; }catch(e){}
+try{ const l = localStorage.getItem("ll_lang"); if(l==="hi"||l==="en") S.lang=l; }catch(e){}
+try{ const d = JSON.parse(localStorage.getItem("ll_demo")||"null"); if(d&&typeof d.step==="number") S.demo=Object.assign(S.demo,d); }catch(e){}
+if(S.user) S.view = S.user.role==="admin" ? "admin" : "home";
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = v => String(v==null?"":v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const userById = id => USERS.find(u=>u.id===id);
+const userLabel = id => (userById(id)||{label:id||"—"}).label;
+const fmtDT = iso => iso ? new Date(iso).toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "—";
+const fmtD = iso => iso ? new Date(iso).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}) : "—";
+const fmtDs = iso => iso ? new Date(iso).toLocaleDateString("en-IN",{day:"2-digit",month:"short"}) : "—";
+const kg = v => (v==null||v==="") ? "—" : (Math.round(v*10)/10).toLocaleString("en-IN")+" kg";
+const kg1 = v => (v==null||v==="") ? "—" : (Math.round(v*10)/10).toFixed(1);
+const inr = v => (v<0?"−":"")+"₹"+Math.abs(Math.round(v)).toLocaleString("en-IN");
+const inr2 = v => "₹"+(Math.round(v*100)/100).toLocaleString("en-IN",{minimumFractionDigits:0,maximumFractionDigits:2});
+const dayMs = 86400000;
+const now = () => new Date();
+const daysSince = iso => iso ? Math.max(0,Math.floor((Date.now()-new Date(iso))/dayMs)) : null;
+const ageText = iso => { if(!iso) return "—"; const m=Math.floor((Date.now()-new Date(iso))/60000); if(m<60) return m+" min"; const h=Math.floor(m/60); if(h<48) return h+" h"; return Math.floor(h/24)+" days"; };
+const pct = (a,c) => (a&&c) ? (c-a)/a*100 : null;
+const rid = p => p+"-"+new Date().toISOString().slice(2,10).replace(/-/g,"")+"-"+Math.random().toString(36).slice(2,6).toUpperCase();
+const clone = o => JSON.parse(JSON.stringify(o));
+function maskVehicle(v){
+  v = (v||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+  if(!v) return "";
+  if(v.length<=6) return v.slice(0,2)+"**…"+v.slice(-2);
+  return v.slice(0,2)+"**…"+v.slice(-4);
+}
+function custodyDays(b){
+  if(!b.yardAt) return null;
+  const end = b.closedAt ? new Date(b.closedAt) : new Date();
+  return Math.max(0, Math.floor((end - new Date(b.yardAt))/dayMs));
+}
+function vendorPayout(kgv){ return RATE*(kgv||0); }
+/* the partner scrap vendor who is paid for a battery: the one who picked it up, or for a dealer take-back, the one who collected it from the dealer */
+const partnerOf = b => b.deliveredBy || b.pickedUpBy;
+const DEALER_COLLECTOR = {"Y-01":"V-102","Y-02":"V-101"};
+const DRIVER_RATE = [60,62]; // local rate paid to the driver, ₹/kg (deck slide 10)
+const thr = () => S.settings.weightThresholdPct;
+const userIs = (...r) => S.user && r.includes(S.user.role);
+
+/* status mark: three scan pips + label (shape carries meaning, not colour alone) */
+function statusMark(s){
+  const n=SCANS[s]||0;
+  return `<span class="st st-${esc(s)}" title="${n} of 3 scans"><span class="pips" aria-hidden="true">${[0,1,2].map(i=>`<i class="${i<n?"f":""}"></i>`).join("")}</span><span class="t">${esc(STATUS[s]||s)}</span></span>`;
+}
+const ICN = {
+  tri:`<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5L15 14H1z" fill="currentColor"/><path d="M8 6v4" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="12" r="1" fill="#fff"/></svg>`,
+  clock:`<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 4.5V8l2.5 1.6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+  truck:`<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 4h8.5v7H1zM9.5 6.5h3l2 2.5V11h-5z" fill="currentColor"/><circle cx="4" cy="12" r="1.6" fill="#fff" stroke="currentColor" stroke-width="1.2"/><circle cx="12" cy="12" r="1.6" fill="#fff" stroke="currentColor" stroke-width="1.2"/></svg>`,
+  rupee:`<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h8M4 6h8M5 3c5 0 5 6 0 6l6 5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  check:`<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  drop:`<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5s4.5 5 4.5 8a4.5 4.5 0 0 1-9 0c0-3 4.5-8 4.5-8z" fill="currentColor"/></svg>`,
+  hold:`<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="3" width="3" height="10" rx="1" fill="currentColor"/><rect x="9.5" y="3" width="3" height="10" rx="1" fill="currentColor"/></svg>`,
+  minus:`<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="currentColor"/><path d="M5 8h6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`
+};
+const mk = (tone,icon,txt,title) => `<span class="mk ${tone}"${title?` title="${esc(title)}"`:""}>${ICN[icon]||""}${esc(txt)}</span>`;
+function flagMark(b){ if(!b.flagged) return ""; const st=(b.flags||[]).map(f=>f.stage==="gate"?"gate":"yard"); return mk("flag","tri","Weight flag: "+[...new Set(st)].join(" + ")); }
+/* custody clock: bar fills toward the 10-day target, red past 90 */
+function custodyMark(b){
+  const d=custodyDays(b); if(d==null) return "";
+  const col = d>STORAGE_LIMIT_DAYS?"var(--red)":d>TARGET_DAYS?"var(--saffron)":"var(--leaf)";
+  const w = Math.min(100, d/TARGET_DAYS*100);
+  const note = d>STORAGE_LIMIT_DAYS?"over the 90-day limit":d>TARGET_DAYS?"over the 10-day target":"within the 10-day target";
+  return `<span class="clock" title="${d} days in custody, ${note}" style="color:${d>TARGET_DAYS?(d>STORAGE_LIMIT_DAYS?"var(--red)":"var(--saffronInk)"):"var(--ink)"}"><span class="bar" aria-hidden="true"><i style="width:${w}%;background:${col}"></i></span>${d} d${b.closedAt?"":" at yard"}</span>`;
+}
+function truckMark(b){ if(!b.truckId||b.status==="closed") return ""; return mk("info","truck","On truck "+((S.trucks.get(b.truckId)||{}).manifestNo||b.truckId)); }
+function payStatusMark(p){
+  if(p.kind==="deduction") return p.status==="recovered"?mk("neutral","minus","Recovered in "+(p.recoveredIn||"")):mk("warn","minus","Comes off next payout");
+  return p.status==="paid"?mk("ok","check","Paid by UPI"):mk("warn","hold","Pending");
+}
+function settleStatus(s){ if(s.status==="repaid") return "repaid"; return new Date(s.dueAt)<new Date(new Date().toDateString()) ? "overdue" : "due"; }
+function settleMark(s){ const st=settleStatus(s); return st==="repaid"?mk("ok","check","Repaid "+fmtDs(s.repaidAt)):st==="overdue"?mk("flag","clock","Overdue since "+fmtDs(s.dueAt)):mk("warn","clock","Due "+fmtDs(s.dueAt)); }
+/* metric tile: number + what it is measured against */
+function tile(o){
+  const tag=o.go?"button":"div";
+  const bar = o.bar ? `<div class="bullet" aria-hidden="true"><i style="width:${Math.min(100,o.bar.v/o.bar.max*100)}%;background:${o.bar.col||"var(--leaf)"}"></i>${o.bar.t!=null?`<b style="left:${Math.min(99,o.bar.t/o.bar.max*100)}%"></b>`:""}</div>` : "";
+  return `<${tag} class="tilem ${o.tone||""}" ${o.go?`data-go="${esc(o.go)}"`:""}><span class="l">${esc(o.l)}</span><span class="v">${o.v}${o.u?`<small>${esc(o.u)}</small>`:""}</span>${bar}<span class="c">${o.c||""}</span></${tag}>`;
+}
+function toast(msg){ const d=document.createElement("div"); d.className="toast"; d.setAttribute("role","status"); d.textContent=msg; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
+function modal(html,wide){ $("#modalRoot").innerHTML = `<div class="overlay" id="ov"><div class="modal${wide?" wide":""}" role="dialog" aria-modal="true">${html}</div></div>`; $("#ov").addEventListener("click",e=>{ if(e.target.id==="ov") closeModal(); }); }
+function closeModal(){ $("#modalRoot").innerHTML=""; }
+
+/* ---------- DB ---------- */
+const COLS = {batteries:"batteries",payouts:"payouts",truckloads:"trucks",settlements:"settlements",partners:"partners",audit:"audit",reviews:"reviews"};
+/* Outside Claude (e.g. on Vercel) the page runs on a browser-local copy of the demo data */
+const LOCAL_KEY="ll_store_v1";
+function localDB(seed){
+  let store={};
+  try{ store=JSON.parse(localStorage.getItem(LOCAL_KEY)||"null")||null; }catch(e){ store=null; }
+  if(!store){ store={}; for(const [c,docs] of Object.entries(seed)) for(const [id,d] of Object.entries(docs)) store[c+"/"+id]=d; }
+  const persist=()=>{ try{ localStorage.setItem(LOCAL_KEY,JSON.stringify(store)); }catch(e){} };
+  persist();
+  const subs=[];
+  const snap=col=>({metadata:{fromCache:false},docs:Object.keys(store).filter(p=>p.split("/")[0]===col&&p.split("/").length===2).map(p=>({id:p.split("/")[1],exists:true,data:()=>JSON.parse(JSON.stringify(store[p]))}))});
+  const fire=path=>subs.forEach(s=>{ if(s.col===path.split("/")[0]) setTimeout(()=>s.cb(snap(s.col)),0); if(s.doc===path) setTimeout(()=>s.cb({exists:true,data:()=>store[path]}),0); });
+  window.addEventListener("storage",e=>{ if(e.key===LOCAL_KEY){ try{ store=JSON.parse(e.newValue)||store; }catch(x){} subs.forEach(s=>s.col?s.cb(snap(s.col)):s.cb({exists:!!store[s.doc],data:()=>store[s.doc]})); } });
+  return {
+    collection:col=>({onSnapshot:(cb)=>{ subs.push({col,cb}); setTimeout(()=>cb(snap(col)),0); return ()=>{}; }}),
+    doc:path=>({ set:async d=>{ store[path]=JSON.parse(JSON.stringify(d)); persist(); fire(path); },
+                 onSnapshot:(cb)=>{ subs.push({doc:path,cb}); setTimeout(()=>cb({exists:!!store[path],data:()=>store[path]}),0); return ()=>{}; } })
+  };
+}
+function resetLocalData(){ try{ localStorage.removeItem(LOCAL_KEY); localStorage.removeItem("ll_demo"); }catch(e){} location.reload(); }
+async function initLocal(){
+  let seed=null;
+  try{ const r=await fetch("data/seed.json",{cache:"no-store"}); seed=await r.json(); }catch(e){ seed=null; }
+  if(!seed){ S.dbState="none"; render(); return; }
+  S.local=true; S.db=localDB(seed);
+  if(!S.downloads) S.downloads={save:async({filename,data})=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([data],{type:"text/csv"})); a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500); }};
+  subscribeAll(S.db);
+}
+async function initDB(){
+  let tries=0; const max=STANDALONE?3:50;
+  while(!(window.claude&&window.claude.use) && tries<max){ await new Promise(r=>setTimeout(r,200)); tries++; }
+  if(!(window.claude&&window.claude.use)) return initLocal();
+  try{ S.downloads = await window.claude.use("downloads"); }catch(e){ S.downloads=null; }
+  let db=null; try{ db = await window.claude.use("db"); }catch(e){ db=null; }
+  if(!db) return initLocal(); // signed-out viewer of a shared link: run on this device's demo copy
+  S.db=db; subscribeAll(db);
+}
+function subscribeAll(db){
+  const timer=setTimeout(()=>{ if(S.dbState==="loading"){ S.dbState="slow"; render(); } },10000);
+  Object.entries(COLS).forEach(([col,key])=>{
+    db.collection(col).onSnapshot(snap=>{
+      const m=new Map(); snap.docs.forEach(d=>{ if(d.exists) m.set(d.id,d.data()); });
+      S[key]=m;
+      if(col==="batteries"){ clearTimeout(timer); if(S.dbState!=="ready"){ S.dbState="ready"; } }
+      softRender();
+    },err=>{ if(col==="batteries"){ clearTimeout(timer); S.dbState="error:"+(err&&err.code||"error"); render(); } });
+  });
+  db.doc("config/settings").onSnapshot(d=>{ if(d.exists) S.settings=Object.assign({weightThresholdPct:5},d.data()); softRender(); },()=>{});
+}
+// don't blow away a half-filled form on background updates
+function softRender(){ if(["pickup","yard","dispatch"].includes(S.view) && S.form) { renderDemo(); return; } if(S.view==="timeline"&&S.form&&S.form.weight) { renderDemo(); return; } render(); }
+async function saveDoc(path,data){
+  if(!S.db) throw new Error("Database not available");
+  let lastErr;
+  for(let i=0;i<2;i++){
+    try{ await S.db.doc(path).set(data); const [c,id]=path.split("/"); if(COLS[c]) S[COLS[c]].set(id,data); return; }
+    catch(e){ lastErr=e; if(e&&e.code==="unavailable"){ await new Promise(r=>setTimeout(r,500+Math.random()*700)); continue; } break; }
+  }
+  throw lastErr;
+}
+const saveBattery = (id,data) => saveDoc("batteries/"+id,data);
+/* audit: every write the app makes leaves a line here */
+async function audit(action,target,detail,extra){
+  const id=rid("AU");
+  const doc=Object.assign({id,at:new Date().toISOString(),by:S.user?S.user.id:"—",action,target,detail:detail||"",before:null,after:null,reason:null},extra||{});
+  try{ await saveDoc("audit/"+id,doc); }catch(e){ /* audit is best-effort; the record itself was saved */ }
+}
+function errText(e){ return `Couldn't save (${esc(e&&e.code||e&&e.message||"error")}). ${e&&(e.code==="invalid_argument"||e.code==="permission_denied")?"Your account may not have write access to this page.":"Try again."}`; }
+
+/* ---------- illustration kit (original SVG) ---------- */
+const C={forest:"#14492f",leaf:"#1f7a4d",saffron:"#e0962a",hivis:"#d8f04a",casing:"#2b3236",paper:"#f1f3ee",white:"#fff"};
+const svg=(vb,body,extra="")=>`<svg viewBox="${vb}" aria-hidden="true" ${extra}>${body}</svg>`;
+const ICON={
+ battery:(f=C.casing,t=C.hivis)=>svg("0 0 48 36",`<rect x="10" y="2" width="7" height="5" rx="1.5" fill="${f}"/><rect x="31" y="2" width="7" height="5" rx="1.5" fill="${f}"/><rect x="3" y="6" width="42" height="28" rx="5" fill="${f}"/><rect x="8" y="13" width="14" height="10" rx="2" fill="${t}"/><path d="M33 15v8M29 19h8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>`),
+ erick:()=>svg("0 0 48 36",`<path d="M8 8h22l6 10v6H5V14z" fill="${C.leaf}"/><path d="M6 6h26" stroke="${C.forest}" stroke-width="3" stroke-linecap="round"/><rect x="10" y="11" width="9" height="7" rx="1.5" fill="#cfe3d6"/><path d="M30 10l5 8h-7z" fill="#cfe3d6"/><rect x="14" y="20" width="10" height="5" rx="1" fill="${C.hivis}"/><circle cx="10" cy="28" r="5" fill="${C.casing}"/><circle cx="10" cy="28" r="2" fill="#fff"/><circle cx="36" cy="28" r="5" fill="${C.casing}"/><circle cx="36" cy="28" r="2" fill="#fff"/>`),
+ inverter:()=>svg("0 0 48 36",`<rect x="6" y="4" width="36" height="28" rx="4" fill="${C.casing}"/><rect x="11" y="9" width="26" height="11" rx="2" fill="#9fd3b4"/><path d="M13 14.5c3-5 5-5 8 0s5 5 8 0 5-5 6-2" stroke="${C.forest}" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="15" cy="26" r="2.2" fill="${C.hivis}"/><circle cx="22" cy="26" r="2.2" fill="${C.saffron}"/>`),
+ bike:()=>svg("0 0 48 36",`<circle cx="11" cy="26" r="7" fill="none" stroke="${C.casing}" stroke-width="3.5"/><circle cx="37" cy="26" r="7" fill="none" stroke="${C.casing}" stroke-width="3.5"/><path d="M11 26l8-11h11l7 11M19 15l-3-5h-4M30 15l3-6h5" stroke="${C.leaf}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="20" y="16" width="9" height="6" rx="1.5" fill="${C.saffron}"/>`),
+ car:()=>svg("0 0 48 36",`<path d="M5 24v-5l5-2 6-7h15l7 7 5 2v5z" fill="${C.leaf}"/><path d="M17 11.5h6v5.5h-10zM25 11.5h5l5 5.5H25z" fill="#cfe3d6"/><circle cx="14" cy="26" r="5" fill="${C.casing}"/><circle cx="14" cy="26" r="2" fill="#fff"/><circle cx="35" cy="26" r="5" fill="${C.casing}"/><circle cx="35" cy="26" r="2" fill="#fff"/>`),
+ other:()=>ICON.battery("#5f6b64","#e9ece6"),
+ vendor:()=>svg("0 0 48 48",`<circle cx="17" cy="10" r="5" fill="${C.saffron}"/><path d="M10 26c0-6 3-9 7-9s7 3 7 9v4H10z" fill="${C.hivis}"/><path d="M13 20l4 4 4-4" stroke="${C.forest}" stroke-width="2" fill="none"/><path d="M24 26h16l-2 10H26z" fill="${C.leaf}"/><rect x="27" y="22" width="10" height="6" rx="1.5" fill="${C.casing}"/><circle cx="28" cy="40" r="4" fill="${C.casing}"/><circle cx="38" cy="40" r="4" fill="${C.casing}"/><path d="M14 30v10M20 30v10" stroke="${C.casing}" stroke-width="3" stroke-linecap="round"/>`),
+ dealer:()=>svg("0 0 48 48",`<rect x="7" y="18" width="34" height="24" rx="2" fill="#fff"/><path d="M5 10h38l-3 9H8z" fill="${C.saffron}"/><path d="M12 10l-2 9M20 10l-1 9M28 10l1 9M36 10l2 9" stroke="#fff" stroke-width="2"/><rect x="12" y="26" width="10" height="16" fill="${C.leaf}"/><rect x="26" y="26" width="11" height="8" rx="1.5" fill="${C.casing}"/><rect x="28" y="28" width="4" height="3" fill="${C.hivis}"/>`),
+ yard:()=>svg("0 0 48 48",`<path d="M4 20L24 8l20 12v22H4z" fill="${C.leaf}"/><rect x="10" y="24" width="28" height="18" fill="${C.forest}"/><rect x="13" y="30" width="9" height="6" rx="1" fill="${C.casing}"/><rect x="14.5" y="31.5" width="3" height="2" fill="${C.hivis}"/><rect x="25" y="30" width="9" height="6" rx="1" fill="${C.casing}"/><rect x="26.5" y="31.5" width="3" height="2" fill="${C.hivis}"/><rect x="11" y="36" width="26" height="3" fill="${C.saffron}"/><circle cx="24" cy="17" r="3" fill="${C.hivis}"/>`),
+ recycler:()=>svg("0 0 48 48",`<rect x="6" y="20" width="30" height="22" fill="${C.casing}"/><path d="M6 20l10-6v6l10-6v6l10-6v28" fill="${C.casing}"/><rect x="36" y="8" width="6" height="34" fill="#4a5459"/><rect x="11" y="28" width="6" height="6" fill="${C.saffron}"/><rect x="21" y="28" width="6" height="6" fill="${C.saffron}"/><path d="M40 4c-2 0-3 2-1 3" stroke="#b9c4bc" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="34" cy="38" r="8" fill="${C.leaf}"/><path d="M30.5 37a4 4 0 0 1 6.5-2.5M37.5 39a4 4 0 0 1-6.5 2.5" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M37 32.5v2.2h-2.2M31 43.5v-2.2h2.2" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/>`),
+ admin:()=>svg("0 0 48 48",`<rect x="9" y="6" width="30" height="38" rx="4" fill="#fff" stroke="${C.casing}" stroke-width="2.5"/><rect x="17" y="3" width="14" height="7" rx="2" fill="${C.casing}"/><rect x="15" y="28" width="4" height="10" rx="1" fill="${C.leaf}"/><rect x="22" y="22" width="4" height="16" rx="1" fill="${C.leaf}"/><rect x="29" y="16" width="4" height="22" rx="1" fill="${C.saffron}"/>`),
+ camera:()=>svg("0 0 48 48",`<rect x="5" y="13" width="38" height="27" rx="6" fill="${C.casing}"/><rect x="16" y="8" width="14" height="7" rx="2" fill="${C.casing}"/><circle cx="24" cy="26" r="9" fill="${C.hivis}"/><circle cx="24" cy="26" r="5" fill="${C.casing}"/><circle cx="36" cy="18" r="2" fill="${C.saffron}"/>`),
+ qr:(c=C.casing)=>svg("0 0 24 24",`<path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3z" fill="none" stroke="${c}" stroke-width="2.2"/><path d="M5.5 5.5h2v2h-2zM16.5 5.5h2v2h-2zM5.5 16.5h2v2h-2zM14 14h3v3h-3zM18 18h3v3h-3zM18 14h3v2h-3zM14 18h2v3h-2z" fill="${c}"/>`),
+ viewfinder:()=>svg("0 0 110 110",`<path d="M6 30V12a6 6 0 0 1 6-6h18M80 6h18a6 6 0 0 1 6 6v18M104 80v18a6 6 0 0 1-6 6H80M30 104H12a6 6 0 0 1-6-6V80" stroke="${C.hivis}" stroke-width="6" fill="none" stroke-linecap="round"/><g transform="translate(33 33)">${'<rect width="44" height="44" rx="4" fill="#fff" opacity=".12"/>'}<path d="M5 5h12v12H5zM27 5h12v12H27zM5 27h12v12H5z" fill="none" stroke="#fff" stroke-width="3"/><path d="M27 27h5v5h-5zM34 34h5v5h-5zM34 27h5v3h-5zM27 34h3v5h-3z" fill="#fff"/></g>`),
+ shield:()=>svg("0 0 24 24",`<path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z" fill="${C.leafSoft||'#e2efe6'}" stroke="${C.leaf}" stroke-width="1.8"/><path d="M8 12l3 3 5-6" stroke="${C.leaf}" stroke-width="2" fill="none" stroke-linecap="round"/>`),
+ drop:()=>svg("0 0 24 24",`<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z" fill="${C.saffron}"/>`),
+ back:()=>svg("0 0 24 24",`<path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,'width="18" height="18"'),
+ logo:()=>svg("0 0 30 30",`<rect x="3" y="8" width="24" height="17" rx="4" fill="none" stroke="#fff" stroke-width="2.4"/><rect x="7" y="4" width="5" height="4" rx="1" fill="#fff"/><rect x="18" y="4" width="5" height="4" rx="1" fill="#fff"/><path d="M9 17.5a6 6 0 0 1 10.5-3.5M21 15.5a6 6 0 0 1-10.5 3.5" fill="none" stroke="${C.hivis}" stroke-width="2.4" stroke-linecap="round"/>`,'width="28" height="28"')
+};
+const ROLE_TINT={vendor:"#fbecd2",dealer:"#fbecd2",yard:"#e2efe6",recycler:"#e4edf7",admin:"#eceee9"};
+const roleIcon=r=>ICON[r]?ICON[r]():"";
+const sticker=(id,sm)=>`<span class="sticker${sm?" sm":""}">${ICON.qr()}${esc(id)}</span>`;
+
+/* hero scene: e-rickshaw → yard → recycler, battery travels the route once */
+function heroScene(){
+  return `<svg class="scene" viewBox="0 0 400 196" role="img" aria-label="A battery travels from an e-rickshaw to a scrap vendor, the LeadLoop yard and a recycler, scanned at each stop">
+  <circle cx="352" cy="30" r="16" fill="${C.saffron}"/>
+  <path d="M0 132h400v64H0z" fill="#0f3a25"/>
+  <path d="M0 126h400v8H0z" fill="#24583c"/>
+  <g transform="translate(14 78) scale(1.5)">${ICON.erick().replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>
+  <g transform="translate(150 66) scale(1.35)">${ICON.yard().replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>
+  <g transform="translate(300 64) scale(1.4)">${ICON.recycler().replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>
+  <path id="route" d="M60 148 C110 148 130 148 182 148 S 280 148 334 148" fill="none" stroke="${C.hivis}" stroke-width="3" stroke-dasharray="7 7" opacity=".85"/>
+  ${[60,182,334].map((x,i)=>`<g transform="translate(${x-11} 137)"><rect width="22" height="22" rx="5" fill="${C.hivis}"/><text x="11" y="15.5" text-anchor="middle" font-family="Figtree,sans-serif" font-weight="800" font-size="12" fill="${C.casing}">${i+1}</text></g>`).join("")}
+  <g id="token"><rect x="-10" y="-22" width="20" height="13" rx="3" fill="${C.casing}" stroke="${C.hivis}" stroke-width="1.5"/><rect x="-6" y="-25" width="3" height="3" fill="${C.casing}"/><rect x="3" y="-25" width="3" height="3" fill="${C.casing}"/>
+    <animateMotion class="am" dur="3.6s" begin="0.4s" fill="freeze" calcMode="spline" keyPoints="0;0.47;0.47;1" keyTimes="0;0.4;0.6;1" keySplines=".4 0 .2 1;0 0 1 1;.4 0 .2 1"><mpath href="#route"/></animateMotion></g>
+  <text x="60" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Figtree,sans-serif">Pickup</text>
+  <text x="182" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Figtree,sans-serif">Yard weigh-in</text>
+  <text x="334" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Figtree,sans-serif">Recycler gate</text>
+  </svg>`;
+}
+
+/* 90-second ring */
+function ringHTML(sec){
+  const r=26, L=2*Math.PI*r, frac=Math.min(sec/90,1), col=sec>90?"#b3261e":sec>60?C.saffron:C.leaf;
+  return `<svg viewBox="0 0 62 62"><circle cx="31" cy="31" r="${r}" fill="none" stroke="#e3e7e1" stroke-width="6"/><circle cx="31" cy="31" r="${r}" fill="none" stroke="${col}" stroke-width="6" stroke-linecap="round" stroke-dasharray="${L}" stroke-dashoffset="${L*(1-frac)}"/></svg><div class="n">${sec}<small>of 90 s</small></div>`;
+}
+
+/* weighing-scale dial 0–40 kg; needle follows typed weight */
+function dialHTML(w){
+  const ticks=[0,10,20,30,40].map(v=>{const a=Math.PI*(1-v/40),x1=75+52*Math.cos(a),y1=78-52*Math.sin(a),x2=75+44*Math.cos(a),y2=78-44*Math.sin(a),tx=75+34*Math.cos(a),ty=78-34*Math.sin(a)+4;
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.casing}" stroke-width="2"/><text x="${tx}" y="${ty}" font-size="9" text-anchor="middle" fill="#5f6b64" font-family="Figtree,sans-serif" font-weight="700">${v}</text>`}).join("");
+  return `<div class="dial"><svg viewBox="0 0 150 96"><path d="M17 78a58 58 0 0 1 116 0" fill="#fff" stroke="${C.casing}" stroke-width="4"/><path d="M23 78a52 52 0 0 1 104 0" fill="none" stroke="${C.leafSoft||'#e2efe6'}" stroke-width="0"/>${ticks}
+   <g class="needle" id="needle" style="transform:rotate(${needleDeg(w)}deg)"><line x1="75" y1="78" x2="75" y2="30" stroke="${C.saffron}" stroke-width="3.5" stroke-linecap="round"/></g><circle cx="75" cy="78" r="6" fill="${C.casing}"/><rect x="10" y="82" width="130" height="10" rx="3" fill="${C.casing}"/></svg></div>`;
+}
+function needleDeg(w){ w=parseFloat(w); if(!(w>0)) w=0; return Math.max(-90,Math.min(90,(Math.min(w,40)/40)*180-90)); }
+function setNeedle(w){ const n=document.getElementById("needle"); if(n) n.style.transform=`rotate(${needleDeg(w)}deg)`; }
+/* ---------- GPS ---------- */
+function startGPS(){
+  S.gpsResult = undefined;
+  S.gpsPromise = new Promise(res=>{
+    let done=false; const fin=v=>{ if(!done){done=true; S.gpsResult=v; res(v);} };
+    try{
+      if(!navigator.geolocation) return fin(null);
+      navigator.geolocation.getCurrentPosition(
+        p=>fin({lat:+p.coords.latitude.toFixed(5),lng:+p.coords.longitude.toFixed(5),acc:Math.round(p.coords.accuracy)}),
+        ()=>fin(null), {enableHighAccuracy:true,timeout:8000,maximumAge:60000});
+      setTimeout(()=>fin(null),9000);
+    }catch(e){ fin(null); }
+  });
+}
+const gpsText = g => g ? `${g.lat}, ${g.lng}${g.acc?` (±${g.acc} m)`:""}` : "Not captured";
+
+/* ---------- images ---------- */
+async function loadBitmap(file){
+  try{ return await createImageBitmap(file,{imageOrientation:"from-image"}); }
+  catch(e){
+    return await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src=URL.createObjectURL(file); });
+  }
+}
+async function compressPhoto(file,max=560,q=0.62){
+  const bm = await loadBitmap(file);
+  const w=bm.width,h=bm.height, s=Math.min(1,max/Math.max(w,h));
+  const c=document.createElement("canvas"); c.width=Math.round(w*s); c.height=Math.round(h*s);
+  c.getContext("2d").drawImage(bm,0,0,c.width,c.height);
+  return c.toDataURL("image/jpeg",q);
+}
+async function decodeQRFile(file){
+  const bm = await loadBitmap(file);
+  if("BarcodeDetector" in window){
+    try{ const det=new BarcodeDetector({formats:["qr_code"]}); const r=await det.detect(bm); if(r&&r.length) return r[0].rawValue; }catch(e){}
+  }
+  if(typeof jsQR!=="function") throw new Error("QR decoder did not load");
+  for(const max of [1200,800,1600,500]){
+    const s=Math.min(1,max/Math.max(bm.width,bm.height));
+    const c=document.createElement("canvas"); c.width=Math.round(bm.width*s); c.height=Math.round(bm.height*s);
+    const ctx=c.getContext("2d",{willReadFrequently:true}); ctx.drawImage(bm,0,0,c.width,c.height);
+    const d=ctx.getImageData(0,0,c.width,c.height);
+    const r=jsQR(d.data,c.width,c.height,{inversionAttempts:"attemptBoth"});
+    if(r&&r.data) return r.data;
+  }
+  return null;
+}
+function pickFile(inputId){
+  return new Promise(res=>{
+    const inp=$("#"+inputId); inp.value="";
+    const on=()=>{ inp.removeEventListener("change",on); res(inp.files&&inp.files[0]||null); };
+    inp.addEventListener("change",on); inp.click();
+  });
+}
+function svgQR(text,cell=4){
+  if(typeof qrcode!=="function") return `<div class="muted small">QR library not loaded</div>`;
+  const q=qrcode(0,"M"); q.addData(text); q.make();
+  return q.createSvgTag({cellSize:cell,margin:2,scalable:true});
+}
+function placeholderPhoto(){
+  return `<div class="noph">${ICON.battery("#9aa59f","#e9ece6")}<span>Demo record, so no photo here. Live entries show the photo taken at this step.</span></div>`;
+}
+/* ---------- header ---------- */
+function renderHeader(){
+  const h=$("#hdActions");
+  const u=S.user;
+  h.innerHTML = `<button class="hbtn ${S.view==="how"?"on":""}" id="hHow" title="How it works: ten steps, three scans"><span class="lbl">How it works</span><span class="lbs">Steps</span></button>
+   <button class="hbtn ${S.demo.on?"on":""}" id="hDemo"><span aria-hidden="true" style="font-size:11px">▶</span><span class="lbl">Demo</span><span class="lbs">Demo</span></button>
+   ${u?`<button class="hbtn solid" id="hWho" title="Switch role (keeps the current battery)">${roleIcon(u.role)}<span>${esc(u.id)}</span><span aria-hidden="true">▾</span></button>`:""}`;
+  $("#hHow").onclick=()=>go("how");
+  $("#hDemo").onclick=openDemoChooser;
+  if(u) $("#hWho").onclick=openSwitcher;
+}
+function chainHTML(cur){
+  const g=[["Pickup","Scan 1",["V-101","V-102","D-201"]],["Yard","Scan 2",["Y-01","Y-02"]],["Recycler","Scan 3",["R-301","R-302"]],["LeadLoop","Control room",["A-01"]]];
+  return `<div class="chain">${g.map(([n,s,ids])=>`<div class="stage"><div class="sn">${n}<small>${s}</small></div><div class="who-row">${ids.map(id=>{const u=userById(id);return `<button class="whob ${cur===id?"cur":""}" data-u="${id}" title="${esc(u.label)}">${roleIcon(u.role)}<span><b>${id}</b><span>${esc(u.area.split(",")[0])}</span></span></button>`}).join("")}</div></div>`).join("")}</div>`;
+}
+function openSwitcher(){
+  modal(`<div class="switch"><h2>Switch role</h2><p class="small muted" style="margin:0">${S.id&&S.batteries.has(S.id)?`Battery ${sticker(S.id,1)} stays open in the new role.`:"Each role sees what its scanner would do."}</p>${chainHTML(S.user&&S.user.id)}
+   <button class="btn ghost" style="margin-top:14px" id="swOut">Sign out</button></div>`);
+  document.querySelectorAll("#modalRoot [data-u]").forEach(b=>b.onclick=()=>{ closeModal(); setUser(b.dataset.u,true); });
+  $("#swOut").onclick=()=>{ closeModal(); S.user=null; S.form=null; try{localStorage.removeItem("ll_user");}catch(e){} go("login"); };
+}
+function setUser(id,keep){
+  S.user=userById(id); S.form=null; try{localStorage.setItem("ll_user",id);}catch(e){}
+  if(keep && S.id && S.batteries.has(S.id)) return routeBattery(S.id,{quiet:true});
+  go(S.user.role==="admin"?"admin":"home");
+}
+function go(view,ref){
+  S.view=view; if(ref!==undefined) S.ref=ref; S.form=null;
+  render();
+}
+
+/* ---------- deep links: QR codes encode APP_URL#LL-xxxx ---------- */
+const readHash = () => { const m=decodeURIComponent(location.hash||"").toUpperCase().match(ID_RE); return m?m[0]:null; };
+function takeHash(){
+  const id=readHash(); if(!id) return;
+  if(!S.user||S.dbState!=="ready"||!S.batteries.size){ S.pendingId=id; render(); return; }
+  S.pendingId=null; routeBattery(id,{quiet:true});
+}
+window.addEventListener("hashchange",takeHash);
+
+/* ---------- guided demo ---------- */
+const DEMO = [
+ {u:null,   t:()=>"See how one sticker covers the deck's ten steps with three scans.", btn:()=>"Open How it works", act:()=>go("how")},
+ {u:"V-101",t:b=>`Scan 1. The scrap vendor tags fresh sticker ${b}, weighs the battery and records what the driver was paid.`, done:b=>b&&b.status!=="unused", act:()=>routeBattery(S.demo.id,{quiet:true})},
+ {u:"Y-02", t:b=>`Scan 2. The yard re-weighs ${b}, checks it against pickup and pays the scrap vendor the same day.`, done:b=>b&&!!b.yardAt, act:()=>routeBattery(S.demo.id,{quiet:true})},
+ {u:"V-101",t:()=>"The scrap vendor sees the payment, its UPI reference and any deduction in My payouts.", act:()=>go("payouts")},
+ {u:"Y-02", t:b=>`The yard loads ${b} onto a truck. The truckload gets a manifest number.`, done:b=>b&&!!b.truckId, act:()=>go("dispatch")},
+ {u:"R-302",t:b=>`Scan 3. The recycler opens the truckload and gate-checks ${b} against the yard weight.`, done:b=>b&&b.status==="closed", act:()=>{ const b=S.batteries.get(S.demo.id); b&&b.truckId?go("truck",b.truckId):routeBattery(S.demo.id,{quiet:true}); }},
+ {u:"R-302",t:()=>"The recycler gets a settlement statement: vendor payments plus ₹4/kg, due 10 days after the gate check.", act:()=>{ const b=S.batteries.get(S.demo.id), t=b&&S.trucks.get(b.truckId); t&&t.settlementId?go("settlement",t.settlementId):go("home"); }},
+ {u:"A-01", t:()=>"LeadLoop's control room: alerts, cash advanced and repaid, partners, corrections and the monthly report.", act:()=>{ S.crTab="alerts"; go("admin"); }}
+];
+function freshIds(){ return [...S.batteries.values()].filter(b=>b.status==="unused").map(b=>b.id).sort(); }
+function saveDemo(){ try{localStorage.setItem("ll_demo",JSON.stringify(S.demo));}catch(e){} }
+function demoStart(){
+  const cur=S.demo.id&&S.batteries.get(S.demo.id);
+  if(!cur||cur.status==="closed"){ S.demo.id=freshIds()[0]||null; S.demo.step=0; }
+  S.demo.on=true; saveDemo(); render();
+}
+function demoOff(){ S.demo.on=false; saveDemo(); render(); }
+function demoGo(i){
+  S.demo.step=Math.max(0,Math.min(DEMO.length-1,i)); saveDemo();
+  const s=DEMO[S.demo.step];
+  if(s.u && (!S.user||S.user.id!==s.u)){ S.user=userById(s.u); try{localStorage.setItem("ll_user",s.u);}catch(e){} }
+  S.id=S.demo.id; S.form=null; s.act();
+}
+function renderDemo(){
+  document.body.classList.toggle("demo-on",S.demo.on);
+  const el=$("#demoRoot");
+  if(!S.demo.on){ el.innerHTML=""; return; }
+  if(!S.demo.id && S.batteries.size){ S.demo.id=freshIds()[0]||null; saveDemo(); }
+  const i=S.demo.step, s=DEMO[i], b=S.batteries.get(S.demo.id), id=S.demo.id||"a fresh sticker";
+  const isDone = s.done ? !!s.done(b) : false;
+  const who = s.u ? (S.user&&S.user.id===s.u ? `Stay as ${s.u}` : `Switch to ${s.u}`) : "";
+  const label = s.btn ? s.btn() : `${who}${i===1||i===2||i===5?" and open "+id:""}`;
+  el.innerHTML = `<div class="demobar" role="region" aria-label="Guided demo"><button class="x" id="dmX" aria-label="Close guided demo">Close ✕</button><div class="in">
+    <div class="prog" aria-hidden="true">${DEMO.map((d,k)=>`<i class="${k<i||(d.done&&d.done(b))?"d":""} ${k===i?"c":""}"></i>`).join("")}</div>
+    <div class="stepn">Step ${i+1} of ${DEMO.length}${s.u?` · ${esc(ROLE_NAME[userById(s.u).role])} ${s.u}`:""}${isDone?`<span class="okk">${ICN.check.replace('viewBox','width="14" height="14" viewBox')} done</span>`:""}</div>
+    <div class="txt">${esc(s.t(id))}</div>
+    <div class="ctl"><button class="nv" id="dmP" ${i===0?"disabled":""} aria-label="Previous step">‹</button><button class="go" id="dmGo">${isDone&&i<DEMO.length-1?"Next: step "+(i+2):esc(label)}</button><button class="nv" id="dmN" ${i===DEMO.length-1?"disabled":""} aria-label="Next step">›</button></div>
+  </div></div>`;
+  $("#dmX").onclick=demoOff;
+  $("#dmP").onclick=()=>demoGo(i-1);
+  $("#dmN").onclick=()=>demoGo(i+1);
+  $("#dmGo").onclick=()=> isDone&&i<DEMO.length-1 ? demoGo(i+1) : demoGo(i);
+}
+
+/* ---------- router ---------- */
+function render(){
+  document.body.classList.toggle("wide", ["admin","qrsheet","how"].includes(S.view));
+  document.body.classList.toggle("mid", ["truck","settlement","payouts"].includes(S.view));
+  renderHeader(); renderDemo(); renderTour();
+  if(S.timerInt && S.view!=="pickup"){ clearInterval(S.timerInt); S.timerInt=null; }
+  const app=$("#app");
+  if(S.dbState==="none"||S.dbState.startsWith("error")){
+    app.innerHTML = `<div class="banner err">The shared record store can't be reached in this view${S.dbState.startsWith("error")?" ("+esc(S.dbState.slice(6))+")":""}. Open this page while signed in to Claude, or from its web address (not as a file on disk).</div>`;
+    return;
+  }
+  const v=S.view, key=v+"|"+(S.id||"")+"|"+(S.ref||"")+"|"+(S.user?S.user.id:"");
+  if(S._lastKey!==key){ S._lastKey=key; try{ window.scrollTo(0,0); }catch(e){} }
+  if(v==="how") return viewHow(app);
+  if(v==="scan") return viewScanDemo(app);
+  if(!S.user||v==="login") return viewLogin(app);
+  if(S.dbState==="loading") { app.innerHTML=`<div class="row" style="margin-top:30px;justify-content:center"><div class="spinner"></div><span class="muted">Loading records…</span></div>`; return; }
+  const V={scan:viewScanDemo,home:viewHome,pickup:viewPickup,yard:viewYard,timeline:viewTimeline,admin:viewAdmin,qrsheet:viewQRSheet,done:viewDone,payouts:viewPayouts,dispatch:viewDispatch,truck:viewTruck,settlement:viewSettlement};
+  (V[v]||viewHome)(app);
+}
+function slowNote(){ return S.dbState==="slow" ? `<div class="banner warn">Records may be out of date. The record store hasn't answered yet.</div>` : ""; }
+function foot(){ return `<div class="foot">${ICON.shield()}<span>LeadLoop is a neutral chain-of-custody checkpoint. Each LeadLoop yard is a registered recycler's battery collection centre, operated by LeadLoop. LeadLoop keeps the evidence trail; EPR certificates are generated by registered recyclers.</span></div>`; }
+const backBtn = (txt) => `<button class="link" id="back">${ICON.back()}${esc(txt||"Back")}</button>`;
+function homeOf(){ return S.user&&S.user.role==="admin"?"admin":"home"; }
+
+/* ---------- login ---------- */
+function viewLogin(app){
+  const fresh=freshIds();
+  app.innerHTML = `<section class="hero"><div class="txt"><h1>Every dead battery, scanned three times</h1><p>One QR sticker follows each battery from pickup to the recycler's gate, with weight, a photo and the money at every hand-off.</p></div>${heroScene()}</section>
+  ${S.pendingId?`<div class="banner info">You scanned ${sticker(S.pendingId,1)}. Choose who you are and it opens.</div>`:""}
+  <button class="btn hv" id="startTour">▶ Play the 2-minute tour</button>
+  <button class="btn sec" id="startDemo">Try it step by step</button>
+  <button class="btn ghost" id="seeScan">${ICON.qr(C.forest)} See what happens when a sticker is scanned</button>
+  <p class="sub" style="margin-top:14px">Or sign in as any demo user. Your role decides what the scanner does.</p>
+  ${chainHTML(null)}
+  ${fresh.length?`<div class="sheet tight" style="margin-top:18px"><h3>Fresh stickers for a live pickup</h3><div class="fresh">${fresh.map(id=>sticker(id,1)).join("")}</div><div class="small muted" style="margin-top:6px">Each works once. Printed sheet: QR sheet in the control room.</div></div>`:""}
+  ${foot()}`;
+  $("#startDemo").onclick=()=>{ demoStart(); demoGo(0); };
+  $("#startTour").onclick=tourStart;
+  $("#seeScan").onclick=()=>{ SD.i=0; SD.paused=false; go("scan"); };
+  app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
+    S.user=userById(b.dataset.u); try{localStorage.setItem("ll_user",S.user.id);}catch(e){}
+    if(S.pendingId){ const id=S.pendingId; S.pendingId=null; return routeBattery(id,{quiet:true}); }
+    go(homeOf());
+  });
+}
+
+/* ---------- how it works: deck slide 7's ten steps on the three scans ---------- */
+function viewHow(app){
+  const col=(n,title,who,steps)=>`<div class="scancol"><div class="top"><span class="n">${n}</span><span><b>${title}</b><span>${who}</span></span></div>${steps.map(s=>`<div class="stp ${s.scan?"scan":""}"><span class="k">${s.k}</span><div><b>${esc(s.t)}</b> <span class="who3">${esc(s.w)}</span><p>${esc(s.d)}</p>${s.demo!=null?`<div class="try"><button class="btn small sec" data-demo="${s.demo}">Try it: ${esc(s.tl)}</button></div>`:""}</div></div>`).join("")}</div>`;
+  app.innerHTML = `${S.user?backBtn():""}<h1 style="margin-top:6px">Ten steps, three scans</h1>
+  <p class="sub">The deck's ten steps from the driver's sale to the recycler's certificate. Each battery is scanned three times; the other steps are payments and paperwork attached to those scans.</p>
+  <div class="how">
+  ${col(1,"Pickup scan","Partner scrap vendor · steps 1–5",[
+    {k:1,t:"Sell",w:"Driver",d:"The driver sells 1–4 dead batteries to a partner scrap vendor, as today. The form records how many were in the sale."},
+    {k:2,t:"Tag and log",w:"Partner",scan:1,d:"QR stuck on, label photographed, battery weighed in the app, photo on the scale. Dealers (phase 2) tag take-backs the same way at exchange.",demo:1,tl:"log a pickup"},
+    {k:3,t:"Pay seller",w:"Partner",d:"Driver paid by UPI at the local rate (₹60–62/kg), target 15 minutes or less. The amount and UPI reference are saved with the pickup."},
+    {k:4,t:"Store",w:"Partner",d:"Kept upright in an acid-proof crate; never broken or drained. Leaks are recorded at pickup."},
+    {k:5,t:"Route",w:"Partner",d:"Partner brings his crates to the yard, at least weekly. No yard scan after 7 days raises an alert."}])}
+  ${col(2,"Yard scan","LeadLoop yard · steps 6–7",[
+    {k:6,t:"Weigh-in and pay",w:"Yard",scan:1,d:`Every QR scanned and weighed, checked against pickup (±${thr()}%). We pay the partner that day, on the recycler's behalf: ₹${WHOLESALE_PER_KG}/kg + ₹${MATCH_PER_KG}/kg match.`,demo:2,tl:"weigh in and pay"},
+    {k:7,t:"Dispatch",w:"Yard",d:"Full truck loaded onto the recycler's transport under one manifest number; nothing stored over 90 days.",demo:4,tl:"dispatch a truck"}])}
+  ${col(3,"Gate scan","Registered recycler · steps 8–10",[
+    {k:8,t:"Gate check",w:"Recycler",scan:1,d:`Each QR scanned again; weight must match the yard within ±${thr()}%.`,demo:5,tl:"gate-check"},
+    {k:9,t:"Settle",w:"Recycler",d:`Repays our battery payments plus ₹${FEE_PER_KG}/kg, about ${REPAY_DAYS} days after its gate check. A gap over ${thr()}% comes off the partner's next payment.`,demo:6,tl:"see the statement"},
+    {k:10,t:"Certificate",w:"Recycler → producer",d:"Lead sold on a GST e-invoice earns EPR certificates, generated by the registered recycler, with our trail behind them. LeadLoop does not issue certificates."}])}
+  </div>
+  <div class="sheet" style="margin-top:16px"><div class="grid2"><div><h3>What each sticker carries</h3><p class="small" style="margin:0">One QR is one battery and is never reused. Scanning it with a phone camera opens this app at that battery. Every hand-off adds who, when, where, weight and a photo to the trail.</p><button class="btn small sec" id="howScan" style="margin-top:10px">See what a scan does</button></div>
+  <div><h3>Money on one 30 kg battery</h3><p class="small" style="margin:0">Driver paid ~₹1,800–1,860 (₹60–62/kg) by the scrap vendor. We pay the scrap vendor ${inr(vendorPayout(30))} (₹2,010 + ₹60 match) the day it reaches the yard. The recycler repays ${inr(vendorPayout(30))} plus the ${inr(FEE_PER_KG*30)} fee in ~${REPAY_DAYS} days.</p></div></div></div>
+  ${foot()}`;
+  if($("#back")) $("#back").onclick=()=>go(homeOf());
+  $("#howScan").onclick=()=>{ SD.i=0; SD.paused=false; go("scan"); };
+  app.querySelectorAll("[data-demo]").forEach(b=>b.onclick=()=>{ if(!S.demo.on) demoStart(); demoGo(+b.dataset.demo); });
+}
+
+/* ---------- scanning ---------- */
+function scanButtons(){
+  return `<button class="scanbtn" id="bScan"><span class="vf">${ICON.viewfinder()}</span><span>Scan battery QR</span><small>Opens your camera. Take a photo of the sticker.</small></button>
+  <button class="btn ghost" id="bSim">Simulate a scan with a demo ID</button>`;
+}
+function wireScan(){
+  $("#bScan").onclick=async()=>{
+    startGPS(); S.scanAt=Date.now();
+    const f=await pickFile("fileScan"); if(!f) return;
+    const bs=$("#bScan"); bs.classList.add("busy"); bs.querySelector("span:nth-child(2)").textContent="Reading the QR…";
+    let txt=null; try{ txt=await decodeQRFile(f); }catch(e){ txt=null; }
+    const m = txt && decodeURIComponent(txt).toUpperCase().match(ID_RE);
+    if(!m){ render(); modal(`<h2>Couldn't read the QR</h2><p>Hold the phone 15–25 cm from the sticker, keep it flat and in focus, and try again. Or simulate the scan with a demo ID.</p><button class="btn" onclick="closeModal()">Try again</button>`); return; }
+    routeBattery(m[0]);
+  };
+  $("#bSim").onclick=()=>{ startGPS(); S.scanAt=Date.now(); simulatePicker(); };
+}
+function fitsRole(b){
+  const r=S.user.role;
+  if(r==="vendor"||r==="dealer") return b.status==="unused";
+  if(r==="yard") return b.status==="picked_up";
+  if(r==="recycler") return b.status==="at_yard"&&b.truckId&&(S.trucks.get(b.truckId)||{}).recyclerId===S.user.id;
+  return true;
+}
+function simulatePicker(){
+  const all=[...S.batteries.values()].sort((a,b)=>a.id.localeCompare(b.id));
+  const sug=all.filter(fitsRole), rest=all.filter(b=>!fitsRole(b));
+  const btn=b=>`<button class="chip" data-sim="${esc(b.id)}" style="flex:0 1 auto;min-width:0;min-height:44px">${esc(b.id)}</button>`;
+  modal(`<h2>Simulate a scan</h2>
+   <p class="small muted">Stickers that fit your role right now</p><div class="chips">${sug.map(btn).join("")||'<span class="muted small">None right now</span>'}</div>
+   <details style="margin-top:14px"><summary class="small muted">Other stickers, to see what gets blocked</summary><div class="chips" style="margin-top:8px">${rest.map(btn).join("")}</div></details>
+   <label class="f">Or type an ID</label><div class="row"><input class="t" id="simId" placeholder="LL-0021"><button class="btn small" id="simGo" style="margin:0;min-height:54px">Open</button></div>
+   <button class="btn ghost" onclick="closeModal()">Cancel</button>`);
+  document.querySelectorAll("[data-sim]").forEach(b=>b.onclick=()=>{ closeModal(); routeBattery(b.dataset.sim); });
+  $("#simGo").onclick=()=>{ const v=($("#simId").value||"").toUpperCase().match(ID_RE); closeModal(); if(v) routeBattery(v[0]); else modal(`<h2>Not a LeadLoop ID</h2><p>IDs look like LL-0021.</p><button class="btn" onclick="closeModal()">OK</button>`); };
+}
+/* decides what a battery opens for the current role; quiet = no blocking pop-ups (role switch, deep link, demo) */
+function routeBattery(id,opt){
+  const quiet=opt&&opt.quiet;
+  const b=S.batteries.get(id), role=S.user.role;
+  const stop=html=>{ if(quiet){ S.view="timeline"; render(); } else modal(html+`<button class="btn" onclick="closeModal()">OK</button>`); };
+  if(!b){ if(!quiet) modal(`<h2>Not a LeadLoop sticker</h2><p>${sticker(id,1)} is not in the sticker registry.</p><button class="btn" onclick="closeModal()">OK</button>`); else go(homeOf()); return; }
+  S.id=id; S.form=null;
+  if(!S.scanAt||quiet) S.scanAt=Date.now();
+  if(role==="vendor"||role==="dealer"){
+    if(b.status!=="unused") return stop(`<h2>Sticker already used</h2><p>${sticker(id,1)} is already on a battery (${esc(STATUS[b.status])}). One QR is one battery, so a sticker can never be reused.</p>`);
+    if(quiet&&!S.gpsPromise) startGPS();
+    S.form={source:"",brand:"",vehicle:"",died:"",weight:"",photo:null,label:null,leaking:null,paid:"",upi:"",sale:""};
+    S.view="pickup"; return render();
+  }
+  if(role==="yard"){
+    if(b.status==="picked_up"){ S.form={weight:"",photo:null,condition:"",upi:demoUpi()}; S.view="yard"; return render(); }
+    if(b.status==="unused") return stop(`<h2>Not picked up yet</h2><p>${sticker(id,1)} has no pickup record, so it can't be weighed in at the yard.</p>`);
+    S.view="timeline"; return render();
+  }
+  if(role==="recycler"){
+    if(b.status==="unused") return stop(`<h2>No custody record</h2><p>${sticker(id,1)} has not been picked up.</p>`);
+    S.form={weight:""}; S.view="timeline"; return render();
+  }
+  S.view="timeline"; render();
+}
+const demoUpi = () => "4"+String(Math.floor(1e10+Math.random()*9e10));
+
+/* ---------- role home screens ---------- */
+const brow = (b,extra) => `<button class="lrow" data-open="${esc(b.id)}">${sticker(b.id,1)}<span class="meta">${extra||""}${flagMark(b)}${truckMark(b)}${custodyMark(b)}</span></button>`;
+function viewHome(app){
+  const r=S.user.role, me=S.user.id, all=[...S.batteries.values()];
+  let extra="";
+  if(r==="vendor"||r==="dealer"){
+    const mine=all.filter(b=>b.pickedUpBy===me).sort((a,c)=>(c.pickedUpAt||"").localeCompare(a.pickedUpAt||""));
+    const pays=[...S.payouts.values()].filter(p=>p.vendorId===me);
+    const month=new Date().toISOString().slice(0,7);
+    const paidM=pays.filter(p=>p.kind==="payout"&&p.at.slice(0,7)===month).reduce((a,p)=>a+p.net,0);
+    const last=pays.filter(p=>p.kind==="payout").sort((a,c)=>c.at.localeCompare(a.at))[0];
+    const pend=pays.filter(p=>p.kind==="deduction"&&p.status==="pending").reduce((a,p)=>a+p.amount,0);
+    const waiting=mine.filter(b=>b.status==="picked_up");
+    if(r==="dealer"){ const tg=mine.filter(b=>b.yardAt).length;
+      extra=`<div class="slip"><div class="sh"><div><div class="small muted">Tagging fee earned</div><div class="amt">${inr(tg*ALLOWANCE)}</div></div><div class="small muted" style="text-align:right">₹${ALLOWANCE} for each take-back<br>that reached the yard</div></div></div>
+      <div class="tiles">${tile({l:"In your crate",v:waiting.length,u:"batteries",c:waiting.length?`Oldest tagged ${daysSince(waiting.map(b=>b.pickedUpAt).sort()[0])} d ago; collected weekly`:"Crate empty"})}${tile({l:"Tagged by you",v:mine.length,u:"batteries",c:Math.round(mine.reduce((a,b)=>a+(b.pickupKg||0),0)).toLocaleString("en-IN")+" kg in total"})}</div>
+      ${mine.length?`<h2>Your recent take-backs</h2>${mine.slice(0,6).map(b=>brow(b,statusMark(b.status))).join("")}`:""}`;
+    } else
+    extra=`<div class="slip"><div class="sh"><div><div class="small muted">Paid to you this month</div><div class="amt">${inr(paidM)}</div></div><div style="text-align:right">${last?`<div class="small muted">Last payment</div><b>${inr(last.net)}</b><div class="small muted">${fmtDs(last.at)} · ${esc(last.batteryId)}</div>`:""}</div></div>
+      ${pend?`<div class="banner warn small" style="margin:10px 0 0">${inr(pend)} will come off your next payout (weight gap at a recycler gate).</div>`:""}
+      <button class="btn small sec" id="myPay" style="margin-top:10px">My payouts</button></div>
+      <div class="tiles">${tile({l:"Waiting to go to the yard",v:waiting.length,u:"batteries",c:waiting.length?`Oldest picked up ${daysSince(waiting.map(b=>b.pickedUpAt).sort()[0])} d ago; deliver weekly`:"All delivered"})}${tile({l:"Logged by you",v:mine.length,u:"batteries",c:Math.round(mine.reduce((a,b)=>a+(b.pickupKg||0),0)).toLocaleString("en-IN")+" kg in total"})}</div>
+      ${mine.length?`<h2>Your recent pickups</h2>${mine.slice(0,6).map(b=>brow(b,statusMark(b.status))).join("")}`:""}`;
+  } else if(r==="yard"){
+    const inT=all.filter(b=>b.status==="picked_up");
+    const here=all.filter(b=>b.status==="at_yard"&&b.yardId===me&&!b.truckId).sort((a,c)=>a.yardAt.localeCompare(c.yardAt));
+    const oldest=here.length?custodyDays(here[0]):0;
+    const today=new Date().toISOString().slice(0,10);
+    const paidT=[...S.payouts.values()].filter(p=>p.kind==="payout"&&p.yardId===me&&p.at.slice(0,10)===today);
+    const sent=[...S.trucks.values()].filter(t=>t.yardId===me).sort((a,c)=>c.dispatchedAt.localeCompare(a.dispatchedAt)).slice(0,3);
+    extra=`<div class="tiles">${tile({l:"On the way from partners",v:inT.length,u:"batteries",c:"Any yard can weigh these in"})}
+      ${tile({l:"Waiting here",v:here.length,u:"batteries",tone:oldest>TARGET_DAYS?"amber":"",bar:{v:oldest,max:Math.max(TARGET_DAYS*1.5,oldest),t:TARGET_DAYS,col:oldest>TARGET_DAYS?"var(--saffron)":"var(--leaf)"},c:here.length?`Oldest ${oldest} d; target ${TARGET_DAYS} d, limit ${STORAGE_LIMIT_DAYS} d`:"Nothing in stock"})}
+      ${tile({l:"Paid to partners today",v:inr(paidT.reduce((a,p)=>a+p.net,0)),c:`${paidT.length} payment${paidT.length===1?"":"s"} at ₹${RATE}/kg`})}</div>
+      <button class="btn sec" id="disp" ${here.length?"":"disabled"} style="margin-top:12px">${ICN.truck.replace('viewBox','width="22" height="22" viewBox')}Dispatch a truckload${here.length?` (${here.length} ready)`:""}</button>
+      ${here.length?`<h2>Waiting at this yard</h2>${here.map(b=>brow(b)).join("")}`:""}
+      ${sent.length?`<h2>Recent truckloads</h2>${sent.map(truckRow).join("")}`:""}`;
+  } else if(r==="recycler"){
+    const tr=[...S.trucks.values()].filter(t=>t.recyclerId===me).sort((a,c)=>c.dispatchedAt.localeCompare(a.dispatchedAt));
+    const inT=tr.filter(t=>t.status!=="received");
+    const toCheck=all.filter(b=>b.status==="at_yard"&&b.truckId&&inT.some(t=>t.id===b.truckId));
+    const st=[...S.settlements.values()].filter(s=>s.recyclerId===me).sort((a,c)=>c.createdAt.localeCompare(a.createdAt));
+    const open=st.filter(s=>s.status!=="repaid"), over=open.filter(s=>settleStatus(s)==="overdue");
+    extra=`<div class="tiles">${tile({l:"Truckloads on the way",v:inT.length,c:`${toCheck.length} batter${toCheck.length===1?"y":"ies"} to gate-check`})}
+      ${tile({l:"To repay LeadLoop",v:inr(open.reduce((a,s)=>a+s.total,0)),tone:over.length?"bad":"",c:over.length?`${over.length} overdue`:open.length?`Next due ${fmtDs(open.map(s=>s.dueAt).sort()[0])}`:"Nothing due"})}
+      ${tile({l:"Received this month",v:Math.round(all.filter(b=>b.recyclerId===me&&b.closedAt&&b.closedAt.slice(0,7)===new Date().toISOString().slice(0,7)).reduce((a,b)=>a+(b.recyclerKg||0),0)).toLocaleString("en-IN"),u:"kg",c:"At your gate weight"})}</div>
+      ${inT.length?`<h2>Truckloads to gate-check</h2>${inT.map(truckRow).join("")}`:`<p class="sub" style="margin-top:14px">No truckloads on the way. The yard dispatches them from its home screen.</p>`}
+      ${st.length?`<h2>Settlement statements</h2>${st.slice(0,6).map(settleRow).join("")}`:""}
+      ${tr.filter(t=>t.status==="received").length?`<details style="margin-top:12px"><summary class="small muted">Received truckloads</summary>${tr.filter(t=>t.status==="received").map(truckRow).join("")}</details>`:""}`;
+  }
+  const title = {vendor:"Pick up a battery",dealer:"Take back an old battery",yard:"Weigh in at the yard",recycler:"Gate check"}[r]||"Scan";
+  const sub = {vendor:"Scan the sticker and fill the form. Aim for under 90 seconds.",dealer:"Phase 2. When a driver exchanges a battery, tag the old one and keep it in a crate until a partner scrap vendor collects it.",yard:"Re-weigh, photograph and check each battery, then pay the scrap vendor.",recycler:"Open a truckload, scan each battery and confirm your weight to close the record."}[r]||"";
+  app.innerHTML = `${slowNote()}<div class="rolehead"><span class="ri" style="background:${ROLE_TINT[r]}">${roleIcon(r)}</span><div><h1>${esc(title)}</h1><div class="who2">${esc(S.user.label)} · ${esc(S.user.area)}</div></div></div><p class="sub" style="margin-top:8px">${esc(sub)}</p>${scanButtons()}${extra}`;
+  wireScan();
+  app.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>routeBattery(el.dataset.open));
+  app.querySelectorAll("[data-truck]").forEach(el=>el.onclick=()=>go("truck",el.dataset.truck));
+  app.querySelectorAll("[data-settle]").forEach(el=>el.onclick=()=>go("settlement",el.dataset.settle));
+  if($("#myPay")) $("#myPay").onclick=()=>go("payouts");
+  if($("#disp")) $("#disp").onclick=()=>go("dispatch");
+}
+function truckRow(t){
+  const bs=t.batteryIds.map(i=>S.batteries.get(i)).filter(Boolean), done=bs.filter(b=>b.status==="closed").length;
+  return `<button class="lrow" data-truck="${esc(t.id)}"><span><b>${esc(t.manifestNo)}</b><div class="sub2">${esc(t.yardId)} → ${esc(t.recyclerId)} · ${fmtDs(t.dispatchedAt)} · ${t.batteryIds.length} batter${t.batteryIds.length===1?"y":"ies"}, ${kg(t.kgAtYard)}</div></span><span class="meta">${t.status==="received"?mk("ok","check","Received"):mk("info","truck",`${done} of ${t.batteryIds.length} gate-checked`)}</span></button>`;
+}
+function settleRow(s){
+  return `<button class="lrow" data-settle="${esc(s.id)}"><span><b>${esc(s.id)}</b> <span class="sub2">${esc(s.manifestNo)}</span><div class="sub2">${s.lines.length} batter${s.lines.length===1?"y":"ies"} · gate-checked ${fmtDs(s.gateCheckedAt)}</div></span><span class="meta"><b class="num">${inr(s.total)}</b>${settleMark(s)}</span></button>`;
+}
+
+/* ----- scan 1: vendor / dealer pickup form ----- */
+const pickReq = (f,dealer) => [f.source,f.brand,f.died,parseFloat(f.weight)>0,f.photo,f.label,f.leaking,f.sale].concat(dealer?[]:[parseFloat(f.paid)>0,(f.upi||"").trim().length>=6]);
+function viewPickup(app){
+  const L=T[S.lang], f=S.form, dealer=S.user.role==="dealer";
+  if(!f){ S.view="home"; return render(); }
+  const chip=(name,val,txt,warn,icon,cls)=>`<button class="chip ${icon?"tile":""} ${cls||""} ${f[name]===val?"on":""} ${warn?"warn":""}" data-k="${name}" data-v="${esc(val)}" aria-pressed="${f[name]===val}">${icon||""}<span>${esc(txt)}</span></button>`;
+  const srcIcon={"e-rickshaw":ICON.erick(),inverter:ICON.inverter(),bike:ICON.bike(),car:ICON.car(),other:ICON.other()};
+  const req=pickReq(f,dealer), done=req.filter(Boolean).length;
+  const sec=Math.floor((Date.now()-(S.scanAt||Date.now()))/1000);
+  app.innerHTML = `
+  <div class="formhead">
+    <div class="ring" id="ring">${ringHTML(sec)}</div>
+    <div style="flex:1"><h1 style="margin:0;font-size:24px" class="${S.lang==="hi"?"hi":""}">${esc(dealer?L.takebackTitle:L.pickupTitle)}</h1><div class="small muted" id="prog">${done} ${esc(L.of)} ${req.length} ${esc(L.done)}</div></div>
+    <div class="lang"><button data-lang="en" class="${S.lang==="en"?"on":""}">EN</button><button data-lang="hi" class="${S.lang==="hi"?"on":""}">हिंदी</button></div>
+  </div>
+  <div class="sheet tight">
+    <div>${sticker(S.id)}</div>
+    <dl class="kv"><dt>${esc(L.auto)}</dt><dd>${esc(S.user.id)}</dd><dt>${esc(L.time)}</dt><dd>${esc(new Date(S.scanAt||Date.now()).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"}))}</dd><dt>${esc(L.gps)}</dt><dd id="gpsTxt">${S.gpsResult===undefined?esc(L.gpsWait):S.gpsResult?esc(gpsText(S.gpsResult)):esc(L.gpsNo)}</dd></dl>
+  </div>
+  <div class="${S.lang==="hi"?"hi":""}">
+  <label class="f">${esc(L.source)}</label>
+  <div class="chips">${SOURCES.map(s=>chip("source",s,L.src[s],false,srcIcon[s])).join("")}</div>
+  <label class="f">${esc(L.brand)}</label>
+  <div class="chips">${BRANDS.map(s=>chip("brand",s,L.brandO[s])).join("")}</div>
+  <label class="f">${esc(L.vehicle)} <span class="opt">(${esc(L.optional)})</span></label>
+  <input class="t" id="veh" value="${esc(f.vehicle)}" placeholder="DL 1E A 1234" autocomplete="off" style="text-transform:uppercase">
+  <div class="small muted" id="vehMask" style="margin-top:6px">${f.vehicle?"Saved as "+esc(maskVehicle(f.vehicle)):esc(L.vehHint)}</div>
+  <label class="f">${esc(L.died)}</label>
+  <div class="chips">${DIED.map(d=>chip("died",d,L.diedO[d])).join("")}</div>
+  <label class="f" for="wt">${esc(L.weight)}</label>
+  <div class="weigh"><input class="t" id="wt" type="number" inputmode="decimal" step="0.1" min="0" value="${esc(f.weight)}" placeholder="30" style="font-size:26px;font-weight:700">${dialHTML(f.weight)}</div>
+  <label class="f">${esc(L.photo)}</label>
+  <button class="photo-box" id="ph">${f.photo?`<img src="${f.photo}" alt=""><span class="small muted">${esc(L.retake)}</span>`:`${ICON.camera()}<span>${esc(L.tapPhoto)}</span>`}</button>
+  <label class="f">${esc(L.label)}</label>
+  <button class="photo-box sm" id="lph">${f.label?`<img src="${f.label}" alt=""><span class="small muted">${esc(L.retake)}</span>`:`<span>${esc(L.tapPhoto)}</span><span class="small muted">${esc(L.labelHint)}</span>`}</button>
+  <label class="f">${esc(L.leaking)}</label>
+  <div class="chips">${chip("leaking","yes",L.yes,true,`<span style="width:22px;height:22px;display:inline-flex;color:${C.saffron}">${ICN.drop}</span>`)}${chip("leaking","no",L.no)}</div>
+  ${dealer?`<label class="f">${esc(L.saleT)}</label>
+  <div class="chips">${["1","2","3","4"].map(n=>chip("sale",n,n,false,"","n")).join("")}</div>
+  <div class="banner info small" style="margin-top:14px">${esc(L.exch)}</div>`:`<div class="slip" style="margin-top:22px">
+    <div class="sh"><b>Paid to the driver</b>${mk("neutral","rupee","Step 3: pay seller")}</div>
+    <label class="f" for="paid" style="margin-top:12px">${esc(L.paid)}</label>
+    <div class="money-in"><span>₹</span><input class="t" id="paid" type="number" inputmode="numeric" min="0" step="10" value="${esc(f.paid)}" placeholder="1830"></div>
+    <div class="small muted" id="rateHint" style="margin-top:6px">${esc(L.rateHint)}${parseFloat(f.weight)>0?`: ₹${Math.round(f.weight*DRIVER_RATE[0]).toLocaleString("en-IN")}–${Math.round(f.weight*DRIVER_RATE[1]).toLocaleString("en-IN")} for ${f.weight} kg`:""}</div>
+    <label class="f" for="upi">${esc(L.upi)}</label>
+    <input class="t" id="upi" value="${esc(f.upi)}" inputmode="numeric" autocomplete="off" placeholder="${esc(L.upiHint)}">
+    <label class="f">${esc(L.sale)}</label>
+    <div class="chips">${["1","2","3","4"].map(n=>chip("sale",n,n,false,"","n")).join("")}</div>
+  </div>`}
+  </div>
+  <div id="formErr"></div>
+  <button class="btn" id="save" style="margin-top:20px">${esc(dealer?L.submitT:L.submit)}</button>
+  <button class="btn ghost" id="cancel">Cancel</button>`;
+  const tick=()=>{ const el=$("#ring"); if(!el) return; el.innerHTML=ringHTML(Math.floor((Date.now()-(S.scanAt||Date.now()))/1000)); };
+  if(S.timerInt) clearInterval(S.timerInt); S.timerInt=setInterval(tick,1000);
+  if(S.gpsPromise && S.gpsResult===undefined) S.gpsPromise.then(()=>{ const el=$("#gpsTxt"); if(el) el.textContent = S.gpsResult?gpsText(S.gpsResult):T[S.lang].gpsNo; });
+  const prog=()=>{ const r=pickReq(f,dealer); $("#prog").textContent=`${r.filter(Boolean).length} ${L.of} ${r.length} ${L.done}`; };
+  app.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{ S.lang=b.dataset.lang; try{localStorage.setItem("ll_lang",S.lang);}catch(e){} render(); });
+  app.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{ f[b.dataset.k]=b.dataset.v; render(); });
+  $("#veh").oninput=e=>{ f.vehicle=e.target.value; $("#vehMask").textContent = f.vehicle ? "Saved as "+maskVehicle(f.vehicle) : L.vehHint; };
+  $("#wt").oninput=e=>{ f.weight=e.target.value; setNeedle(f.weight); prog(); const h=$("#rateHint"); if(h){ const w=parseFloat(f.weight); h.textContent=L.rateHint+(w>0?`: ₹${Math.round(w*DRIVER_RATE[0]).toLocaleString("en-IN")}–${Math.round(w*DRIVER_RATE[1]).toLocaleString("en-IN")} for ${w} kg`:""); } };
+  if($("#paid")) $("#paid").oninput=e=>{ f.paid=e.target.value; prog(); };
+  if($("#upi")) $("#upi").oninput=e=>{ f.upi=e.target.value; prog(); };
+  $("#ph").onclick=async()=>{ const file=await pickFile("filePhoto"); if(!file) return; try{ f.photo=await compressPhoto(file); }catch(e){ f.photo=null; } render(); };
+  $("#lph").onclick=async()=>{ const file=await pickFile("filePhoto"); if(!file) return; try{ f.label=await compressPhoto(file,480,.6); }catch(e){ f.label=null; } render(); };
+  $("#cancel").onclick=()=>go("home");
+  $("#save").onclick=savePickup;
+}
+async function savePickup(){
+  const L=T[S.lang], f=S.form, dealer=S.user.role==="dealer";
+  const w=parseFloat(f.weight), paid=parseFloat(f.paid), upi=(f.upi||"").trim();
+  const miss=[];
+  if(!f.source) miss.push(L.source);
+  if(!f.brand) miss.push(L.brand);
+  if(!f.died) miss.push(L.died);
+  if(!(w>0&&w<500)) miss.push(L.weight);
+  if(!f.photo) miss.push(L.photo);
+  if(!f.label) miss.push(L.label);
+  if(!f.leaking) miss.push(L.leaking);
+  if(!dealer&&!(paid>0)) miss.push(L.paid);
+  if(!dealer&&upi.length<6) miss.push(L.upi);
+  if(!f.sale) miss.push(dealer?L.saleT:L.sale);
+  if(miss.length){ $("#formErr").innerHTML=`<div class="banner err">${esc(L.need)} ${miss.map(esc).join(", ")}</div>`; return; }
+  const btn=$("#save"); btn.disabled=true; btn.textContent="…";
+  const cur=S.batteries.get(S.id);
+  if(!cur||cur.status!=="unused"){ modal(`<h2>Sticker already used</h2><p>Someone registered ${esc(S.id)} a moment ago.</p><button class="btn" onclick="closeModal()">OK</button>`); go("home"); return; }
+  const gps = S.gpsResult===undefined ? await Promise.race([S.gpsPromise||Promise.resolve(null),new Promise(r=>setTimeout(()=>r(null),1500))]) : S.gpsResult;
+  const at=new Date().toISOString(), dur=Math.round((Date.now()-S.scanAt)/1000), sale=+f.sale;
+  const payF = dealer ? {exchange:true} : {paidToDriverInr:paid,driverUpiRef:upi};
+  const ev={type:dealer?"dealer_takeback":"pickup",at,by:S.user.id,role:S.user.role,gps:gps||null,kg:w,photo:f.photo,labelPhoto:f.label||null,
+    source:f.source,brand:f.brand,vehicleMasked:maskVehicle(f.vehicle),diedWhen:f.died,leaking:f.leaking==="yes",durationSec:dur,batteriesInSale:sale,...payF};
+  const nb=Object.assign(clone(cur),{status:"picked_up",channel:dealer?"dealer":"vendor",source:f.source,brand:f.brand,vehicleMasked:maskVehicle(f.vehicle),diedWhen:f.died,leaking:f.leaking==="yes",
+    pickupKg:w,pickedUpBy:S.user.id,pickedUpAt:at,pickupGps:gps||null,batteriesInSale:sale,...payF,flagged:false,flags:[],events:[...(cur.events||[]),ev],updatedAt:at});
+  try{ await saveBattery(S.id,nb); }
+  catch(e){ btn.disabled=false; btn.textContent=dealer?L.submitT:L.submit; $("#formErr").innerHTML=`<div class="banner err">${errText(e)}</div>`; return; }
+  audit(dealer?"Take-back logged":"Pickup logged",S.id,dealer?`${kg(w)}, exchange at ${S.user.id}`:`${kg(w)}, ${inr(paid)} paid to the driver (UPI ${upi})`);
+  S.done={id:S.id,dur,kind:"pickup"}; S.form=null; S.view="done"; render();
+}
+function viewDone(app){
+  const L=T[S.lang], d=S.done||{};
+  const pick = d.kind==="pickup", r=66, Lc=2*Math.PI*r, frac=pick?Math.min((d.dur||0)/90,1):1, late=pick&&d.dur>90;
+  const b=S.batteries.get(d.id), po=d.payoutId&&S.payouts.get(d.payoutId);
+  app.innerHTML = `<div class="donescreen">
+    <div class="big"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="${r}" fill="none" stroke="#e3e7e1" stroke-width="10"/><circle class="arc" cx="75" cy="75" r="${r}" fill="none" stroke="${late?"#b3261e":d.flagMsg?C.saffron:C.leaf}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${Lc}" stroke-dashoffset="${Lc*(1-frac)}" transform="rotate(-90 75 75)"/><path class="chk" d="M50 77l17 17 34-36" fill="none" stroke="${C.forest}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h1 class="${S.lang==="hi"&&pick?"hi":""}">${esc(pick?L.saved:"Weighed in and paid")}</h1>
+    <div style="margin:6px 0 4px">${sticker(d.id)}</div>
+    ${pick?`<p class="sub" style="margin:8px auto">${esc(L.loggedIn)} <b>${d.dur} ${esc(L.sec)}</b>${d.dur<=90?", under the 90-second target":""}</p>`:`<p class="sub" style="margin:8px auto">${esc(d.msg||"")}</p>`}
+  </div>
+  ${d.flagMsg?`<div class="banner err">${esc(d.flagMsg)}</div>`:""}
+  ${po?payoutSlip(po):""}
+  ${b?trackHTML(b):""}
+  <button class="btn" id="again">${esc(pick?L.next:"Scan the next battery")}</button>
+  <button class="btn sec" id="view">See the custody trail</button>`;
+  $("#again").onclick=()=>go("home");
+  $("#view").onclick=()=>{ S.id=d.id; go("timeline"); };
+}
+function payoutSlip(p){
+  const ded=(p.deductions||[]).reduce((a,d)=>a+d.amount,0);
+  return `<div class="slip"><div class="sh"><div><div class="small muted">Payout ${esc(p.id)} to ${esc(p.vendorId)}</div><div class="amt">${inr(p.net)}</div></div>${payStatusMark(p)}</div>
+   <dl><dt>Battery</dt><dd>${esc(p.batteryId)}, ${kg(p.kg)} at the yard</dd><dt>Rate</dt><dd>₹${p.rate}/kg = ${inr(p.gross)}</dd>${ded?`<dt>Deduction</dt><dd>− ${inr(ded)} (${(p.deductions||[]).map(d=>esc(d.id)+" for "+esc(d.batteryId)).join(", ")})</dd>`:""}<dt>UPI ref</dt><dd>${esc(p.upiRef)}</dd><dt>Paid by</dt><dd>${esc(p.yardId)}, ${fmtDT(p.at)}, for ${esc(p.recyclerId)}</dd></dl></div>`;
+}
+
+/* ----- scan 2: yard weigh-in + same-day payout ----- */
+const pendingDeductions = vid => [...S.payouts.values()].filter(p=>p.kind==="deduction"&&p.status==="pending"&&p.vendorId===vid);
+function viewYard(app){
+  const f=S.form, b=S.batteries.get(S.id);
+  if(!f||!b){ S.view="home"; return render(); }
+  if(b.channel==="dealer"&&!f.collector) f.collector=DEALER_COLLECTOR[S.user.id]||"V-101";
+  const payee=b.channel==="dealer"?f.collector:b.pickedUpBy;
+  const t=thr(), deds=pendingDeductions(payee), dsum=deds.reduce((a,d)=>a+d.amount,0);
+  const yb=w=>diffBanner(b.pickupKg,w,t,"Pickup","yard","record will be flagged")+(w>0?`<div class="slip"><div class="sh"><b>Pay ${esc(payee)} today, for ${esc(S.user.recycler)}</b><span class="amt">${inr(Math.max(0,Math.round(vendorPayout(w))-dsum))}</span></div>
+     <dl><dt>${kg(w)} × ₹${RATE}/kg</dt><dd>${inr(Math.round(vendorPayout(w)))} <span class="muted small">(₹${WHOLESALE_PER_KG} + ₹${MATCH_PER_KG} match)</span></dd>${deds.map(d=>`<dt>Less ${esc(d.id)}</dt><dd>− ${inr(d.amount)} <span class="muted small">gate gap on ${esc(d.batteryId)}</span></dd>`).join("")}</dl></div>`:"");
+  const conds=["Intact","Casing damaged","Leaking","Terminals damaged"];
+  app.innerHTML = `${backBtn()}<h1 style="margin-top:4px">Yard weigh-in</h1>
+  ${trackHTML(b)}
+  <div class="sheet tight"><dl class="kv" style="margin:0"><dt>Picked up by</dt><dd>${esc(userLabel(b.pickedUpBy))}</dd><dt>When</dt><dd>${esc(fmtDT(b.pickedUpAt))}</dd><dt>Source</dt><dd>${esc(T.en.src[b.source]||b.source)}</dd><dt>Leaking at pickup</dt><dd>${b.leaking?"Yes":"No"}</dd>${b.channel==="dealer"?`<dt>Exchange</dt><dd>Tagged by dealer ${esc(b.pickedUpBy)}; ₹${ALLOWANCE} tagging fee to the dealer</dd>`:""}${b.paidToDriverInr?`<dt>Driver was paid</dt><dd>${inr(b.paidToDriverInr)} (UPI ${esc(b.driverUpiRef||"—")}), ${b.batteriesInSale||1} in the sale</dd>`:""}</dl>
+   <div class="small muted" style="margin-top:8px">This yard is the collection centre of ${esc(userLabel(S.user.recycler))}.</div></div>
+  <label class="f" for="wt">Re-weigh on the yard scale (kg)</label>
+  <div class="weigh"><input class="t" id="wt" type="number" inputmode="decimal" step="0.1" value="${esc(f.weight)}" placeholder="kg" style="font-size:26px;font-weight:700">${dialHTML(f.weight)}</div>
+  <div id="diff">${yb(parseFloat(f.weight))}</div>
+  ${b.channel==="dealer"?`<label class="f" for="coll">Brought in by partner scrap vendor</label><select class="t" id="coll">${USERS.filter(u=>u.role==="vendor").map(u=>`<option value="${u.id}" ${f.collector===u.id?"selected":""}>${u.id} · ${esc(u.area)}</option>`).join("")}</select>`:""}
+  <label class="f">Photo on the yard scale</label>
+  <button class="photo-box" id="ph">${f.photo?`<img src="${f.photo}" alt=""><span class="small muted">Tap to retake</span>`:`${ICON.camera()}<span>Tap to take photo</span>`}</button>
+  <label class="f">Condition check</label>
+  <div class="chips">${conds.map(c=>`<button class="chip ${f.condition===c?"on":""} ${c==="Leaking"&&f.condition===c?"warn":""}" data-c="${c}" aria-pressed="${f.condition===c}">${c}</button>`).join("")}</div>
+  <label class="f" for="upi">UPI reference of the payment to ${esc(payee)}</label>
+  <input class="t" id="upi" value="${esc(f.upi)}" inputmode="numeric" autocomplete="off">
+  <div class="small muted" style="margin-top:6px">Demo: a reference is filled in. In use, paste it from the payment app.</div>
+  <div id="formErr"></div>
+  <button class="btn" id="save" style="margin-top:20px">Confirm weigh-in and payment</button>
+  <button class="btn ghost" id="cancel">Cancel</button>`;
+  $("#back").onclick=()=>go("home");
+  $("#wt").oninput=e=>{ f.weight=e.target.value; setNeedle(f.weight); $("#diff").innerHTML=yb(parseFloat(f.weight)); };
+  $("#upi").oninput=e=>{ f.upi=e.target.value; };
+  if($("#coll")) $("#coll").onchange=e=>{ f.collector=e.target.value; render(); };
+  $("#ph").onclick=async()=>{ const file=await pickFile("filePhoto"); if(!file) return; try{ f.photo=await compressPhoto(file);}catch(e){} render(); };
+  app.querySelectorAll("[data-c]").forEach(x=>x.onclick=()=>{ f.condition=x.dataset.c; render(); });
+  $("#cancel").onclick=()=>go("home");
+  $("#save").onclick=saveYard;
+}
+async function saveYard(){
+  const f=S.form, t=thr();
+  const w=parseFloat(f.weight), miss=[];
+  if(!(w>0)) miss.push("weight"); if(!f.photo) miss.push("photo"); if(!f.condition) miss.push("condition"); if((f.upi||"").trim().length<6) miss.push("UPI reference");
+  if(miss.length){ $("#formErr").innerHTML=`<div class="banner err">Please add: ${miss.join(", ")}</div>`; return; }
+  const cur=S.batteries.get(S.id); if(cur.status!=="picked_up"){ modal(`<h2>Already received</h2><button class="btn" onclick="closeModal()">OK</button>`); return; }
+  $("#save").disabled=true;
+  if(!S.gpsPromise) startGPS();
+  const gps=await Promise.race([S.gpsPromise,new Promise(r=>setTimeout(()=>r(null),1500))]);
+  const at=new Date().toISOString(), p=(w-cur.pickupKg)/cur.pickupKg*100, bad=Math.abs(p)>t;
+  const flags=[...(cur.flags||[])];
+  if(bad) flags.push({type:"weight_mismatch",stage:"yard",at,baseKg:cur.pickupKg,newKg:w,diffPct:+p.toFixed(1),thresholdPct:t});
+  const payee=cur.channel==="dealer"?(f.collector||DEALER_COLLECTOR[S.user.id]):cur.pickedUpBy;
+  const deds=pendingDeductions(payee), gross=Math.round(vendorPayout(w)), dsum=deds.reduce((a,d)=>a+d.amount,0);
+  const pid=rid("PO");
+  const po={id:pid,kind:"payout",vendorId:payee,batteryId:cur.id,yardId:S.user.id,recyclerId:S.user.recycler,kg:w,rate:RATE,gross,
+    deductions:deds.map(d=>({id:d.id,amount:d.amount,batteryId:d.batteryId})),net:Math.max(0,gross-dsum),upiRef:f.upi.trim(),status:"paid",at,by:S.user.id};
+  const ev={type:"yard_receipt",at,by:S.user.id,role:"yard",gps:gps||null,kg:w,photo:f.photo,condition:f.condition,diffPct:+p.toFixed(1),flagged:bad,payoutId:pid};
+  const nb=Object.assign(clone(cur),cur.channel==="dealer"?{deliveredBy:payee}:{},{status:"at_yard",yardId:S.user.id,recyclerId:S.user.recycler,yardKg:w,yardAt:at,condition:f.condition,payoutId:pid,flagged:flags.length>0,flags,events:[...(cur.events||[]),ev],updatedAt:at});
+  try{ await saveBattery(S.id,nb); await saveDoc("payouts/"+pid,po); }
+  catch(e){ $("#save").disabled=false; $("#formErr").innerHTML=`<div class="banner err">${errText(e)}</div>`; return; }
+  for(const d of deds){ try{ await saveDoc("payouts/"+d.id,Object.assign(clone(d),{status:"recovered",recoveredIn:pid,recoveredAt:at})); audit("Deduction recovered",d.id,`${inr(d.amount)} netted from ${pid}`); }catch(e){} }
+  audit("Weighed in and paid",S.id,`${kg(w)} (${p>=0?"+":""}${p.toFixed(1)}% vs pickup), ${pid} ${inr(po.net)} to ${payee}, UPI ${po.upiRef}`);
+  S.done={id:S.id,kind:"yard",payoutId:pid,msg:`Weighed in at ${S.user.label}. ${payee} paid ${inr(po.net)} by UPI.`,flagMsg:bad?`Flagged: weight differs by ${p.toFixed(1)}% from pickup (threshold ±${t}%).`:""};
+  S.form=null; S.view="done"; render();
+}
+
+/* ----- vendor: my payouts ----- */
+function viewPayouts(app){
+  const me=S.user.id;
+  const rows=[...S.payouts.values()].filter(p=>p.vendorId===me).sort((a,c)=>c.at.localeCompare(a.at));
+  const pays=rows.filter(p=>p.kind==="payout"), deds=rows.filter(p=>p.kind==="deduction");
+  const pend=deds.filter(d=>d.status==="pending").reduce((a,d)=>a+d.amount,0);
+  const tagged=[...S.batteries.values()].filter(b=>b.pickedUpBy===me&&b.yardAt).length, allowance=tagged*ALLOWANCE;
+  app.innerHTML=`${backBtn()}<h1 style="margin-top:4px">My payouts</h1><p class="sub">Paid at the LeadLoop yard when your batteries are weighed in, at ₹${RATE}/kg of yard weight.</p>
+  <div class="tiles">${tile({l:"Paid to you",v:inr(pays.reduce((a,p)=>a+p.net,0)),c:`${pays.length} payment${pays.length===1?"":"s"}, ${kg(pays.reduce((a,p)=>a+p.kg,0))}`})}
+   ${tile({l:S.user.role==="dealer"?"Tagging fee":"Delivery-and-record allowance",v:inr(allowance),c:`₹${ALLOWANCE} for each battery you tagged that reached the yard`})}
+   ${tile({l:"Comes off next payout",v:inr(pend),tone:pend?"amber":"",c:pend?"Weight gap at a recycler gate":"No deductions waiting"})}</div>
+  <h2>Ledger</h2>
+  <div class="tablewrap rt"><table><thead><tr><th>Date</th><th>Battery</th><th class="num">kg</th><th class="num">Gross</th><th class="num">Deducted</th><th class="num">Paid</th><th>UPI ref</th><th>Status</th></tr></thead><tbody>
+  ${rows.map(p=>p.kind==="deduction"
+    ?`<tr><td class="lead">${fmtDs(p.at)} · deduction ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Gap" class="num">${kg1(p.kgGap)}</td><td data-l="Gross"></td><td data-l="Amount" class="num">− ${inr(p.amount)}</td><td data-l="Paid"></td><td data-l="Why" class="wrap">${esc(p.reason)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`
+    :`<tr><td class="lead">${fmtDs(p.at)} · ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="kg" class="num">${kg1(p.kg)}</td><td data-l="Gross" class="num">${inr(p.gross)}</td><td data-l="Deducted" class="num">${(p.deductions||[]).length?"− "+inr(p.gross-p.net):""}</td><td data-l="Paid" class="num"><b>${inr(p.net)}</b></td><td data-l="UPI ref">${esc(p.upiRef)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="8" class="muted">${S.user.role==="dealer"?"Dealers aren't paid for batteries: the partner scrap vendor who collects them is. You earn the ₹10 tagging fee above.":"No payouts yet. You're paid when a battery you logged is weighed in at the yard."}</td></tr>`}
+  </tbody></table></div>`;
+  $("#back").onclick=()=>go("home");
+}
+
+/* ----- yard: dispatch a truckload ----- */
+function viewDispatch(app){
+  const me=S.user.id;
+  const ready=[...S.batteries.values()].filter(b=>b.status==="at_yard"&&b.yardId===me&&!b.truckId).sort((a,c)=>a.yardAt.localeCompare(c.yardAt));
+  if(!S.form) S.form={sel:new Set(ready.map(b=>b.id)),truckNo:"",manifest:"MF-"+me.replace("-","")+"-"+new Date().toISOString().slice(2,10).replace(/-/g,"")+"-"+String(Math.floor(Math.random()*90+10))};
+  const f=S.form, sel=ready.filter(b=>f.sel.has(b.id)), kgT=sel.reduce((a,b)=>a+(b.yardKg||0),0);
+  app.innerHTML=`${backBtn()}<h1 style="margin-top:4px">Dispatch a truckload</h1><p class="sub">Load batteries onto ${esc(S.user.recycler)}'s truck. Each one gets the manifest number; the recycler scans them at its gate.</p>
+  ${ready.length?`<div class="sheet">${ready.map(b=>`<label class="lrow" style="cursor:pointer"><span class="row"><input type="checkbox" data-sel="${esc(b.id)}" ${f.sel.has(b.id)?"checked":""} style="width:22px;height:22px">${sticker(b.id,1)}<span class="sub2">${kg(b.yardKg)}</span></span><span class="meta">${flagMark(b)}${custodyMark(b)}</span></label>`).join("")}</div>`:`<div class="banner info">Nothing waiting at this yard. Weigh batteries in first.</div>`}
+  <div class="slip"><div class="sh"><div><div class="small muted">Manifest</div><div class="ref">${esc(f.manifest)}</div></div><div style="text-align:right"><div class="amt">${sel.length}</div><div class="small muted">batteries, ${kg(kgT)}</div></div></div>
+    <dl><dt>From</dt><dd>${esc(S.user.label)}</dd><dt>To</dt><dd>${esc(userLabel(S.user.recycler))}</dd></dl>
+    <label class="f" for="tno">Truck number</label><input class="t" id="tno" value="${esc(f.truckNo)}" placeholder="HR 55 AK 7713" style="text-transform:uppercase" autocomplete="off"></div>
+  <div id="formErr"></div>
+  <button class="btn" id="go" ${sel.length?"":"disabled"}>${ICN.truck.replace('viewBox','width="22" height="22" viewBox')}Dispatch ${sel.length} batter${sel.length===1?"y":"ies"}</button>
+  <button class="btn ghost" id="cancel">Cancel</button>`;
+  $("#back").onclick=$("#cancel").onclick=()=>go("home");
+  app.querySelectorAll("[data-sel]").forEach(c=>c.onchange=()=>{ c.checked?f.sel.add(c.dataset.sel):f.sel.delete(c.dataset.sel); render(); });
+  $("#tno").oninput=e=>{ f.truckNo=e.target.value; };
+  $("#go").onclick=async()=>{
+    if(!sel.length) return;
+    if(!(f.truckNo||"").trim()){ $("#formErr").innerHTML=`<div class="banner err">Add the truck number.</div>`; return; }
+    $("#go").disabled=true;
+    const at=new Date().toISOString(), tid=rid("TL");
+    const t={id:tid,manifestNo:f.manifest,yardId:me,recyclerId:S.user.recycler,batteryIds:sel.map(b=>b.id),kgAtYard:Math.round(kgT*10)/10,truckNo:f.truckNo.trim().toUpperCase(),dispatchedAt:at,dispatchedBy:me,status:"in_transit"};
+    try{
+      await saveDoc("truckloads/"+tid,t);
+      for(const b of sel){ const cur=S.batteries.get(b.id);
+        await saveBattery(b.id,Object.assign(clone(cur),{truckId:tid,dispatchedAt:at,updatedAt:at,events:[...(cur.events||[]),{type:"dispatch",at,by:me,role:"yard",truckId:tid,manifestNo:t.manifestNo,truckNo:t.truckNo}]})); }
+    }catch(e){ $("#go").disabled=false; $("#formErr").innerHTML=`<div class="banner err">${errText(e)}</div>`; return; }
+    audit("Truckload dispatched",t.manifestNo,`${sel.length} batteries, ${kg(kgT)}, truck ${t.truckNo} to ${t.recyclerId}`);
+    toast("Dispatched "+t.manifestNo); go("truck",tid);
+  };
+}
+
+/* ----- truckload view (yard + recycler + admin) ----- */
+function viewTruck(app){
+  const t=S.trucks.get(S.ref); if(!t){ return go(homeOf()); }
+  const bs=t.batteryIds.map(i=>S.batteries.get(i)).filter(Boolean), done=bs.filter(b=>b.status==="closed");
+  const rec=S.user.role==="recycler"&&S.user.id===t.recyclerId;
+  const kgR=done.reduce((a,b)=>a+(b.recyclerKg||0),0);
+  app.innerHTML=`${backBtn()}<h1 style="margin-top:4px">Truckload</h1>
+  <div class="slip"><div class="sh"><div><div class="small muted">Manifest</div><div class="ref">${esc(t.manifestNo)}</div></div>${t.status==="received"?mk("ok","check","Received "+fmtDs(t.receivedAt)):mk("info","truck",`${done.length} of ${bs.length} gate-checked`)}</div>
+   <dl><dt>From</dt><dd>${esc(userLabel(t.yardId))}</dd><dt>To</dt><dd>${esc(userLabel(t.recyclerId))}</dd><dt>Truck</dt><dd>${esc(t.truckNo)}</dd><dt>Dispatched</dt><dd>${fmtDT(t.dispatchedAt)}</dd></dl>
+   <div class="tot"><span>${bs.length} batteries</span><span>${kg(t.kgAtYard)} at yard${done.length?` · ${kg(kgR)} at gate`:""}</span></div></div>
+  ${rec&&t.status!=="received"?`<div class="banner info">Scan each battery at your gate, or tap one below. The statement is made when the last one is checked.</div>`:""}
+  <div class="tablewrap rt"><table><thead><tr><th>Battery</th><th class="num">Yard kg</th><th class="num">Gate kg</th><th class="num">Gap</th><th>Status</th><th></th></tr></thead><tbody>
+  ${bs.map(b=>{ const p=pct(b.yardKg,b.recyclerKg), bad=p!=null&&Math.abs(p)>thr();
+    return `<tr class="click" data-open="${esc(b.id)}"><td class="lead">${sticker(b.id,1)}</td><td data-l="Yard kg" class="num">${kg1(b.yardKg)}</td><td data-l="Gate kg" class="num">${b.recyclerKg!=null?kg1(b.recyclerKg):"—"}</td><td data-l="Gap" class="num" style="color:${bad?"var(--red)":"inherit"}">${p==null?"—":(p>=0?"+":"")+p.toFixed(1)+"%"}</td><td data-l="Status">${statusMark(b.status)} ${flagMark(b)}</td><td data-l="">${rec&&b.status!=="closed"?`<span class="btn small" style="margin:0">Gate check</span>`:""}</td></tr>`;}).join("")}
+  </tbody></table></div>
+  ${t.settlementId?`<button class="btn" id="st" style="margin-top:14px">Open settlement statement ${esc(t.settlementId)}</button>`:""}`;
+  $("#back").onclick=()=>go(homeOf());
+  app.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{ S.ref=t.id; routeBattery(el.dataset.open,{quiet:true}); });
+  if($("#st")) $("#st").onclick=()=>go("settlement",t.settlementId);
+}
+
+/* ----- settlement statement ----- */
+function viewSettlement(app){
+  const s=S.settlements.get(S.ref); if(!s) return go(homeOf());
+  const st=settleStatus(s), canPay=(S.user.role==="recycler"&&S.user.id===s.recyclerId)||S.user.role==="admin";
+  app.innerHTML=`${backBtn()}<h1 style="margin-top:4px">Settlement statement</h1>
+  <div class="slip"><div class="sh"><div><div class="small muted">${esc(s.id)} · ${esc(userLabel(s.recyclerId))} owes LeadLoop</div><div class="amt">${inr2(s.total)}</div></div>${settleMark(s)}</div>
+   <dl><dt>Truckload</dt><dd>${esc(s.manifestNo)} from ${esc(s.yardId)}</dd><dt>Gate check done</dt><dd>${fmtDT(s.gateCheckedAt)}</dd><dt>Due</dt><dd>${fmtD(s.dueAt)} (gate check + ${REPAY_DAYS} days)</dd>${s.status==="repaid"?`<dt>Repaid</dt><dd>${fmtD(s.repaidAt)}, ref ${esc(s.repaidRef)}</dd>`:""}</dl></div>
+  <div class="tablewrap rt"><table><thead><tr><th>Battery</th><th>Partner</th><th class="num">Yard kg</th><th class="num">Gate kg</th><th class="num">Gap</th><th class="num">Partner paid</th><th class="num">Fee ₹${FEE_PER_KG}/kg</th></tr></thead><tbody>
+   ${s.lines.map(l=>`<tr><td class="lead">${esc(l.batteryId)} ${l.flagged?mk("flag","tri","Gap over "+thr()+"%"):""}</td><td data-l="Partner">${esc(l.vendorId)}</td><td data-l="Yard kg" class="num">${kg1(l.yardKg)}</td><td data-l="Gate kg" class="num">${kg1(l.recyclerKg)}</td><td data-l="Gap" class="num">${(l.diffPct>=0?"+":"")+l.diffPct}%</td><td data-l="Partner paid" class="num">${inr(l.vendorPaid)}</td><td data-l="Fee" class="num">${inr2(l.fee)}</td></tr>`).join("")}
+   </tbody><tfoot><tr><td data-l="Total" colspan="5">Total</td><td data-l="Partner payments" class="num">${inr(s.vendorPayments)}</td><td data-l="Fee" class="num">${inr2(s.fee)}</td></tr></tfoot></table></div>
+  <div class="sheet tight"><dl class="kv" style="margin:0"><dt>Partner payments advanced by LeadLoop</dt><dd class="num">${inr(s.vendorPayments)}</dd><dt>LeadLoop fee, ₹${FEE_PER_KG}/kg of gate weight</dt><dd class="num">${inr2(s.fee)}</dd><dt><b>To repay by ${fmtDs(s.dueAt)}</b></dt><dd class="num"><b>${inr2(s.total)}</b></dd></dl>
+   ${(s.deductions||[]).length?`<div class="banner warn small" style="margin-bottom:0">${s.deductions.map(d=>`Gap over ${thr()}% on ${esc(d.batteryId)}: ${inr(d.amount)} comes off ${esc(d.vendorId)}'s next payout (${esc(d.id)}).`).join(" ")}</div>`:""}</div>
+  ${s.status!=="repaid"&&canPay?`<label class="f" for="rref">Repayment reference (bank UTR)</label><input class="t" id="rref" placeholder="UTR …" autocomplete="off"><div id="formErr"></div><button class="btn" id="repay">Record repayment of ${inr2(s.total)}</button>`:""}`;
+  $("#back").onclick=()=>go(homeOf());
+  if($("#repay")) $("#repay").onclick=async()=>{
+    const ref=($("#rref").value||"").trim(); if(ref.length<4){ $("#formErr").innerHTML=`<div class="banner err">Add the bank reference.</div>`; return; }
+    $("#repay").disabled=true;
+    try{ await saveDoc("settlements/"+s.id,Object.assign(clone(s),{status:"repaid",repaidAt:new Date().toISOString(),repaidRef:ref})); }catch(e){ $("#repay").disabled=false; $("#formErr").innerHTML=`<div class="banner err">${errText(e)}</div>`; return; }
+    audit("Repayment recorded",s.id,`${inr2(s.total)} from ${s.recyclerId}, ref ${ref}`); toast("Repayment recorded"); render();
+  };
+}
+
+/* custody track: 3 scans with weights and the gaps between them */
+function trackHTML(b){
+  const t=thr();
+  const st=b.status, stage = SCANS[st]||0;
+  const yf=(b.flags||[]).some(f=>(f.stage||"yard")==="yard"), gf=(b.flags||[]).some(f=>f.stage==="gate");
+  const p1=pct(b.pickupKg,b.yardKg), p2=pct(b.yardKg,b.recyclerKg);
+  const node=(i,icon,name,w,flag)=>`<div class="node ${i<=stage?"done":i===stage+1?"now":""} ${flag?"flag":""}"><div class="dot">${icon}</div><div class="nm">${name}</div><div class="w ${w==null?"pending":""}">${w==null?"waiting":kg1(w)+"<small style='font-size:12px'> kg</small>"}</div></div>`;
+  const fill = stage<=0?0:stage===1?25:stage===2?(b.truckId?75:50):100;
+  const seg=(left,p,bad)=>p==null?"":`<div class="seg ${bad?"bad":""}" style="left:${left}%">${p>=0?"+":""}${p.toFixed(1)}%</div>`;
+  const tr=b.truckId&&S.trucks.get(b.truckId);
+  return `<div class="track"><div class="head">${sticker(b.id)}${statusMark(st)}</div>
+   <div class="trk"><div class="road"><i style="width:${fill}%"></i></div>
+    ${node(1,b.channel==="dealer"?ICON.dealer():ICON.vendor(),b.channel==="dealer"?"Dealer take-back":"Pickup",b.pickupKg,false)}
+    ${node(2,ICON.yard(),"Yard weigh-in",b.yardKg,yf)}
+    ${node(3,ICON.recycler(),"Recycler gate",b.recyclerKg,gf)}
+    ${seg(33.3,p1,p1!=null&&Math.abs(p1)>t)}${seg(66.6,p2,p2!=null&&Math.abs(p2)>t)}
+   </div>
+   <div class="truckline">${tr?`${ICN.truck.replace('viewBox','width="16" height="16" viewBox')} ${esc(tr.manifestNo)}, truck ${esc(tr.truckNo)}, ${fmtDs(tr.dispatchedAt)}`:`Weights must match within ±${t}% at each check`}</div></div>`;
+}
+
+/* ----- timeline + recycler gate check ----- */
+const EV_TITLE={pickup:"Picked up by scrap vendor",dealer_takeback:"Taken back by dealer at exchange",yard_receipt:"Weighed in at LeadLoop yard and partner paid",dispatch:"Loaded onto the recycler's truck",recycler_receipt:"Gate check at the recycler, record closed",correction:"Record corrected by LeadLoop"};
+const STAGE={yard:"Yard weigh-in vs pickup",gate:"Recycler gate vs yard"};
+function diffBanner(base,w,t,baseLabel,newLabel,consequence){
+  if(!(w>0)||!base) return "";
+  const p=(w-base)/base*100, bad=Math.abs(p)>t;
+  return `<div class="banner ${bad?"err":"ok"}">${baseLabel} ${kg(base)}, ${newLabel} ${kg(w)}: <b>${p>=0?"+":""}${p.toFixed(1)}%</b>, ${bad?`over ±${t}%, so the ${consequence}`:`within ±${t}%`}</div>`;
+}
+function timelineHTML(b){
+  const evs=[...(b.events||[])].sort((a,c)=>a.at.localeCompare(c.at));
+  if(!evs.length) return `<p class="muted">No hand-offs logged yet.</p>`;
+  return `<div class="tl">${evs.map(e=>{
+    const rows=[["Who",userLabel(e.by)],["When",fmtDT(e.at)]];
+    if(e.gps!==undefined) rows.push(["Where",gpsText(e.gps)]);
+    if(e.kg!=null) rows.push(["Weight",kg(e.kg)]);
+    if(e.type==="pickup"||e.type==="dealer_takeback"){
+      rows.push(["Source",T.en.src[e.source]||e.source||"—"]);
+      if(e.brand) rows.push(["Brand",T.en.brandO[e.brand]||e.brand]);
+      if(e.vehicleMasked) rows.push(["Vehicle",e.vehicleMasked]);
+      rows.push(["Died",T.en.diedO[e.diedWhen]||e.diedWhen||"—"],["Leaking",e.leaking?"Yes":"No"]);
+      if(e.paidToDriverInr) rows.push(["Paid to driver",`${inr(e.paidToDriverInr)}, UPI ${e.driverUpiRef||"—"}`]);
+      if(e.type==="dealer_takeback") rows.push(["Exchange",`Credited against the new battery; ₹${ALLOWANCE} tagging fee to ${e.by}`]);
+      if(e.batteriesInSale) rows.push([e.type==="dealer_takeback"?"Batteries exchanged":"Batteries in this sale",String(e.batteriesInSale)]);
+      if(e.durationSec!=null) rows.push(["Logged in",e.durationSec+" s"]);
+    }
+    if(e.type==="yard_receipt"){
+      if(b.deliveredBy) rows.push(["Brought in by",userLabel(b.deliveredBy)]);
+      rows.push(["Condition",e.condition||"—"]);
+      if(e.diffPct!=null) rows.push(["vs pickup",(e.diffPct>=0?"+":"")+e.diffPct+"%"]);
+      const po=S.payouts.get(e.payoutId||b.payoutId);
+      rows.push(["Partner paid",po?`${inr(po.net)} by UPI ${po.upiRef} (${po.id})`:`${inr(vendorPayout(e.kg))} (₹${RATE}/kg)`]);
+    }
+    if(e.type==="dispatch") rows.push(["Manifest",e.manifestNo],["Truck",e.truckNo]);
+    if(e.type==="recycler_receipt"){
+      if(e.diffPct!=null) rows.push(["vs yard",(e.diffPct>=0?"+":"")+e.diffPct+"%"]);
+      rows.push(["Recycler repays",`${inr(vendorPayout(b.yardKg||0))} + fee ${inr(FEE_PER_KG*e.kg)}, within ${REPAY_DAYS} days`]);
+    }
+    if(e.type==="correction") rows.push(["Field",e.field],["Was",e.before],["Now",e.after],["Reason",e.reason]);
+    const showPhoto = ["pickup","dealer_takeback","yard_receipt"].includes(e.type);
+    const pinIcon={pickup:ICON.vendor(),dealer_takeback:ICON.dealer(),yard_receipt:ICON.yard(),recycler_receipt:ICON.recycler(),dispatch:`<span style="color:${C.forest};display:flex">${ICN.truck.replace('viewBox','width="20" height="20" viewBox')}</span>`,correction:ICON.admin()}[e.type]||ICON.battery();
+    return `<div class="ev ${e.flagged?"flag":""}"><span class="pin">${pinIcon}</span><div class="sheet">
+      <div class="row" style="justify-content:space-between;align-items:flex-start;gap:8px"><b>${esc(EV_TITLE[e.type]||e.type)}</b>${e.flagged?mk("flag","tri","Weight flag"):""}</div>
+      <dl class="kv">${rows.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join("")}</dl>
+      ${showPhoto?(e.photo?`<img class="ph" src="${esc(e.photo)}" alt="Photo at this step">`:placeholderPhoto()):""}
+      ${e.labelPhoto?`<img class="ph" src="${esc(e.labelPhoto)}" alt="Label photo">`:""}
+    </div></div>`; }).join("")}</div>`;
+}
+function flagsHTML(b){
+  if(!(b.flags&&b.flags.length)) return "";
+  return b.flags.map(f=>{
+    const st=f.stage||"yard";
+    const a=st==="gate"?["Yard",f.baseKg]:["Pickup",f.baseKg], n=st==="gate"?["gate",f.newKg]:["yard",f.newKg];
+    return `<div class="banner err"><b>Weight flag: ${esc(STAGE[st].toLowerCase())}</b><br>${a[0]} ${kg(a[1])} vs ${n[0]} ${kg(n[1])} (${f.diffPct>=0?"+":""}${f.diffPct}%, threshold ±${f.thresholdPct}%), ${esc(fmtDT(f.at))}${st==="gate"?"<br><span class='small'>The gap comes off the partner's next payout.</span>":""}</div>`;
+  }).join("");
+}
+function viewTimeline(app){
+  const b=S.batteries.get(S.id);
+  if(!b){ return go(homeOf()); }
+  const rec = S.user.role==="recycler", t=thr(), tr=b.truckId&&S.trucks.get(b.truckId);
+  let confirm="";
+  if(rec){
+    if(b.status==="closed") confirm=`<div class="banner ok">Record closed ${esc(fmtDT(b.closedAt))}. ${kg(b.recyclerKg)} received by ${esc(userLabel(b.recyclerId))}.</div>`;
+    else if(b.status==="picked_up") confirm=`<div class="banner warn">Still with the partner. It hasn't been weighed in at a collection centre yet.</div>`;
+    else if(b.status==="at_yard" && b.recyclerId!==S.user.id) confirm=`<div class="banner warn">This battery is at the collection centre of ${esc(userLabel(b.recyclerId))}, not yours.</div>`;
+    else if(b.status==="at_yard" && !tr) confirm=`<div class="banner warn">Still at ${esc(b.yardId)}. It hasn't been loaded onto a truck to you yet.</div>`;
+    else if(b.status==="at_yard"){
+      const f=S.form&&S.form.weight!==undefined?S.form:(S.form={weight:""});
+      confirm=`<div class="sheet accent"><h2 style="margin-top:0">Your gate check</h2>
+        <p class="small muted" style="margin:0">Truckload ${esc(tr.manifestNo)}. Re-weigh on your scale; it must match the yard weight (${kg(b.yardKg)}) within ±${t}%.</p>
+        <label class="f" for="rwt">Your weight (kg)</label>
+        <div class="weigh"><input class="t" id="rwt" type="number" inputmode="decimal" step="0.1" value="${esc(f.weight)}" placeholder="kg" style="font-size:26px;font-weight:700">${dialHTML(f.weight)}</div>
+        <div id="gdiff">${diffBanner(b.yardKg,parseFloat(f.weight),t,"Yard","gate","record will be flagged and the gap comes off the partner's next payout")}</div>
+        <div id="formErr"></div>
+        <button class="btn" id="close">Confirm receipt and close record</button></div>`;
+    }
+  }
+  const po=b.payoutId&&S.payouts.get(b.payoutId);
+  const money = b.status==="unused" ? "" : po ? `Partner ${esc(po.vendorId)} paid ${inr(po.net)} at the yard (${esc(po.id)}). ${b.status==="closed"?`The recycler repays ${inr(po.gross)} plus the LeadLoop fee of ${inr(FEE_PER_KG*(b.recyclerKg||0))}.`:`The LeadLoop fee is charged after the gate check.`}` : "The partner is paid when the battery is weighed in at the yard.";
+  app.innerHTML = `${slowNote()}${backBtn(tr&&S.ref===tr.id?"Back to the truckload":"Back")}
+  ${trackHTML(b)}
+  <div class="sheet tight"><div class="row wrapr" style="gap:8px">${flagMark(b)}${b.leaking?mk("warn","drop","Leaking at pickup"):""}${custodyMark(b)}${truckMark(b)}</div>
+   ${b.recyclerId?`<div class="small muted" style="margin-top:8px">${esc(userLabel(b.yardId))}, collection centre for ${esc(userLabel(b.recyclerId))}</div>`:""}
+   ${money?`<div class="small" style="margin-top:6px">${money}</div>`:""}
+  </div>
+  ${confirm}${flagsHTML(b)}
+  <h2>Custody trail</h2>${timelineHTML(b)}`;
+  $("#back").onclick=()=>{ if(tr&&S.ref===tr.id&&S.user.role!=="vendor"&&S.user.role!=="dealer") return go("truck",tr.id); go(homeOf()); };
+  if($("#rwt")) $("#rwt").oninput=e=>{ S.form.weight=e.target.value; setNeedle(e.target.value); $("#gdiff").innerHTML=diffBanner(b.yardKg,parseFloat(e.target.value),t,"Yard","gate","record will be flagged and the gap comes off the partner's next payout"); };
+  if($("#close")) $("#close").onclick=()=>saveGate(b.id);
+}
+async function saveGate(id){
+  const w=parseFloat(S.form.weight); if(!(w>0)){ $("#formErr").innerHTML=`<div class="banner err">Enter your weight.</div>`; return; }
+  const cur=S.batteries.get(id); if(cur.status!=="at_yard"){ render(); return; }
+  $("#close").disabled=true;
+  const t=thr();
+  startGPS(); const gps=await Promise.race([S.gpsPromise,new Promise(r=>setTimeout(()=>r(null),1500))]);
+  const at=new Date().toISOString(), p=cur.yardKg?+((w-cur.yardKg)/cur.yardKg*100).toFixed(1):null, bad=p!=null&&Math.abs(p)>t;
+  const flags=[...(cur.flags||[])];
+  if(bad) flags.push({type:"weight_mismatch",stage:"gate",at,baseKg:cur.yardKg,newKg:w,diffPct:p,thresholdPct:t});
+  const ev={type:"recycler_receipt",at,by:S.user.id,role:"recycler",gps:gps||null,kg:w,diffPct:p,flagged:bad,truckId:cur.truckId};
+  const nb=Object.assign(clone(cur),{status:"closed",recyclerKg:w,closedAt:at,flagged:flags.length>0,flags,events:[...(cur.events||[]),ev],updatedAt:at});
+  try{ await saveBattery(id,nb); }catch(e){ $("#close").disabled=false; $("#formErr").innerHTML=`<div class="banner err">${errText(e)}</div>`; return; }
+  audit("Gate check, record closed",id,`${kg(w)} (${p>=0?"+":""}${p}% vs yard)${bad?", flagged":""}`);
+  // gap over threshold with less lead than paid for: comes off the partner's next payout
+  if(bad && w<cur.yardKg){
+    const did=rid("DD"), amt=Math.round(RATE*(cur.yardKg-w));
+    const dd={id:did,kind:"deduction",vendorId:partnerOf(cur),batteryId:id,truckId:cur.truckId,kgGap:Math.round((cur.yardKg-w)*10)/10,amount:amt,diffPct:p,
+      reason:`Gate weight ${kg1(w)} kg vs yard ${kg1(cur.yardKg)} kg (${p}%), over the ±${t}% threshold`,status:"pending",at};
+    try{ await saveDoc("payouts/"+did,dd); audit("Deduction raised",did,`${inr(amt)} from ${partnerOf(cur)}'s next payout (${id} gate gap ${p}%)`); }catch(e){}
+  }
+  // last battery on the truck: mark it received and issue the settlement statement
+  const tr=cur.truckId&&S.trucks.get(cur.truckId);
+  let msg=bad?"Record closed and flagged at the gate":"Record closed";
+  if(tr){
+    const bs=tr.batteryIds.map(i=>S.batteries.get(i));
+    if(bs.every(x=>x&&x.status==="closed")&&!tr.settlementId){
+      const sid=rid("ST");
+      const lines=bs.map(x=>{ const po=S.payouts.get(x.payoutId)||{gross:Math.round(vendorPayout(x.yardKg))};
+        return {batteryId:x.id,vendorId:partnerOf(x),yardKg:x.yardKg,recyclerKg:x.recyclerKg,vendorPaid:po.gross,fee:Math.round(FEE_PER_KG*x.recyclerKg*100)/100,diffPct:+pct(x.yardKg,x.recyclerKg).toFixed(1),flagged:(x.flags||[]).some(f=>f.stage==="gate")}; });
+      const vp=lines.reduce((a,l)=>a+l.vendorPaid,0), fee=Math.round(lines.reduce((a,l)=>a+l.fee,0)*100)/100;
+      const deds=[...S.payouts.values()].filter(d=>d.kind==="deduction"&&d.truckId===tr.id).map(d=>({id:d.id,vendorId:d.vendorId,batteryId:d.batteryId,amount:d.amount}));
+      const s={id:sid,truckId:tr.id,manifestNo:tr.manifestNo,yardId:tr.yardId,recyclerId:tr.recyclerId,lines,vendorPayments:vp,fee,total:Math.round((vp+fee)*100)/100,
+        gateCheckedAt:at,dueAt:new Date(Date.now()+REPAY_DAYS*dayMs).toISOString(),status:"due",deductions:deds,createdAt:at};
+      try{ await saveDoc("settlements/"+sid,s); await saveDoc("truckloads/"+tr.id,Object.assign(clone(tr),{status:"received",receivedAt:at,settlementId:sid})); }catch(e){}
+      audit("Settlement issued",sid,`${tr.manifestNo}: ${inr2(s.total)} due ${fmtD(s.dueAt)}`);
+      msg="Truckload complete. Settlement "+sid+" issued";
+    }
+  }
+  S.form=null; toast(msg);
+  if(tr){ S.ref=tr.id; go("truck",tr.id); } else render();
+}
+
+/* ---------- LeadLoop control room ---------- */
+function alertsList(){
+  const A=[], all=[...S.batteries.values()];
+  const add=a=>{ a.reviewed=S.reviews.get(a.key.replace(/[\/:]/g,"_"))||null; A.push(a); };
+  for(const b of all){
+    for(const f of (b.flags||[])){
+      const g=f.stage==="gate";
+      const dd=g&&[...S.payouts.values()].find(d=>d.kind==="deduction"&&d.batteryId===b.id);
+      add({key:`flag:${b.id}:${f.stage}`,sev:"red",kind:"Weight flag",id:b.id,at:f.at,
+        title:`${b.id}: ${g?"gate":"yard"} weight ${f.diffPct>=0?"+":""}${f.diffPct}% vs ${g?"yard":"pickup"}`,
+        why:`${g?"Yard":"Pickup"} ${kg(f.baseKg)}, ${g?"gate":"yard"} ${kg(f.newKg)}; threshold ±${f.thresholdPct}%.`,
+        owner:g?`${b.recyclerId} with partner ${partnerOf(b)}`:`${b.yardId} with partner ${partnerOf(b)}`,
+        next:g?(dd?`${dd.id} ${dd.status==="recovered"?"recovered":"pending"}: ${inr(dd.amount)} from ${partnerOf(b)}`:"Raise a deduction or correct the record"):"Check the pickup photo and the partner's scale; correct the record if it was an entry error"});
+    }
+    const d=custodyDays(b);
+    if(b.status==="at_yard"&&d>STORAGE_LIMIT_DAYS) add({key:`limit:${b.id}`,sev:"red",kind:"Over 90 days",id:b.id,at:b.yardAt,title:`${b.id}: ${d} days at ${b.yardId}, over the ${STORAGE_LIMIT_DAYS}-day storage limit`,why:"CPCB collection guidelines cap storage at 90 days.",owner:b.yardId,next:`Dispatch now to ${b.recyclerId} and report it`});
+    else if(b.status==="at_yard"&&d>TARGET_DAYS) add({key:`target:${b.id}`,sev:"amber",kind:"Over 10 days",id:b.id,at:b.yardAt,title:`${b.id}: ${d} days at ${b.yardId}, over the ${TARGET_DAYS}-day target`,why:`Cash is tied up until ${b.recyclerId} gate-checks and repays.`+(b.truckId?" It is on a truck.":" Not yet on a truck."),owner:b.truckId?b.recyclerId:b.yardId,next:b.truckId?`Ask ${b.recyclerId} to gate-check`:`Put it on the next truck to ${b.recyclerId}`});
+    if(b.status==="picked_up"&&daysSince(b.pickedUpAt)>NO_YARD_SCAN_DAYS) add({key:`noyard:${b.id}`,sev:"amber",kind:"Missing scan",id:b.id,at:b.pickedUpAt,title:`${b.id}: no yard scan ${daysSince(b.pickedUpAt)} days after pickup`,why:b.channel==="dealer"?`Dealer take-back at ${b.pickedUpBy}; partners collect from dealers weekly.`:`Partners deliver at least weekly. Picked up by ${b.pickedUpBy}.`,owner:b.channel==="dealer"?`${b.pickedUpBy} and its collecting partner`:b.pickedUpBy,next:b.channel==="dealer"?`Ask the partner scrap vendor to collect it from ${b.pickedUpBy}`:`Call ${b.pickedUpBy} to bring it to the yard`});
+  }
+  for(const t of S.trucks.values()){
+    if(t.status==="received") continue;
+    const left=t.batteryIds.filter(i=>(S.batteries.get(i)||{}).status!=="closed");
+    if(left.length&&daysSince(t.dispatchedAt)>=TRUCK_GATE_DAYS) add({key:`gate:${t.id}`,sev:"amber",kind:"Missing scan",truck:t.id,at:t.dispatchedAt,title:`${t.manifestNo}: ${left.length} batter${left.length===1?"y":"ies"} not gate-scanned ${daysSince(t.dispatchedAt)} days after dispatch`,why:`${left.join(", ")} left ${t.yardId} on truck ${t.truckNo}.`,owner:t.recyclerId,next:`Ask ${t.recyclerId} to scan at the gate`});
+  }
+  for(const s of S.settlements.values()){
+    const st=settleStatus(s);
+    if(st==="overdue") add({key:`overdue:${s.id}`,sev:"red",kind:"Repayment overdue",settle:s.id,at:s.dueAt,title:`${s.id}: ${inr2(s.total)} from ${s.recyclerId} overdue`,why:`Due ${fmtD(s.dueAt)}, ${REPAY_DAYS} days after the gate check.`,owner:s.recyclerId,next:"Follow up; hold the next truck if unpaid"});
+    else if(st==="due"&&new Date(s.dueAt).toDateString()===new Date().toDateString()) add({key:`duetoday:${s.id}`,sev:"info",kind:"Repayment due today",settle:s.id,at:s.dueAt,title:`${s.id}: ${inr2(s.total)} from ${s.recyclerId} due today`,why:`Gate check ${fmtD(s.gateCheckedAt)}.`,owner:s.recyclerId,next:"Confirm the transfer"});
+  }
+  const rank={red:0,amber:1,info:2};
+  return A.sort((a,c)=>rank[a.sev]-rank[c.sev]||a.at.localeCompare(c.at));
+}
+function money(){
+  const pays=[...S.payouts.values()].filter(p=>p.kind==="payout"), sts=[...S.settlements.values()];
+  const advanced=pays.reduce((a,p)=>a+p.gross,0);
+  const repaid=sts.filter(s=>s.status==="repaid").reduce((a,s)=>a+s.vendorPayments,0);
+  const billed=sts.filter(s=>s.status!=="repaid").reduce((a,s)=>a+s.vendorPayments,0);
+  const overdue=sts.filter(s=>settleStatus(s)==="overdue").reduce((a,s)=>a+s.total,0);
+  const fees=sts.reduce((a,s)=>a+s.fee,0), feesIn=sts.filter(s=>s.status==="repaid").reduce((a,s)=>a+s.fee,0);
+  const byRec={};
+  for(const r of ["R-301","R-302"]){
+    const P=pays.filter(p=>p.recyclerId===r), Ss=sts.filter(s=>s.recyclerId===r);
+    const adv=P.reduce((a,p)=>a+p.gross,0), rep=Ss.filter(s=>s.status==="repaid").reduce((a,s)=>a+s.vendorPayments,0);
+    const ov=Ss.filter(s=>settleStatus(s)==="overdue").reduce((a,s)=>a+s.vendorPayments,0), due=Ss.filter(s=>settleStatus(s)==="due").reduce((a,s)=>a+s.vendorPayments,0);
+    byRec[r]={adv,rep,ov,due,unbilled:adv-rep-ov-due};
+  }
+  return {advanced,repaid,billed,overdue,fees,feesIn,outstanding:advanced-repaid,byRec,deductions:[...S.payouts.values()].filter(p=>p.kind==="deduction")};
+}
+function cashBars(M){
+  const max=Math.max(1,...Object.values(M.byRec).map(r=>r.adv));
+  const seg=[["rep","Repaid",C.leaf],["due","Billed, not yet due",C.saffron],["ov","Overdue","#b3261e"],["unbilled","With the yard or on a truck","#9aa59f"]];
+  return Object.entries(M.byRec).map(([r,v])=>`<div style="margin:10px 0"><div class="row" style="justify-content:space-between"><b>${r}</b><span class="small num">${inr(v.adv)} advanced</span></div>
+    <div class="pipe" role="img" aria-label="${r}: ${seg.map(s=>s[1]+" "+inr(v[s[0]])).join(", ")}" style="width:${v.adv/max*100}%">${seg.map(([k,t,c])=>v[k]>0?`<span style="width:${v[k]/v.adv*100}%;background:${c}" title="${t}: ${inr(v[k])}"></span>`:"").join("")}</div></div>`).join("")
+   +`<div class="legend">${seg.map(([k,t,c])=>`<span><i style="background:${c}"></i>${t}</span>`).join("")}</div>`;
+}
+/* grouped bar chart: kg received per month per recycler */
+function monthly(){
+  const m={};
+  for(const b of S.batteries.values()){
+    if(b.status!=="closed") continue;
+    const k=b.closedAt.slice(0,7)+"|"+b.recyclerId;
+    const r=m[k]||(m[k]={month:b.closedAt.slice(0,7),recycler:b.recyclerId,n:0,kgR:0,kgP:0,flagged:0});
+    r.n++; r.kgR+=b.recyclerKg||0; r.kgP+=b.yardKg||0; if(b.flagged) r.flagged++;
+  }
+  return Object.values(m).sort((a,c)=>c.month.localeCompare(a.month)||a.recycler.localeCompare(c.recycler));
+}
+const monthName = ym => new Date(ym+"-01T00:00:00").toLocaleDateString("en-IN",{month:"short",year:"numeric"});
+function monthChartHTML(){
+  const M=monthly(); if(!M.length) return `<p class="muted small">No closed records yet.</p>`;
+  const months=[...new Set(M.map(r=>r.month))].sort();
+  const recs=["R-301","R-302"], col={"R-301":C.leaf,"R-302":C.saffron};
+  const val=(m,r)=>{const x=M.find(q=>q.month===m&&q.recycler===r); return x?x.kgR:0;};
+  const max=Math.max(10,...months.flatMap(m=>recs.map(r=>val(m,r))));
+  const W=420,H=200,pl=34,pb=26,pt=16, gw=(W-pl-10)/months.length, bw=Math.min(34,gw/3);
+  const y=v=>pt+(H-pt-pb)*(1-v/max);
+  const grid=[0,.5,1].map(f=>{const v=Math.round(max*f);return `<line x1="${pl}" x2="${W-6}" y1="${y(v)}" y2="${y(v)}" stroke="#e3e7e1"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="#5f6b64">${v}</text>`}).join("");
+  const bars=months.map((m,i)=>recs.map((r,j)=>{const v=val(m,r),x=pl+gw*i+gw/2-bw-1+j*(bw+2),h=(H-pt-pb)-(y(v)-pt);
+     return v?`<path class="bar" data-tip="${esc(monthName(m))}, ${r}: ${Math.round(v*10)/10} kg" d="M${x},${y(v)+4} a4,4 0 0 1 4,-4 h${bw-8} a4,4 0 0 1 4,4 v${h-4} h-${bw} z" fill="${col[r]}"/><text x="${x+bw/2}" y="${y(v)-4}" font-size="10" text-anchor="middle" fill="#1b2420" font-weight="700">${Math.round(v)}</text>`:""}).join("")+`<text x="${pl+gw*i+gw/2}" y="${H-8}" text-anchor="middle" font-size="11" fill="#5f6b64">${esc(monthName(m))}</text>`).join("");
+  return `<div class="chart" id="mchart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="kg received per month per recycler">${grid}${bars}</svg><div class="tip" id="mtip"></div></div>
+   <div class="legend"><span><i style="background:${C.leaf}"></i>Recycler R-301</span><span><i style="background:${C.saffron}"></i>Recycler R-302</span></div>`;
+}
+function wireChart(){
+  const ch=document.getElementById("mchart"); if(!ch) return; const tip=document.getElementById("mtip");
+  ch.querySelectorAll(".bar").forEach(b=>{ b.addEventListener("mouseenter",()=>{ tip.textContent=b.dataset.tip; tip.style.opacity=1; });
+    b.addEventListener("mousemove",e=>{ const r=ch.getBoundingClientRect(); tip.style.left=(e.clientX-r.left)+"px"; tip.style.top=(e.clientY-r.top)+"px"; });
+    b.addEventListener("mouseleave",()=>tip.style.opacity=0); });
+}
+function filtered(){
+  const F=S.filters;
+  return [...S.batteries.values()].filter(b=>{
+    if(F.status){ if(b.status!==F.status) return false; } else if(b.status==="unused") return false;
+    if(F.source && b.source!==F.source) return false;
+    if(F.recycler && b.recyclerId!==F.recycler) return false;
+    if(F.flagged==="yes" && !b.flagged) return false;
+    if(F.flagged==="no" && b.flagged) return false;
+    const d=(b.pickedUpAt||"").slice(0,10);
+    if(F.from && (!d||d<F.from)) return false;
+    if(F.to && (!d||d>F.to)) return false;
+    return true;
+  }).sort((a,c)=>(c.pickedUpAt||"").localeCompare(a.pickedUpAt||""));
+}
+const TAX={gst_done:"GST registered",udyam_done:"Udyam registered",udyam_help:"Udyam help booked",gst_help:"GST help booked",none:"Not started"};
+const KIT={issued:"Issued",pending:"Not yet issued"};
+const SCALE={issued:"LeadLoop scale issued",own:"Uses own certified scale",pending:"Not yet issued"};
+const FIX_FIELDS={pickupKg:"Pickup weight (kg)",yardKg:"Yard weight (kg)",recyclerKg:"Gate weight (kg)",source:"Source",brand:"Brand",vehicleMasked:"Vehicle number",condition:"Yard condition"};
+const FIX_REASONS=["Entry typo","Scale error confirmed","Wrong battery photographed","Partner reported a mistake","Other"];
+
+function viewAdmin(app){
+  const tab=S.crTab, AL=alertsList(), open=AL.filter(a=>!a.reviewed), M=money();
+  const nav=[["alerts","Alerts",open.length],["batteries","Batteries"],["money","Cash"],["partners","Partners"],["reports","Monthly report"],["audit","Corrections & audit"],["settings","Settings"],["-"],["qr","QR stickers"],["scan","What a scan does"],["how","How it works"]];
+  let body="";
+  if(tab==="alerts") body=crAlerts(AL,M);
+  else if(tab==="batteries") body=crBatteries();
+  else if(tab==="money") body=crMoney(M);
+  else if(tab==="partners") body=crPartners();
+  else if(tab==="reports") body=crReports();
+  else if(tab==="audit") body=crAudit();
+  else if(tab==="settings") body=crSettings();
+  app.innerHTML=`${slowNote()}<div class="cr"><nav class="crnav" aria-label="Control room">${nav.map(([k,t,n])=>k==="-"?"<hr>":`<button data-tab="${k}" class="${tab===k?"on":""}">${t}${n?`<span class="cnt">${n}</span>`:""}</button>`).join("")}</nav><div>${body}</div></div>`;
+  app.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{ const k=b.dataset.tab; if(k==="qr") return go("qrsheet"); if(k==="how") return go("how"); if(k==="scan"){ SD.i=0; SD.paused=false; return go("scan"); } S.crTab=k; render(); });
+  app.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ S.crTab=b.dataset.go; render(); });
+  app.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{ S.id=el.dataset.open; go("timeline"); });
+  app.querySelectorAll("[data-truck]").forEach(el=>el.onclick=()=>go("truck",el.dataset.truck));
+  app.querySelectorAll("[data-settle]").forEach(el=>el.onclick=()=>go("settlement",el.dataset.settle));
+  wireChart(); wireAdmin(tab,AL);
+}
+function crHead(t,sub,right){ return `<div class="crhead"><div><h1>${t}</h1>${sub?`<p class="sub" style="margin:4px 0 0">${sub}</p>`:""}</div>${right||""}</div>`; }
+function crAlerts(AL,M){
+  const all=[...S.batteries.values()], inC=all.filter(b=>b.status==="picked_up"||b.status==="at_yard");
+  const atY=all.filter(b=>b.status==="at_yard"), oldest=Math.max(0,...atY.map(custodyDays));
+  const mon=new Date().toISOString().slice(0,7), prev=new Date(new Date().getFullYear(),new Date().getMonth()-1,15).toISOString().slice(0,7);
+  const kgM=all.filter(b=>b.closedAt&&b.closedAt.slice(0,7)===mon).reduce((a,b)=>a+b.recyclerKg,0), kgP=all.filter(b=>b.closedAt&&b.closedAt.slice(0,7)===prev).reduce((a,b)=>a+b.recyclerKg,0);
+  const open=AL.filter(a=>!a.reviewed), done=AL.filter(a=>a.reviewed);
+  const row=a=>`<div class="alert ${a.sev}"><span class="sev" aria-hidden="true"></span><div class="bd"><b>${esc(a.title)}</b><div class="why">${esc(a.why)}</div>
+    <div class="meta"><span><em>Type</em> ${esc(a.kind)}</span><span><em>Owner</em> ${esc(a.owner)}</span><span><em>Age</em> ${esc(ageText(a.at))}</span></div>
+    <div class="meta"><span><em>Next</em> ${esc(a.next)}</span></div>${a.reviewed?`<div class="meta"><span><em>Reviewed</em> ${esc(a.reviewed.by)}, ${fmtDs(a.reviewed.at)}: ${esc(a.reviewed.note)}</span></div>`:""}</div>
+    <div class="act">${a.id?`<button class="btn small sec" data-open="${esc(a.id)}" style="margin:0">Open ${esc(a.id)}</button>`:a.truck?`<button class="btn small sec" data-truck="${esc(a.truck)}" style="margin:0">Open truck</button>`:a.settle?`<button class="btn small sec" data-settle="${esc(a.settle)}" style="margin:0">Open statement</button>`:""}${a.reviewed?"":`<button class="btn small" data-rev="${esc(a.key)}" style="margin:0">Mark reviewed</button>`}</div></div>`;
+  return crHead("Alerts",`Only what needs action. Sorted by severity, then age. ${fmtD(new Date().toISOString())}.`)+
+  `<div class="tiles">${tile({l:"Open alerts",v:open.length,tone:open.some(a=>a.sev==="red")?"bad":"",c:`${open.filter(a=>a.sev==="red").length} red, ${open.filter(a=>a.sev==="amber").length} amber`})}
+   ${tile({l:"Oldest battery at a yard",v:oldest,u:"days",tone:oldest>TARGET_DAYS?"amber":"",bar:{v:oldest,max:Math.max(30,oldest),t:TARGET_DAYS,col:oldest>TARGET_DAYS?"var(--saffron)":"var(--leaf)"},c:`Target ${TARGET_DAYS} d, limit ${STORAGE_LIMIT_DAYS} d · ${inC.length} in custody`})}
+   ${tile({l:"Cash out with recyclers",v:inr(M.outstanding),go:"money",tone:M.overdue?"bad":"",c:M.overdue?`${inr(M.overdue)} overdue`:"Nothing overdue"})}
+   ${tile({l:"kg to recyclers this month",v:Math.round(kgM).toLocaleString("en-IN"),u:"kg",bar:{v:kgM,max:Math.max(kgM,kgP,1),t:kgP},c:`Tick marks last month: ${Math.round(kgP).toLocaleString("en-IN")} kg`})}</div>
+  <h2>Needs action (${open.length})</h2>${open.map(row).join("")||`<div class="banner ok">No open alerts.</div>`}
+  ${done.length?`<details style="margin-top:10px"><summary class="small muted">Reviewed (${done.length})</summary>${done.map(row).join("")}</details>`:""}`;
+}
+function crBatteries(){
+  const rows=filtered(), F=S.filters, opt=(v,t,cur)=>`<option value="${esc(v)}" ${cur===v?"selected":""}>${esc(t)}</option>`;
+  const all=[...S.batteries.values()].filter(b=>b.status!=="unused"), cnt=s=>all.filter(b=>b.status===s).length, tot=all.length||1;
+  const segs=[["picked_up","Picked up",C.saffron],["at_yard","At a collection centre","#245a8f"],["closed","Closed at the recycler",C.leaf]];
+  return crHead("Batteries",`${all.length} tagged, ${freshIds().length} fresh stickers left.`)+
+  `<div class="sheet tight"><div class="pipe" role="img" aria-label="Batteries by status">${segs.map(([k,_,c])=>cnt(k)?`<span style="width:${cnt(k)/tot*100}%;background:${c}"></span>`:"").join("")}</div>
+   <div class="legend">${segs.map(([k,t,c])=>`<span><i style="background:${c}"></i><b>${cnt(k)}</b> ${t}</span>`).join("")}</div></div>
+  <div class="sheet"><div class="filters">
+      <div><label>Pickup from</label><input type="date" data-f="from" value="${esc(F.from)}"></div>
+      <div><label>Pickup to</label><input type="date" data-f="to" value="${esc(F.to)}"></div>
+      <div><label>Source</label><select data-f="source">${opt("","All")}${SOURCES.map(s=>opt(s,T.en.src[s],F.source)).join("")}</select></div>
+      <div><label>Recycler</label><select data-f="recycler">${opt("","All")}${["R-301","R-302"].map(u=>opt(u,u,F.recycler)).join("")}</select></div>
+      <div><label>Status</label><select data-f="status">${opt("","All tagged")}${Object.keys(STATUS).map(s=>opt(s,STATUS[s],F.status)).join("")}</select></div>
+      <div><label>Flagged</label><select data-f="flagged">${opt("","All")}${opt("yes","Flagged only",F.flagged)}${opt("no","Not flagged",F.flagged)}</select></div>
+    </div>
+    <div class="row wrapr" style="margin-top:10px"><button class="btn small" id="csv">Export custody evidence (CSV)</button><button class="btn small sec" id="clr">Clear filters</button><span class="small muted">${rows.length} record${rows.length===1?"":"s"}</span></div>
+    <div id="csvOut"></div></div>
+  <div class="tablewrap rt"><table><thead><tr><th>Battery</th><th>Status</th><th>Marks</th><th>Source</th><th>Partner</th><th>Picked up</th><th class="num">Pickup kg</th><th class="num">Yard kg</th><th class="num">Gate kg</th><th>Recycler</th></tr></thead><tbody>
+    ${rows.map(b=>`<tr class="click" data-open="${esc(b.id)}"><td class="lead">${sticker(b.id,1)}</td><td data-l="Status">${statusMark(b.status)}</td><td data-l="Marks">${flagMark(b)} ${custodyMark(b)}</td><td data-l="Source">${esc(T.en.src[b.source]||"—")}</td><td data-l="Partner">${esc(b.pickedUpBy||"—")}</td><td data-l="Picked up">${esc(fmtDs(b.pickedUpAt))}</td><td data-l="Pickup kg" class="num">${kg1(b.pickupKg)}</td><td data-l="Yard kg" class="num">${b.yardKg!=null?kg1(b.yardKg):""}</td><td data-l="Gate kg" class="num">${b.recyclerKg!=null?kg1(b.recyclerKg):""}</td><td data-l="Recycler">${esc(b.recyclerId||"")}</td></tr>`).join("")||`<tr><td colspan="10" class="muted">No records match.</td></tr>`}
+  </tbody></table></div>`;
+}
+function crMoney(M){
+  const sts=[...S.settlements.values()].sort((a,c)=>c.createdAt.localeCompare(a.createdAt));
+  const pays=[...S.payouts.values()].sort((a,c)=>c.at.localeCompare(a.at));
+  return crHead("Cash advanced and repaid",`LeadLoop pays partners at the yard for the recycler; the recycler repays within ${REPAY_DAYS} days of its gate check, plus ₹${FEE_PER_KG}/kg.`)+
+  `<div class="tiles">${tile({l:"Advanced to partners",v:inr(M.advanced),c:`${pays.filter(p=>p.kind==="payout").length} payouts at ₹${RATE}/kg`})}
+    ${tile({l:"Repaid by recyclers",v:inr(M.repaid),bar:{v:M.repaid,max:Math.max(1,M.advanced)},c:`${Math.round(M.repaid/Math.max(1,M.advanced)*100)}% of advances`})}
+    ${tile({l:"Outstanding",v:inr(M.outstanding),tone:M.overdue?"bad":"",c:M.overdue?`${inr(M.overdue)} overdue`:`${inr(M.billed)} billed, rest not yet at a gate`})}
+    ${tile({l:"LeadLoop fee",v:inr(M.fees),c:`${inr(M.feesIn)} received`})}</div>
+  <div class="grid2" style="margin-top:12px"><div class="sheet" style="margin:0"><h3>By recycler</h3>${cashBars(M)}</div>
+   <div class="sheet" style="margin:0"><h3>Deductions from partners</h3>${M.deductions.length?M.deductions.map(d=>`<div class="row" style="justify-content:space-between;margin:8px 0;gap:8px"><span><b>${esc(d.id)}</b> ${esc(d.vendorId)}, ${esc(d.batteryId)}<div class="small muted">${esc(d.reason)}</div></span><span style="text-align:right"><b>${inr(d.amount)}</b><br>${payStatusMark(d)}</span></div>`).join(""):`<p class="small muted">None. A gate weight more than ±${thr()}% under the yard weight raises one.</p>`}</div></div>
+  <h2>Settlement statements</h2>
+  <div class="tablewrap rt"><table><thead><tr><th>Statement</th><th>Recycler</th><th>Truckload</th><th class="num">Partner payments</th><th class="num">Fee</th><th class="num">Total</th><th>Status</th></tr></thead><tbody>
+   ${sts.map(s=>`<tr class="click" data-settle="${esc(s.id)}"><td class="lead">${esc(s.id)}</td><td data-l="Recycler">${esc(s.recyclerId)}</td><td data-l="Truckload">${esc(s.manifestNo)}</td><td data-l="Partner payments" class="num">${inr(s.vendorPayments)}</td><td data-l="Fee" class="num">${inr2(s.fee)}</td><td data-l="Total" class="num"><b>${inr2(s.total)}</b></td><td data-l="Status">${settleMark(s)}</td></tr>`).join("")}
+  </tbody></table></div>
+  <h2>Partner payout ledger</h2>
+  <div class="tablewrap rt"><table><thead><tr><th>Payout</th><th>Date</th><th>Partner</th><th>Battery</th><th>Yard</th><th class="num">kg</th><th class="num">Paid</th><th>UPI ref</th><th>Status</th></tr></thead><tbody>
+   ${pays.map(p=>`<tr><td class="lead">${esc(p.id)}</td><td data-l="Date">${fmtDs(p.at)}</td><td data-l="Partner">${esc(p.vendorId)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Yard">${esc(p.yardId||"")}</td><td data-l="kg" class="num">${p.kind==="payout"?kg1(p.kg):kg1(p.kgGap)}</td><td data-l="Paid" class="num">${p.kind==="payout"?inr(p.net):"− "+inr(p.amount)}</td><td data-l="UPI ref">${esc(p.upiRef||"")}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+function crPartners(){
+  const P=[...S.partners.values()].sort((a,c)=>a.id.localeCompare(c.id));
+  const sel=(id,k,map,cur)=>`<select class="sel" data-pid="${esc(id)}" data-pk="${k}" aria-label="${k}">${Object.entries(map).map(([v,t])=>`<option value="${v}" ${cur===v?"selected":""}>${t}</option>`).join("")}</select>`;
+  const pays=[...S.payouts.values()].filter(p=>p.kind==="payout");
+  const tg=id=>[...S.batteries.values()].filter(b=>b.pickedUpBy===id&&b.yardAt).length;
+  return crHead("Partners","Partner scrap vendors and dealers (phase 2): partner ID, safety kit, scale, the ₹10 per tagged battery and GST or Udyam help.")+
+  `<div class="tablewrap rt"><table><thead><tr><th>Partner</th><th>Area</th><th>Since</th><th>Safety kit</th><th>Scale</th><th>GST / Udyam</th><th class="num">Tagged, at yard</th><th class="num">₹${ALLOWANCE} per tagged battery</th><th class="num">Paid to date</th></tr></thead><tbody>
+  ${P.map(p=>{ const mine=pays.filter(x=>x.vendorId===p.id);
+    return `<tr><td class="lead">${roleIcon(userById(p.id)?userById(p.id).role:"vendor").replace('<svg','<svg width="26" height="26" style="vertical-align:middle;margin-right:6px"')}<b>${esc(p.id)}</b> <span class="small muted">${esc(p.type)}</span></td><td data-l="Area">${esc(p.area)}</td><td data-l="Since">${fmtDs(p.joinedAt)}</td>
+    <td data-l="Safety kit">${sel(p.id,"safetyKit",KIT,p.safetyKit)}</td><td data-l="Scale">${sel(p.id,"scale",SCALE,p.scale)}${p.scaleSerial?`<div class="small muted">${esc(p.scaleSerial)}</div>`:""}</td><td data-l="GST / Udyam">${sel(p.id,"taxStatus",TAX,p.taxStatus)}</td>
+    <td data-l="Tagged, at yard" class="num">${tg(p.id)}</td><td data-l="Allowance" class="num">${inr(tg(p.id)*(p.allowancePerBattery||ALLOWANCE))}</td><td data-l="Paid to date" class="num">${inr(mine.reduce((a,x)=>a+x.net,0))}</td></tr>`; }).join("")||`<tr><td colspan="9" class="muted">No partners on file.</td></tr>`}
+  </tbody></table></div>
+  <p class="small muted">Changes here are saved straight away and written to the audit log.</p>`;
+}
+function cpcbRows(month){
+  const all=[...S.batteries.values()], end=new Date(month+"-01T00:00:00Z"); end.setUTCMonth(end.getUTCMonth()+1);
+  const start=month+"-01", endIso=end.toISOString();
+  return ["Y-01","Y-02"].map(y=>{
+    const yb=all.filter(b=>b.yardId===y);
+    const inM=(iso)=>iso&&iso>=start&&iso<endIso;
+    const opening=yb.filter(b=>b.yardAt<start&&!(b.dispatchedAt&&b.dispatchedAt<start));
+    const recv=yb.filter(b=>inM(b.yardAt)), sent=yb.filter(b=>inM(b.dispatchedAt)), gate=yb.filter(b=>inM(b.closedAt));
+    const closing=yb.filter(b=>b.yardAt<endIso&&!(b.dispatchedAt&&b.dispatchedAt<endIso));
+    const stored=yb.filter(b=>inM(b.dispatchedAt)||closing.includes(b)).map(b=>Math.floor(((b.dispatchedAt&&b.dispatchedAt<endIso?new Date(b.dispatchedAt):new Date(Math.min(Date.now(),end)))-new Date(b.yardAt))/dayMs));
+    const s=a=>Math.round(a.reduce((x,b)=>x+(b.yardKg||0),0)*10)/10;
+    return {centre:y,recycler:userById(y).recycler,openingN:opening.length,openingKg:s(opening),recvN:recv.length,recvKg:s(recv),sentN:sent.length,sentKg:s(sent),gateKg:Math.round(gate.reduce((x,b)=>x+(b.recyclerKg||0),0)*10)/10,closingN:closing.length,closingKg:s(closing),maxDays:stored.length?Math.max(...stored):0,over90:stored.filter(d=>d>STORAGE_LIMIT_DAYS).length,flags:recv.filter(b=>b.flagged).length+gate.filter(b=>(b.flags||[]).some(f=>f.stage==="gate")).length,leaking:recv.filter(b=>b.leaking||b.condition==="Leaking").length};
+  });
+}
+function crReports(){
+  const months=[...new Set([...S.batteries.values()].filter(b=>b.yardAt).map(b=>b.yardAt.slice(0,7)))].sort().reverse();
+  if(!S.repMonth||!months.includes(S.repMonth)) S.repMonth=months[0];
+  const R=S.repMonth?cpcbRows(S.repMonth):[], M=monthly();
+  return crHead("Monthly report","Collection-centre figures in the shape the recycler files with CPCB. LeadLoop supplies the evidence; certificates come from the registered recycler.",
+   `<div class="row"><select class="sel" id="repM" style="width:auto">${months.map(m=>`<option value="${m}" ${m===S.repMonth?"selected":""}>${monthName(m)}</option>`).join("")}</select><button class="btn small" id="cpcb" style="margin:0">Export CSV</button></div>`)+
+  `<div id="csvOut"></div>
+  <div class="tablewrap rt"><table><thead><tr><th>Collection centre</th><th>For recycler</th><th class="num">Opening stock</th><th class="num">Received</th><th class="num">Sent to recycler</th><th class="num">Gate kg at recycler</th><th class="num">Closing stock</th><th class="num">Longest stored</th><th class="num">Over 90 d</th><th class="num">Weight flags</th><th class="num">Leaking</th></tr></thead><tbody>
+  ${R.map(r=>`<tr><td class="lead">${r.centre}</td><td data-l="For recycler">${r.recycler}</td><td data-l="Opening stock" class="num">${r.openingN} / ${r.openingKg} kg</td><td data-l="Received" class="num">${r.recvN} / ${r.recvKg} kg</td><td data-l="Sent to recycler" class="num">${r.sentN} / ${r.sentKg} kg</td><td data-l="Gate kg" class="num">${r.gateKg} kg</td><td data-l="Closing stock" class="num">${r.closingN} / ${r.closingKg} kg</td><td data-l="Longest stored" class="num">${r.maxDays} d</td><td data-l="Over 90 d" class="num">${r.over90}</td><td data-l="Weight flags" class="num">${r.flags}</td><td data-l="Leaking" class="num">${r.leaking}</td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="grid2" style="margin-top:14px"><div class="sheet" style="margin:0"><h3>kg received per month, by recycler</h3>${monthChartHTML()}</div>
+  <div class="sheet" style="margin:0"><h3>Closed records by month</h3><div class="tablewrap rt"><table><thead><tr><th>Month</th><th>Recycler</th><th class="num">Batteries</th><th class="num">Gate kg</th><th class="num">Flagged</th></tr></thead><tbody>
+   ${M.map(r=>`<tr><td class="lead">${esc(monthName(r.month))}</td><td data-l="Recycler">${esc(r.recycler)}</td><td data-l="Batteries" class="num">${r.n}</td><td data-l="Gate kg" class="num">${(Math.round(r.kgR*10)/10).toLocaleString("en-IN")}</td><td data-l="Flagged" class="num">${r.flagged}</td></tr>`).join("")}
+  </tbody></table></div></div></div>`;
+}
+function crAudit(){
+  const L=[...S.audit.values()].sort((a,c)=>c.at.localeCompare(a.at));
+  const ids=[...S.batteries.values()].filter(b=>b.status!=="unused").map(b=>b.id).sort();
+  const f=S.fix||(S.fix={id:ids[0]||"",field:"pickupKg",val:"",reason:"",note:""});
+  const b=S.batteries.get(f.id), before=b?(b[f.field]==null?"":b[f.field]):"";
+  return crHead("Corrections and audit log","Every write the app makes is logged. Corrections need a reason and keep the old value.")+
+  `<div class="sheet"><h3>Correct a record</h3><div class="filters">
+    <div><label>Battery</label><select id="fxId">${ids.map(i=>`<option ${i===f.id?"selected":""}>${i}</option>`).join("")}</select></div>
+    <div><label>Field</label><select id="fxF">${Object.entries(FIX_FIELDS).map(([k,t])=>`<option value="${k}" ${k===f.field?"selected":""}>${t}</option>`).join("")}</select></div>
+    <div><label>Now</label><input disabled value="${esc(before)||"(blank)"}"></div>
+    <div><label>Correct value</label><input id="fxV" value="${esc(f.val)}" ${/Kg$/.test(f.field)?'type="number" step="0.1"':""}></div>
+    <div><label>Reason</label><select id="fxR"><option value="">Choose…</option>${FIX_REASONS.map(r=>`<option ${r===f.reason?"selected":""}>${r}</option>`).join("")}</select></div>
+   </div><label class="f small" for="fxN" style="margin:10px 0 6px">Note (required)</label><input class="t" id="fxN" value="${esc(f.note)}" style="min-height:44px;font-size:15px" placeholder="What was checked, e.g. photo shows 30.1 kg on the scale">
+   <div id="fxErr"></div><button class="btn small" id="fxGo" style="margin-top:10px">Save correction</button>
+   <div class="small muted" style="margin-top:6px">Weight corrections re-run the ±${thr()}% checks for that record.</div></div>
+  <h2>Audit log</h2>
+  <div class="tablewrap rt"><table><thead><tr><th>When</th><th>Who</th><th>Action</th><th>Record</th><th>Detail</th><th>Before → after</th><th>Reason</th></tr></thead><tbody>
+  ${L.map(a=>`<tr><td class="lead">${fmtDT(a.at)}</td><td data-l="Who">${esc(a.by)}</td><td data-l="Action">${esc(a.action)}</td><td data-l="Record">${esc(a.target)}</td><td data-l="Detail" class="wrap">${esc(a.detail)}</td><td data-l="Before → after">${a.before!=null||a.after!=null?esc((a.before??"")+" → "+(a.after??"")):""}</td><td data-l="Reason" class="wrap">${esc(a.reason||"")}</td></tr>`).join("")||`<tr><td colspan="7" class="muted">Nothing logged yet.</td></tr>`}
+  </tbody></table></div>`;
+}
+function crSettings(){
+  return crHead("Settings")+`<div class="sheet"><label class="f" style="margin-top:0" for="thr">Weight-mismatch threshold (±%), used at yard weigh-in and at the recycler gate</label>
+      <div class="row"><input class="t" id="thr" type="number" step="0.5" min="0" value="${esc(thr())}" style="max-width:160px"><button class="btn small" id="thrSave" style="margin:0">Save</button></div>
+      <div class="small muted" style="margin-top:6px">Applies to new checks. Existing flags keep the threshold they were raised under.</div></div>
+    <div class="sheet"><h3>Rules in this demo</h3><ul class="small" style="margin:6px 0 0;padding-left:18px">
+     <li>Under CPCB's July 2026 guidelines only producers, recyclers or refurbishers may set up collection centres, so each LeadLoop yard is a registered recycler's collection centre, operated by LeadLoop.</li>
+     <li>The driver is paid the local rate (₹60–62/kg) by UPI, target 15 minutes or less. Partner scrap vendors are paid ₹${RATE}/kg of yard weight at weigh-in (₹${WHOLESALE_PER_KG} wholesale + ₹${MATCH_PER_KG} match), the same day, on the recycler's behalf: ₹2,070 for a 30 kg battery.</li>
+     <li>₹${ALLOWANCE} per tagged battery: the delivery-and-record allowance to the scrap vendor, or the tagging fee to a dealer (phase 2) for a take-back. Dealers keep take-backs in a crate until a partner scrap vendor collects them; that partner is paid for the battery.</li>
+     <li>The recycler repays those payments plus ₹${FEE_PER_KG}/kg of gate weight, due ${REPAY_DAYS} days after the truckload's last gate check. A gate gap over ±${thr()}% (less lead than paid for) comes off the partner's next payout.</li>
+     <li>Storage limit ${STORAGE_LIMIT_DAYS} days; target ~${TARGET_DAYS} days. No yard scan ${NO_YARD_SCAN_DAYS} days after pickup, or no gate scan ${TRUCK_GATE_DAYS} days after dispatch, raises a missing-scan alert.</li>
+     <li>Only registered recyclers generate EPR certificates. LeadLoop supplies the evidence trail.</li>
+     <li>One QR is one battery. A used sticker is rejected at pickup.</li></ul></div>
+    ${S.local?`<div class="sheet"><h3>Demo data on this device</h3><p class="small" style="margin:0 0 8px">This copy keeps its records in this browser (sign in to Claude to use the shared records), so each device starts from the same demo data and changes stay on it.</p><button class="btn small sec" id="rst">Reset demo data</button></div>`:""}`;
+}
+function wireAdmin(tab,AL){
+  if(tab==="alerts") document.querySelectorAll("[data-rev]").forEach(b=>b.onclick=()=>{
+    const a=AL.find(x=>x.key===b.dataset.rev);
+    modal(`<h2>Mark reviewed</h2><p class="small">${esc(a.title)}</p><label class="f" for="rvN">What was done</label><input class="t" id="rvN" placeholder="e.g. Called the yard; dispatch booked for Monday"><div id="rvE"></div><button class="btn" id="rvGo">Mark reviewed</button><button class="btn ghost" onclick="closeModal()">Cancel</button>`);
+    $("#rvGo").onclick=async()=>{ const note=($("#rvN").value||"").trim(); if(note.length<3){ $("#rvE").innerHTML=`<div class="banner err">Add a short note.</div>`; return; }
+      const id=a.key.replace(/[\/:]/g,"_");
+      try{ await saveDoc("reviews/"+id,{key:a.key,at:new Date().toISOString(),by:S.user.id,note}); }catch(e){ $("#rvE").innerHTML=`<div class="banner err">${errText(e)}</div>`; return; }
+      audit("Alert reviewed",a.id||a.truck||a.settle||a.key,`${a.title}. ${note}`); closeModal(); render(); };
+  });
+  if(tab==="batteries"){
+    document.querySelectorAll("[data-f]").forEach(el=>el.onchange=()=>{ S.filters[el.dataset.f]=el.value; render(); });
+    $("#clr").onclick=()=>{ S.filters={from:"",to:"",source:"",recycler:"",status:"",flagged:""}; render(); };
+    $("#csv").onclick=()=>exportCSV(buildCSV(filtered()),`leadloop_custody_evidence_${new Date().toISOString().slice(0,10)}.csv`);
+  }
+  if(tab==="partners") document.querySelectorAll("[data-pid]").forEach(s=>s.onchange=async()=>{
+    const p=S.partners.get(s.dataset.pid), k=s.dataset.pk, map={safetyKit:KIT,scale:SCALE,taxStatus:TAX}[k];
+    const before=map[p[k]]||p[k];
+    try{ await saveDoc("partners/"+p.id,Object.assign(clone(p),{[k]:s.value})); }catch(e){ toast("Couldn't save"); return; }
+    audit("Partner updated",p.id,{safetyKit:"Safety kit",scale:"Scale",taxStatus:"GST / Udyam"}[k],{before,after:map[s.value]}); toast("Saved"); render();
+  });
+  if(tab==="reports"){
+    $("#repM").onchange=e=>{ S.repMonth=e.target.value; render(); };
+    $("#cpcb").onclick=()=>{
+      const R=cpcbRows(S.repMonth), H=["month","collection_centre","recycler","opening_stock_batteries","opening_stock_kg","received_batteries","received_kg","sent_to_recycler_batteries","sent_to_recycler_kg","received_at_recycler_gate_kg","closing_stock_batteries","closing_stock_kg","longest_stored_days","stored_over_90_days","weight_flags","leaking_on_receipt"];
+      const csv=[H.join(","),...R.map(r=>[S.repMonth,r.centre,r.recycler,r.openingN,r.openingKg,r.recvN,r.recvKg,r.sentN,r.sentKg,r.gateKg,r.closingN,r.closingKg,r.maxDays,r.over90,r.flags,r.leaking].map(csvCell).join(","))].join("\n");
+      exportCSV(csv,`leadloop_monthly_collection_report_${S.repMonth}.csv`); audit("Report exported","Monthly report",monthName(S.repMonth));
+    };
+  }
+  if(tab==="audit"){
+    const f=S.fix;
+    $("#fxId").onchange=e=>{ f.id=e.target.value; f.val=""; render(); };
+    $("#fxF").onchange=e=>{ f.field=e.target.value; f.val=""; render(); };
+    $("#fxV").oninput=e=>{ f.val=e.target.value; };
+    $("#fxR").onchange=e=>{ f.reason=e.target.value; };
+    $("#fxN").oninput=e=>{ f.note=e.target.value; };
+    $("#fxGo").onclick=async()=>{
+      const b=S.batteries.get(f.id); if(!b) return;
+      const isKg=/Kg$/.test(f.field), v=isKg?parseFloat(f.val):(f.field==="vehicleMasked"?maskVehicle(f.val):f.val.trim());
+      const err=m=>{ $("#fxErr").innerHTML=`<div class="banner err">${m}</div>`; };
+      if(isKg&&!(v>0)) return err("Enter the correct weight.");
+      if(!isKg&&f.field!=="vehicleMasked"&&!v) return err("Enter the correct value.");
+      if(isKg&&b[f.field]==null) return err("That weight hasn't been recorded yet for this battery.");
+      if(!f.reason) return err("Choose a reason.");
+      if((f.note||"").trim().length<5) return err("Add a note on what was checked.");
+      const at=new Date().toISOString(), before=b[f.field]==null||b[f.field]===""?"(blank)":String(b[f.field]), after=v===""?"(blank)":String(v);
+      const nb=clone(b); nb[f.field]=v; nb.updatedAt=at;
+      if(isKg){ // re-run the weight checks with the threshold in force
+        const t=thr(), fl=(nb.flags||[]).filter(x=>!(x.stage==="yard"&&(f.field==="pickupKg"||f.field==="yardKg"))&&!(x.stage==="gate"&&(f.field==="yardKg"||f.field==="recyclerKg")));
+        const p1=pct(nb.pickupKg,nb.yardKg), p2=pct(nb.yardKg,nb.recyclerKg);
+        if((f.field==="pickupKg"||f.field==="yardKg")&&p1!=null&&Math.abs(p1)>t) fl.push({type:"weight_mismatch",stage:"yard",at,baseKg:nb.pickupKg,newKg:nb.yardKg,diffPct:+p1.toFixed(1),thresholdPct:t,afterCorrection:true});
+        if((f.field==="yardKg"||f.field==="recyclerKg")&&p2!=null&&Math.abs(p2)>t) fl.push({type:"weight_mismatch",stage:"gate",at,baseKg:nb.yardKg,newKg:nb.recyclerKg,diffPct:+p2.toFixed(1),thresholdPct:t,afterCorrection:true});
+        nb.flags=fl; nb.flagged=fl.length>0;
+      }
+      const reason=f.reason+": "+f.note.trim();
+      nb.events=[...(nb.events||[]),{type:"correction",at,by:S.user.id,role:"admin",field:FIX_FIELDS[f.field],before,after,reason}];
+      try{ await saveBattery(b.id,nb); }catch(e){ return err(errText(e)); }
+      await audit("Record corrected",b.id,FIX_FIELDS[f.field],{before,after,reason});
+      S.fix={id:f.id,field:f.field,val:"",reason:"",note:""}; toast("Correction saved"); render();
+    };
+  }
+  if(tab==="settings"&&$("#rst")) $("#rst").onclick=()=>{ modal(`<h2>Reset demo data?</h2><p>Every record on this device goes back to the starting demo data. Records made here are deleted.</p><button class="btn" id="rsGo">Reset demo data</button><button class="btn ghost" onclick="closeModal()">Cancel</button>`); $("#rsGo").onclick=resetLocalData; };
+  if(tab==="settings") $("#thrSave").onclick=async()=>{
+    const v=parseFloat($("#thr").value); if(!(v>=0&&v<100)) return;
+    const before="±"+thr()+"%";
+    try{ await S.db.doc("config/settings").set({weightThresholdPct:v}); S.settings.weightThresholdPct=v; audit("Setting changed","config/settings","Weight-mismatch threshold",{before,after:"±"+v+"%"}); toast("Threshold saved: ±"+v+"%"); render(); }catch(e){ toast("Couldn't save ("+(e&&e.code||"error")+")"); }
+  };
+}
+function csvCell(v){ v = v==null ? "" : String(v); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
+function buildCSV(rows){
+  const H=["battery_id","status","channel","source","brand","vehicle_masked","died_when","leaking_at_pickup","picked_up_by","picked_up_at","pickup_gps","pickup_kg","paid_to_driver_inr","driver_upi_ref","batteries_in_sale","collection_centre","recycler_id","yard_weighed_in_at","yard_kg","yard_condition","yard_vs_pickup_pct","partner_payout_id","partner_paid_inr","manifest_no","dispatched_at","recycler_gate_at","recycler_kg","gate_vs_yard_pct","flagged","flag_details","days_in_custody","handoffs_logged","photos_logged","leadloop_fee_inr"];
+  const out=[H.join(",")];
+  const pc=(a,c)=>(a&&c)?+((c-a)/a*100).toFixed(1):"";
+  for(const b of rows){
+    const g=b.pickupGps, po=b.payoutId&&S.payouts.get(b.payoutId), tr=b.truckId&&S.trucks.get(b.truckId);
+    const flags=(b.flags||[]).map(f=>`${f.stage==="gate"?"gate_vs_yard":"yard_vs_pickup"} ${f.baseKg}->${f.newKg}kg (${f.diffPct}%, threshold ${f.thresholdPct}%)`).join("; ");
+    const ev=b.events||[];
+    out.push([b.id,b.status,b.channel,b.source,b.brand,b.vehicleMasked,b.diedWhen,b.leaking==null?"":b.leaking?"yes":"no",b.pickedUpBy,b.pickedUpAt,g?`${g.lat} ${g.lng}`:"",b.pickupKg,b.paidToDriverInr,b.driverUpiRef,b.batteriesInSale,b.yardId,b.recyclerId,b.yardAt,b.yardKg,b.condition,pc(b.pickupKg,b.yardKg),po?po.id:"",po?po.net:"",tr?tr.manifestNo:"",b.dispatchedAt,b.closedAt,b.recyclerKg,pc(b.yardKg,b.recyclerKg),b.flagged?"yes":"no",flags,custodyDays(b),ev.length,ev.filter(e=>e.photo||e.labelPhoto).length,
+      b.recyclerKg!=null?Math.round(FEE_PER_KG*b.recyclerKg*100)/100:""].map(csvCell).join(","));
+  }
+  return out.join("\n");
+}
+async function exportCSV(csv,name){
+  if(S.downloads){ try{ await S.downloads.save({filename:name,data:csv}); toast("CSV saved"); return; }catch(e){} }
+  $("#csvOut").innerHTML=`<div class="banner info" style="margin-top:10px">Download isn't available in this view. Copy the CSV instead.</div><textarea style="width:100%;height:140px;font-family:monospace;font-size:12px">${esc(csv)}</textarea><button class="btn small" id="cp">Copy CSV</button>`;
+  $("#cp").onclick=async()=>{ try{ await navigator.clipboard.writeText(csv); toast("Copied"); }catch(e){ toast("Select the text and copy"); } };
+}
+
+/* ----- QR sheet: codes open the app at that battery ----- */
+function viewQRSheet(app){
+  const all=[...S.batteries.values()].sort((a,c)=>a.id.localeCompare(c.id));
+  const fresh=all.filter(b=>b.status==="unused"), used=all.filter(b=>b.status!=="unused");
+  const card=b=>`<div class="qrc ${b.status==="unused"?"fresh":""}">${svgQR(APP_URL+"#"+b.id)}<div>${sticker(b.id,1)}</div><div>${statusMark(b.status)}</div></div>`;
+  app.innerHTML=`${backBtn()}<h1 style="margin-top:4px">QR stickers</h1>
+  <p class="sub">Each code holds this app's link plus the battery ID, so a phone's camera app opens the battery directly. In the app, Scan battery QR reads the same codes.</p>
+  <h2>Fresh stickers (${fresh.length}): use for a live pickup</h2><div class="qrgrid">${fresh.map(card).join("")||'<p class="muted">All used.</p>'}</div>
+  <h2>Stickers already on batteries</h2><div class="qrgrid">${used.map(card).join("")}</div>`;
+  $("#back").onclick=()=>{ S.crTab="alerts"; go(homeOf()); };
+}
+
+/* ---------- hands-free tour: plays through the app on its own, writes nothing ---------- */
+const TOUR_MS = 7000;
+const firstWhere = (m,f) => [...m.values()].sort((a,c)=>(a.id||"").localeCompare(c.id||"")).find(f);
+function tourShow(u,view,prep){
+  if(u){ S.user=userById(u); }
+  S.form=null; if(prep) prep(); S.view=view; render();
+}
+const TOUR = [
+ {cap:"One QR sticker follows each dead battery from the scrap vendor to the recycler. Three scans, with weight, photo and money at every hand-off.", run:()=>{ S.user=null; S.view="login"; render(); }},
+ {cap:"How it works: the deck's ten steps sit on three scans. Pickup, yard weigh-in, recycler gate.", run:()=>{ S.view="how"; render(); }, focus:".how"},
+ {cap:"What one scan does: a phone camera reads the sticker, the app opens at that battery, and the scanner's role decides what happens next.", ms:21000, run:()=>{ SD.i=0; SD.paused=false; S.view="scan"; render(); }},
+ {cap:"Scan 1 · Scrap vendor V-101 scans a fresh sticker and fills the form in about a minute, including what the driver was paid and the UPI reference.", ms:9000, run:()=>{
+    const id=freshIds()[0]; tourShow("V-101","pickup",()=>{ S.id=id; S.scanAt=Date.now()-41000; S.gpsResult=null;
+      S.form={source:"e-rickshaw",brand:"major",vehicle:"DL1EA4455",died:"this_week",weight:"30.4",photo:null,label:null,leaking:"no",paid:"1850",upi:"412398765432",sale:"2"}; }); }, focus:".slip"},
+ {cap:"Scan 2 · The LeadLoop yard re-weighs the battery. The gap against pickup is checked (±5%), and the scrap vendor is paid ₹69/kg the same day.", ms:9000, run:()=>{
+    const b=firstWhere(S.batteries,x=>x.status==="picked_up"); if(!b) return tourShow("Y-02","home");
+    tourShow(b.pickedUpBy==="V-102"?"Y-01":"Y-02","yard",()=>{ S.id=b.id; S.form={weight:String(Math.round((b.pickupKg-0.3)*10)/10),photo:null,condition:"Intact",upi:"412345678901"}; }); }, focus:"#diff"},
+ {cap:"The scrap vendor sees every payout with its UPI reference, the ₹10 allowance, and any deduction for a weight gap.", run:()=>tourShow("V-101","payouts")},
+ {cap:"The yard loads batteries onto the recycler's truck under one manifest number.", run:()=>tourShow("Y-02","dispatch")},
+ {cap:"Scan 3 · The recycler opens the truckload and scans each battery at its gate.", run:()=>{
+    const t=[...S.trucks.values()].filter(x=>x.status!=="received").sort((a,c)=>c.dispatchedAt.localeCompare(a.dispatchedAt))[0]||[...S.trucks.values()].sort((a,c)=>c.dispatchedAt.localeCompare(a.dispatchedAt))[0];
+    if(!t) return tourShow("R-301","home"); tourShow(t.recyclerId,"truck",()=>{ S.ref=t.id; }); }},
+ {cap:"The gate weight must match the yard within ±5%. A bigger gap flags the record, and the missing lead comes off the scrap vendor's next payout.", ms:9000, run:()=>{
+    const b=firstWhere(S.batteries,x=>x.status==="at_yard"&&x.truckId); if(!b) return;
+    tourShow((S.trucks.get(b.truckId)||{}).recyclerId||b.recyclerId,"timeline",()=>{ S.id=b.id; S.ref=b.truckId; S.form={weight:String(Math.round(b.yardKg*0.92*10)/10)}; }); }, focus:"#gdiff"},
+ {cap:"Each completed truckload produces a settlement statement: partner payments plus ₹4/kg, due 10 days after the gate check.", run:()=>{
+    const s=[...S.settlements.values()].sort((a,c)=>(a.status==="repaid")-(c.status==="repaid")||c.createdAt.localeCompare(a.createdAt))[0];
+    if(!s) return; tourShow(s.recyclerId,"settlement",()=>{ S.ref=s.id; }); }},
+ {cap:"Every scan builds the custody trail: who, when, where, weight, photo and payment, ready for the recycler's EPR filing.", run:()=>{
+    const b=firstWhere(S.batteries,x=>x.status==="closed"&&x.flagged)||firstWhere(S.batteries,x=>x.status==="closed"); if(!b) return;
+    tourShow("A-01","timeline",()=>{ S.id=b.id; S.ref=null; }); }, focus:".tl"},
+ {cap:"LeadLoop control room: an alerts inbox for weight flags, batteries over 10 or 90 days and missing scans, each with an owner and a next step.", run:()=>{ S.crTab="alerts"; tourShow("A-01","admin"); }},
+ {cap:"Cash: what LeadLoop advanced to partners, what each recycler has repaid, and what is overdue.", run:()=>{ S.crTab="money"; tourShow("A-01","admin"); }},
+ {cap:"Partners: safety kit, scale, the ₹10 delivery-and-record allowance and GST or Udyam help.", run:()=>{ S.crTab="partners"; tourShow("A-01","admin"); }},
+ {cap:"Monthly report per collection centre, exported as CSV for the recycler's CPCB filing.", run:()=>{ S.crTab="reports"; tourShow("A-01","admin"); }},
+ {cap:"Corrections need a reason and keep the old value; every write is in the audit log.", run:()=>{ S.crTab="audit"; tourShow("A-01","admin"); }},
+ {cap:"That's the loop. Try it yourself with the step-by-step demo, or scan a printed sticker with your phone.", ms:60000, run:()=>{ S.view="login"; S.user=null; render(); }, end:true}
+];
+const TT = {on:false,i:0,paused:false,timer:null,saved:null};
+function tourStart(){
+  closeModal();
+  TT.saved={user:S.user?S.user.id:null,view:S.view,id:S.id,ref:S.ref,crTab:S.crTab,demo:S.demo.on};
+  S.demo.on=false; TT.on=true; TT.paused=false; tourGo(0);
+}
+function tourStop(){
+  try{ if((location.hash||"").toLowerCase()==="#tour") history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+  clearTimeout(TT.timer); TT.on=false; if(S.timerInt){ clearInterval(S.timerInt); S.timerInt=null; }
+  const s=TT.saved||{}; S.user=s.user?userById(s.user):null; S.view=S.user?(s.view||homeOf()):"login"; S.id=s.id; S.ref=s.ref; S.crTab=s.crTab||"alerts"; S.demo.on=!!s.demo; S.form=null;
+  render();
+}
+function tourGo(i){
+  clearTimeout(TT.timer);
+  TT.i=Math.max(0,Math.min(TOUR.length-1,i));
+  const st=TOUR[TT.i];
+  try{ st.run(); }catch(e){}
+  if(st.focus) setTimeout(()=>{ const el=document.querySelector(st.focus); if(el) el.scrollIntoView({block:"center",behavior:"smooth"}); },400);
+  renderTour(true);
+  if(!TT.paused && !st.end) TT.timer=setTimeout(()=>tourGo(TT.i+1), st.ms||TOUR_MS);
+}
+function renderTour(force){
+  document.body.classList.toggle("tour-on",TT.on);
+  const el=$("#tourRoot");
+  if(!TT.on){ el.innerHTML=""; el.dataset.k=""; return; }
+  const k=TT.i+"|"+TT.paused; if(!force && el.dataset.k===k && el.firstChild) return; el.dataset.k=k;
+  const st=TOUR[TT.i], ms=st.ms||TOUR_MS;
+  el.innerHTML=`<div class="demobar tourbar" role="region" aria-label="App tour"><button class="x" id="tX">Exit tour ✕</button><div class="in">
+    <div class="prog" aria-hidden="true">${TOUR.map((_,k)=>`<i class="${k<TT.i?"d":""}">${k===TT.i&&!TT.paused&&!st.end?`<b style="animation-duration:${ms}ms"></b>`:k===TT.i?`<b style="width:100%;animation:none"></b>`:""}</i>`).join("")}</div>
+    <div class="stepn">Tour · ${TT.i+1} of ${TOUR.length}${S.user?` · viewing as ${esc(S.user.id)}`:""} · nothing is saved</div>
+    <div class="txt">${esc(st.cap)}</div>
+    <div class="ctl">${st.end?`<button class="go" id="tHands">Try it step by step</button><button class="nv" id="tAgain" aria-label="Play again" title="Play again">↺</button>`:
+      `<button class="nv" id="tP" ${TT.i===0?"disabled":""} aria-label="Previous">‹</button><button class="go" id="tPause">${TT.paused?"▶ Play":"❚❚ Pause"}</button><button class="nv" id="tN" aria-label="Next">›</button>`}</div>
+  </div></div>`;
+  $("#tX").onclick=tourStop;
+  if(st.end){ $("#tHands").onclick=()=>{ TT.on=false; renderTour(); demoStart(); demoGo(1); }; $("#tAgain").onclick=()=>{ TT.paused=false; tourGo(0); }; return; }
+  $("#tP").onclick=()=>tourGo(TT.i-1);
+  $("#tN").onclick=()=>tourGo(TT.i+1);
+  $("#tPause").onclick=()=>{ TT.paused=!TT.paused; if(TT.paused){ clearTimeout(TT.timer); renderTour(); } else tourGo(TT.i); };
+}
+/* while the tour plays, the screens are for looking: block taps so nothing gets saved */
+document.addEventListener("click",e=>{
+  if(!TT.on) return;
+  if(e.target.closest("#tourRoot")) return;
+  if(e.target.closest("#app,#hdActions,#modalRoot")){ e.preventDefault(); e.stopPropagation(); toast("The tour is playing. Exit it to use the app."); }
+},true);
+function openDemoChooser(){
+  modal(`<h2>See LeadLoop work</h2>
+   <button class="btn hv" id="chTour">▶ Play the tour<span class="small" style="font-weight:600;opacity:.8">· about 2 minutes, hands-free</span></button>
+   <p class="small muted" style="margin:2px 0 10px">Walks through all three scans, the money and the control room on its own. Nothing is saved.</p>
+   <button class="btn sec" id="chDemo">Try it step by step</button>
+   <p class="small muted" style="margin:2px 0 10px">You tag fresh sticker ${esc(freshIds()[0]||"")}, weigh it in, dispatch it and gate-check it, switching role with one tap at each step. Saves real records.</p>
+   ${S.demo.on?`<button class="btn ghost" id="chOff">Close the step-by-step demo</button>`:""}`);
+  $("#chTour").onclick=tourStart;
+  $("#chDemo").onclick=()=>{ closeModal(); demoStart(); demoGo(S.demo.step||0); };
+  if($("#chOff")) $("#chOff").onclick=()=>{ closeModal(); demoOff(); };
+}
+
+/* ---------- "What happens when you scan": animated walkthrough + live on-screen QR ---------- */
+const SCAN_STEPS = [
+ {t:"The sticker", d:"Every battery gets one QR sticker at pickup. It holds this app's address plus the battery's ID, and is never reused."},
+ {t:"Point a phone camera", d:"Any phone camera reads it; no special app. The phone opens LeadLoop straight at that battery."},
+ {t:"The app knows who is scanning", d:"Your sign-in decides what opens: a scrap vendor gets the pickup form, the yard gets weigh-in, the recycler gets the gate check."},
+ {t:"One scan, one record", d:"Saving adds who, when, where, weight, photo and payment to the battery's custody trail. A used sticker can't start a second pickup."},
+ {t:"Three scans, one trail", d:"The same sticker is scanned again at the yard (±5% vs pickup) and at the recycler's gate (±5% vs yard)."}
+];
+const SD = {i:0, timer:null, paused:false};
+function scanPhone(i,id){
+  const role=(r,ic,title,rows)=>`<div class="ph-app"><div class="ph-bar">${ICON.logo()}<b>LeadLoop</b><span>${r}</span></div><div class="ph-body"><div class="ph-stk">${ICON.qr()}${id}</div><div class="ph-title">${ic}${title}</div>${rows}</div></div>`;
+  const rows=a=>a.map(([k,v])=>`<div class="ph-row"><span>${k}</span><b>${v}</b></div>`).join("");
+  if(i===0) return `<div class="ph-cam idle"><div class="ph-battery">${ICON.battery(C.casing,"#3a4348")}<span class="ph-sticker">${ICON.qr()}${id}</span></div></div>`;
+  if(i===1) return `<div class="ph-cam"><div class="ph-battery">${ICON.battery(C.casing,"#3a4348")}<span class="ph-sticker">${ICON.qr()}${id}</span><div class="ph-vf"></div></div><div class="ph-link">${esc(APP_URL.replace(/^https?:\/\//,""))}#${id}</div></div>`;
+  if(i===2) return role("V-101",ICON.vendor(),"Battery pickup",rows([["Source","E-rickshaw"],["Weight","30.4 kg"],["Photo, label","✓ ✓"],["Paid to driver","₹1,850 UPI"]]))+`<div class="ph-cap">Scrap vendor V-101</div>`;
+  if(i===3) return `<div class="ph-app"><div class="ph-bar">${ICON.logo()}<b>LeadLoop</b><span>V-101</span></div><div class="ph-body ph-done"><div class="ph-check">${ICN.check}</div><b>Saved in 48 s</b><div class="ph-stk">${ICON.qr()}${id}</div><div class="ph-pips"><i class="f"></i><i></i><i></i></div><small>1 of 3 scans</small><div class="ph-block">${ICN.tri} Scan again for a new pickup: blocked, sticker already used</div></div></div>`;
+  return `<div class="ph-trio">${[["Pickup","V-101",ICON.vendor(),"30.4 kg"],["Yard","Y-02",ICON.yard(),"30.1 kg · −1.0%"],["Gate","R-302",ICON.recycler(),"29.9 kg · −0.7%"]].map(([a,b,ic,w],k)=>`<div class="ph-mini" style="animation-delay:${k*0.5}s">${ic}<b>${a}</b><span>${b}</span><em>${w}</em></div>`).join("")}</div>`;
+}
+function viewScanDemo(app){
+  clearTimeout(SD.timer);
+  const fresh=freshIds()[0]||"LL-0021", st=SCAN_STEPS[SD.i];
+  app.innerHTML=`${S.user?backBtn():backBtn("Back")}<h1 style="margin-top:4px">What happens when you scan</h1>
+  <p class="sub">The QR sticker is the whole interface for people in the field. Here is what one scan does.</p>
+  <div class="scandemo">
+    <div class="phone" aria-live="polite"><div class="notch"></div><div class="screen" key="${SD.i}">${scanPhone(SD.i,fresh)}</div></div>
+    <div class="sd-side">
+      <ol class="sd-steps">${SCAN_STEPS.map((s,k)=>`<li class="${k===SD.i?"on":k<SD.i?"done":""}"><button data-sd="${k}"><span class="n">${k+1}</span><span><b>${esc(s.t)}</b>${k===SD.i?`<span class="d">${esc(s.d)}</span>`:""}</span></button></li>`).join("")}</ol>
+      <div class="row" style="gap:8px;margin-top:6px"><button class="btn small sec" id="sdPause" style="margin:0">${SD.paused?"▶ Play":"❚❚ Pause"}</button><button class="btn small sec" id="sdNext" style="margin:0">Next ›</button></div>
+    </div>
+  </div>
+  <div class="grid2" style="margin-top:14px">
+    <div class="sheet" style="margin:0"><h3>Try it with your own phone</h3><div class="row" style="align-items:flex-start;gap:14px"><div class="livqr">${svgQR(APP_URL+"#"+fresh)}<div>${sticker(fresh,1)}</div></div>
+      <p class="small" style="margin:0">Point your phone camera at this code. It opens the app at fresh sticker ${esc(fresh)}. Choose <b>V-101</b> and the pickup form opens, ready to log.<br><br><span class="muted">This is a real sticker code; printed stickers work the same way.</span></p></div></div>
+    <div class="sheet" style="margin:0"><h3>Or simulate it here</h3><p class="small" style="margin:0 0 10px">No phone? This opens the same pickup form for ${esc(fresh)} as scrap vendor V-101, the way a scan would.</p>
+      <button class="btn" id="sdTry" style="margin:0">Simulate scanning ${esc(fresh)}</button></div>
+  </div>`;
+  $("#back").onclick=()=>go(S.user?homeOf():"login");
+  app.querySelectorAll("[data-sd]").forEach(b=>b.onclick=()=>{ SD.i=+b.dataset.sd; SD.paused=true; render(); });
+  $("#sdPause").onclick=()=>{ SD.paused=!SD.paused; render(); };
+  $("#sdNext").onclick=()=>{ SD.i=(SD.i+1)%SCAN_STEPS.length; render(); };
+  $("#sdTry").onclick=()=>{ S.user=userById("V-101"); try{localStorage.setItem("ll_user","V-101");}catch(e){} startGPS(); S.scanAt=Date.now(); routeBattery(fresh); };
+  if(!SD.paused) SD.timer=setTimeout(()=>{ if(S.view==="scan"){ SD.i=(SD.i+1)%SCAN_STEPS.length; render(); } },4200);
+}
+
+$("#logoBtn").onclick=()=>{ if(S.user) go(homeOf()); else go("login"); };
+S.pendingId = readHash();
+render();
+initDB().then(()=>{});
+/* once records arrive, honour a #LL-xxxx deep link */
+const wantsTour = () => (location.hash||"").toLowerCase()==="#tour";
+window.addEventListener("hashchange",()=>{ if(wantsTour()&&!TT.on&&S.batteries.size) tourStart(); });
+(function waitHash(){ if(S.dbState==="ready"&&S.batteries.size){ if(wantsTour()) return tourStart(); if(S.pendingId&&S.user) takeHash(); else if(S.pendingId) render(); return; } if(S.dbState==="none"||S.dbState.startsWith("error")) return; setTimeout(waitHash,250); })();
+</script>
+</body>
+</html>
