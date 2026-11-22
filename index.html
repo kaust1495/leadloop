@@ -657,6 +657,15 @@ tfoot td{background:var(--paper-2)}
 .ev-more{margin-top:8px;border-top:1px dashed #C9C0AC;padding-top:6px}
 .ev-more summary{font-size:12.5px;font-weight:700;color:var(--forest);cursor:pointer;padding:6px 0;min-height:36px}
 .ev-more .kv{margin-top:4px}
+.result h3{margin:0 0 6px;font-size:14px;letter-spacing:.02em}
+.tprog{margin:14px 0 4px}
+.tpbar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.tpbar i{display:block;height:100%;background:var(--forest);border-radius:4px}
+.tprow{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;margin-top:6px;font-size:11.5px;font-weight:700;color:#8C8271;letter-spacing:.04em;text-transform:uppercase}
+.tprow .on{color:var(--forest)}
+.empty{padding:24px 18px;text-align:center;border:1px dashed var(--line);border-radius:10px;background:var(--paper)}
+.empty .e{font-size:26px;line-height:1;margin-bottom:6px}
+.empty b{display:block;font-size:15px}
 :lang(hi),.hi{line-height:1.65;letter-spacing:.015em}
 
 /* ---- story / scan chrome ---- */
@@ -3280,6 +3289,7 @@ function tile(o){
 function toast(msg){ const d=document.createElement("div"); d.className="toast"; d.setAttribute("role","status"); d.textContent=msg; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
 function modal(html,wide){ $("#modalRoot").innerHTML = `<div class="overlay" id="ov"><div class="modal${wide?" wide":""}" role="dialog" aria-modal="true">${html}</div></div>`; $("#ov").addEventListener("click",e=>{ if(e.target.id==="ov") closeModal(); }); }
 function closeModal(){ $("#modalRoot").innerHTML=""; }
+const emptyHTML = (mark,title,body) => `<div class="empty"><div class="e">${mark}</div><b>${esc(title)}</b><p class="small muted" style="margin:4px 0 0">${esc(body)}</p></div>`;
 
 /* ---------- DB ---------- */
 const COLS = {batteries:"batteries",payouts:"payouts",truckloads:"trucks",settlements:"settlements",partners:"partners",audit:"audit",reviews:"reviews"};
@@ -3874,12 +3884,16 @@ function viewDone(app){
   const L=T[S.lang], d=S.done||{};
   const pick = d.kind==="pickup", r=66, Lc=2*Math.PI*r, frac=pick?Math.min((d.dur||0)/90,1):1, late=pick&&d.dur>90;
   const b=S.batteries.get(d.id), po=d.payoutId&&S.payouts.get(d.payoutId);
+  const resultRows = b ? (pick
+    ? [["Sticker",`${d.id} → picked up`],["Weight",kg(b.pickupKg)],["Driver paid",b.paidToDriverInr?inr(b.paidToDriverInr)+" by UPI":"Exchange"],["Next","Weigh it in at the yard"]]
+    : [["Sticker",`${d.id} → at yard`],["Yard weight",kg(b.yardKg)],["Vendor paid",po?inr(po.net)+" by UPI":"—"],["Next","Load it on a truck"]]) : [];
   app.innerHTML = `<div class="donescreen">
     <div class="big"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="${r}" fill="none" stroke="#e3e7e1" stroke-width="10"/><circle class="arc" cx="75" cy="75" r="${r}" fill="none" stroke="${late?"#b3261e":d.flagMsg?C.saffron:C.leaf}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${Lc}" stroke-dashoffset="${Lc*(1-frac)}" transform="rotate(-90 75 75)"/><path class="chk" d="M50 77l17 17 34-36" fill="none" stroke="${C.forest}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h1 class="${S.lang==="hi"&&pick?"hi":""}">${esc(pick?L.saved:"Weighed in and paid")}</h1>
     <div style="margin:6px 0 4px">${sticker(d.id)}</div>
     ${pick?`<p class="sub" style="margin:8px auto">${esc(L.loggedIn)} <b>${d.dur} ${esc(L.sec)}</b>${d.dur<=90?", under the 90-second target":""}</p>`:`<p class="sub" style="margin:8px auto">${esc(d.msg||"")}</p>`}
   </div>
+  ${resultRows.length?`<div class="sheet tight result"><h3>What just changed</h3><dl class="kv" style="margin:0">${resultRows.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl></div>`:""}
   ${d.flagMsg?`<div class="banner err">${esc(d.flagMsg)}</div>`:""}
   ${po?payoutSlip(po):""}
   ${b?trackHTML(b):""}
@@ -3970,11 +3984,12 @@ function viewPayouts(app){
   <div class="tiles">${tile({l:"Paid to you",v:inr(pays.reduce((a,p)=>a+p.net,0)),c:`${pays.length} payment${pays.length===1?"":"s"}, ${kg(pays.reduce((a,p)=>a+p.kg,0))}`})}
    ${tile({l:S.user.role==="dealer"?"Tagging fee":"Delivery-and-record allowance",v:inr(allowance),c:`₹${ALLOWANCE} for each battery you tagged that reached the yard`})}
    ${tile({l:"Comes off next payout",v:inr(pend),tone:pend?"amber":"",c:pend?"Weight gap at a recycler gate":"No deductions waiting"})}</div>
+  ${pays.length?`<h2>Latest payment</h2>${payoutSlip(pays[0])}`:""}
   <h2>Ledger</h2>
   <div class="tablewrap rt"><table><thead><tr><th>Date</th><th>Battery</th><th class="num">kg</th><th class="num">Gross</th><th class="num">Deducted</th><th class="num">Paid</th><th>UPI ref</th><th>Status</th></tr></thead><tbody>
   ${rows.map(p=>p.kind==="deduction"
     ?`<tr><td class="lead">${fmtDs(p.at)} · deduction ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Gap" class="num">${kg1(p.kgGap)}</td><td data-l="Gross"></td><td data-l="Amount" class="num">− ${inr(p.amount)}</td><td data-l="Paid"></td><td data-l="Why" class="wrap">${esc(p.reason)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`
-    :`<tr><td class="lead">${fmtDs(p.at)} · ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="kg" class="num">${kg1(p.kg)}</td><td data-l="Gross" class="num">${inr(p.gross)}</td><td data-l="Deducted" class="num">${(p.deductions||[]).length?"− "+inr(p.gross-p.net):""}</td><td data-l="Paid" class="num"><b>${inr(p.net)}</b></td><td data-l="UPI ref">${esc(p.upiRef)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="8" class="muted">${S.user.role==="dealer"?"Dealers aren't paid for batteries: the partner scrap vendor who collects them is. You earn the ₹10 tagging fee above.":"No payouts yet. You're paid when a battery you logged is weighed in at the yard."}</td></tr>`}
+    :`<tr><td class="lead">${fmtDs(p.at)} · ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="kg" class="num">${kg1(p.kg)}</td><td data-l="Gross" class="num">${inr(p.gross)}</td><td data-l="Deducted" class="num">${(p.deductions||[]).length?"− "+inr(p.gross-p.net):""}</td><td data-l="Paid" class="num"><b>${inr(p.net)}</b></td><td data-l="UPI ref">${esc(p.upiRef)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="8">${S.user.role==="dealer"?emptyHTML("₹","Tagging fee only","Dealers aren't paid for batteries: the partner scrap vendor who collects them is. You earn the ₹10 tagging fee above."):emptyHTML("₹","No payouts yet","You're paid when a battery you logged is weighed in at the yard.")}</td></tr>`}
   </tbody></table></div>`;
   $("#back").onclick=()=>go("home");
 }
@@ -3985,10 +4000,13 @@ function viewDispatch(app){
   const ready=[...S.batteries.values()].filter(b=>b.status==="at_yard"&&b.yardId===me&&!b.truckId).sort((a,c)=>a.yardAt.localeCompare(c.yardAt));
   if(!S.form) S.form={sel:new Set(ready.map(b=>b.id)),truckNo:"",manifest:"MF-"+me.replace("-","")+"-"+new Date().toISOString().slice(2,10).replace(/-/g,"")+"-"+String(Math.floor(Math.random()*90+10))};
   const f=S.form, sel=ready.filter(b=>f.sel.has(b.id)), kgT=sel.reduce((a,b)=>a+(b.yardKg||0),0);
+  const paidFor=id=>[...S.payouts.values()].filter(p=>p.kind==="payout"&&p.batteryId===id).reduce((a,p)=>a+p.net,0);
+  const advanced=sel.reduce((a,b)=>a+paidFor(b.id),0), estimate=Math.round(advanced+FEE_PER_KG*kgT);
   app.innerHTML=`${backBtn()}<h1 style="margin-top:4px">Dispatch a truckload</h1><p class="sub">Load batteries onto ${esc(S.user.recycler)}'s truck. Each one gets the manifest number; the recycler scans them at its gate.</p>
-  ${ready.length?`<div class="sheet">${ready.map(b=>`<label class="lrow" style="cursor:pointer"><span class="row"><input type="checkbox" data-sel="${esc(b.id)}" ${f.sel.has(b.id)?"checked":""} style="width:22px;height:22px">${sticker(b.id,1)}<span class="sub2">${kg(b.yardKg)}</span></span><span class="meta">${flagMark(b)}${custodyMark(b)}</span></label>`).join("")}</div>`:`<div class="banner info">Nothing waiting at this yard. Weigh batteries in first.</div>`}
+  ${ready.length?`<div class="sheet">${ready.map(b=>`<label class="lrow" style="cursor:pointer"><span class="row"><input type="checkbox" data-sel="${esc(b.id)}" ${f.sel.has(b.id)?"checked":""} style="width:22px;height:22px">${sticker(b.id,1)}<span class="sub2">${kg(b.yardKg)}</span></span><span class="meta">${flagMark(b)}${custodyMark(b)}</span></label>`).join("")}</div>`:`${emptyHTML("🚚","Nothing waiting at this yard","Weigh batteries in first. Each one appears here until it is loaded on a truck.")}`}
   <div class="slip"><div class="sh"><div><div class="small muted">Manifest</div><div class="ref">${esc(f.manifest)}</div></div><div style="text-align:right"><div class="amt">${sel.length}</div><div class="small muted">batteries, ${kg(kgT)}</div></div></div>
-    <dl><dt>From</dt><dd>${esc(S.user.label)}</dd><dt>To</dt><dd>${esc(userLabel(S.user.recycler))}</dd></dl>
+    <dl><dt>From</dt><dd>${esc(S.user.label)}</dd><dt>To</dt><dd>${esc(userLabel(S.user.recycler))}</dd><dt>Partner paid at weigh-in</dt><dd class="num">${inr(advanced)}</dd><dt>Statement at the gate (est.)</dt><dd class="num">${inr(estimate)}</dd></dl>
+    <div class="small muted" style="margin-top:6px">Gate weight and the ₹${FEE_PER_KG}/kg fee are confirmed at the gate. The statement follows the last gate check.</div>
     <label class="f" for="tno">Truck number</label><input class="t" id="tno" value="${esc(f.truckNo)}" placeholder="HR 55 AK 7713" style="text-transform:uppercase" autocomplete="off"></div>
   <div id="formErr"></div>
   <button class="btn" id="go" ${sel.length?"":"disabled"}>${ICN.truck.replace('viewBox','width="22" height="22" viewBox')}Dispatch ${sel.length} batter${sel.length===1?"y":"ies"}</button>
@@ -4022,6 +4040,7 @@ function viewTruck(app){
   <div class="slip"><div class="sh"><div><div class="small muted">Manifest</div><div class="ref">${esc(t.manifestNo)}</div></div>${t.status==="received"?mk("ok","check","Received "+fmtDs(t.receivedAt)):mk("info","truck",`${done.length} of ${bs.length} gate-checked`)}</div>
    <dl><dt>From</dt><dd>${esc(userLabel(t.yardId))}</dd><dt>To</dt><dd>${esc(userLabel(t.recyclerId))}</dd><dt>Truck</dt><dd>${esc(t.truckNo)}</dd><dt>Dispatched</dt><dd>${fmtDT(t.dispatchedAt)}</dd></dl>
    <div class="tot"><span>${bs.length} batteries</span><span>${kg(t.kgAtYard)} at yard${done.length?` · ${kg(kgR)} at gate`:""}</span></div></div>
+  ${(()=>{const pc=t.status==="received"?100:Math.min(95,10+80*(done.length/Math.max(1,bs.length)));return `<div class="tprog"><div class="tpbar"><i style="width:${pc}%"></i></div><div class="tprow"><span class="on">Dispatched ${esc(fmtDs(t.dispatchedAt))}</span><span class="${done.length?"on":""}">Gate ${done.length} of ${bs.length}</span><span class="${t.settlementId?"on":""}">Statement</span></div></div>`;})()}
   ${rec&&t.status!=="received"?`<div class="banner info">Scan each battery at your gate, or tap one below. The statement is made when the last one is checked.</div>`:""}
   <div class="tablewrap rt"><table><thead><tr><th>Battery</th><th class="num">Yard kg</th><th class="num">Gate kg</th><th class="num">Gap</th><th>Status</th><th></th></tr></thead><tbody>
   ${bs.map(b=>{ const p=pct(b.yardKg,b.recyclerKg), bad=p!=null&&Math.abs(p)>thr();
@@ -4732,7 +4751,8 @@ const BEATS = [
  {f:[0,1,2,3,4,5], en:"Built for the field: big buttons, Hindi or English, photos, any phone camera.",
   hi:"फ़ील्ड के लिए: बड़े बटन, हिंदी या अंग्रेज़ी, फ़ोटो, कोई भी फ़ोन कैमरा।", t:"Made for the field"}
 ];
-const ST = {i:0, playing:false, timer:null, lang:"en", sound:true, ended:false, voiceBlocked:false, token:0};
+const STORY_MS = 43000;
+const ST = {i:0, playing:false, timer:null, guard:null, deadline:0, startedAt:0, lang:"en", sound:true, ended:false, voiceBlocked:false, token:0};
 try{ const l=localStorage.getItem("ll_story_lang"); if(l==="hi"||l==="en") ST.lang=l; const s=localStorage.getItem("ll_story_sound"); if(s==="0") ST.sound=false; }catch(e){}
 const canSpeak = () => { try{ return "speechSynthesis" in window && typeof SpeechSynthesisUtterance==="function"; }catch(e){ return false; } };
 function pickVoice(lang){
@@ -4740,7 +4760,12 @@ function pickVoice(lang){
     for(const w of want){ const v=vs.find(v=>(v.lang||"").toLowerCase().startsWith(w.toLowerCase())); if(v) return v; } }catch(e){}
   return null;
 }
-function storyStop(){ clearTimeout(ST.timer); ST.playing=false; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} }
+function storyStop(){ clearTimeout(ST.timer); clearTimeout(ST.guard); ST.playing=false; ST.deadline=0; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} }
+function storyFinish(){ clearTimeout(ST.timer); clearTimeout(ST.guard); ST.playing=false; ST.ended=true; ST.deadline=0; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} if(S.view==="story") renderStoryStage(); }
+/* Hard stop so a throttled tab (timers clamped to ~1 s) still lands under 45 s */
+function storyGuard(){ clearTimeout(ST.guard); if(!ST.playing||!ST.deadline) return;
+  const left=Math.max(0,ST.deadline-Date.now());
+  ST.guard=setTimeout(()=>{ if(ST.playing) storyFinish(); }, left+40); }
 function storyVoicePrompt(){
   const note=$("#stNote"); if(!note) return;
   note.innerHTML=`Your browser blocked the voice. <button class="hbtn2" id="stVoice" style="margin-top:6px">🔈 Tap to hear it</button>`;
@@ -4752,21 +4777,26 @@ function storyBeat(i){
   ST.i=Math.max(0,Math.min(BEATS.length-1,i)); ST.ended=false;
   if(S.view==="story") renderStoryStage();
   if(!ST.playing) return;
-  const b=BEATS[ST.i], txt=b[ST.lang], minMs=ST.lang==="hi"?4000:3400, started=Date.now();
-  const next=()=>{ if(!ST.playing) return; const wait=Math.max(0,minMs-(Date.now()-started))+300;
-    ST.timer=setTimeout(()=>{ if(!ST.playing) return; if(ST.i<BEATS.length-1) storyBeat(ST.i+1); else { ST.playing=false; ST.ended=true; renderStoryStage(); } },wait); };
+  if(!ST.deadline) ST.deadline=Date.now()+STORY_MS;
+  storyGuard();
+  const b=BEATS[ST.i], txt=b[ST.lang], started=Date.now();
+  const left=Math.max(700,ST.deadline-started), cap=Math.max(650,left/Math.max(1,BEATS.length-ST.i)-420);
+  const minMs=Math.min(ST.lang==="hi"?3400:3000, cap);
+  const next=()=>{ if(!ST.playing) return; if(Date.now()>=ST.deadline-150) return storyFinish();
+    const wait=Math.max(120,Math.min(cap,Math.max(0,minMs-(Date.now()-started))+200));
+    ST.timer=setTimeout(()=>{ if(!ST.playing) return; if(ST.i<BEATS.length-1) storyBeat(ST.i+1); else storyFinish(); },wait); };
   const voice = ST.sound && canSpeak() && !ST.voiceBlocked ? pickVoice(ST.lang) : null;
   const note=$("#stNote");
   if(note){ if(ST.voiceBlocked){ storyVoicePrompt(); } else { note.textContent = ST.sound && canSpeak() && !voice ? (ST.lang==="hi"?"This device has no Hindi voice installed, so Hindi plays as captions. Switch to EN for the voice.":"This device has no English voice installed, so the story plays as captions.") : ""; } }
   if(voice){
-    try{ const u=new SpeechSynthesisUtterance(txt.replace(/₹/g, ST.lang==="hi"?"रुपये ":"rupees ")); u.voice=voice; u.lang=ST.lang==="hi"?"hi-IN":"en-IN"; u.rate=1.45;
+    try{ const u=new SpeechSynthesisUtterance(txt.replace(/₹/g, ST.lang==="hi"?"रुपये ":"rupees ")); u.voice=voice; u.lang=ST.lang==="hi"?"hi-IN":"en-IN"; u.rate=1.5;
       let done=false, began=false;
       const fin=()=>{ if(done||token!==ST.token) return; done=true; clearTimeout(watch); next(); };
       const watch=setTimeout(()=>{ if(!done&&!began&&token===ST.token){ ST.voiceBlocked=true; storyVoicePrompt(); } },1400);
       u.onstart=()=>{ began=true; clearTimeout(watch); };
       u.onend=fin;
       u.onerror=()=>{ if(!began&&token===ST.token){ ST.voiceBlocked=true; storyVoicePrompt(); } fin(); };
-      ST.timer=setTimeout(fin, Math.max(minMs, txt.length*95)); // fallback if the browser never fires onend
+      ST.timer=setTimeout(fin, Math.min(Math.max(minMs, txt.length*80), Math.max(700,left-250))); // fallback if the browser never fires onend
       speechSynthesis.speak(u); return; }catch(e){}
   }
   ST.timer=setTimeout(next, 0);
