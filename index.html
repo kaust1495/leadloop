@@ -4523,8 +4523,10 @@ function storyBeat(i){
   const b=BEATS[ST.i], txt=b[ST.lang], minMs=ST.lang==="hi"?5200:4600, started=Date.now();
   const next=()=>{ if(!ST.playing) return; const wait=Math.max(0,minMs-(Date.now()-started))+500;
     ST.timer=setTimeout(()=>{ if(!ST.playing) return; if(ST.i<BEATS.length-1) storyBeat(ST.i+1); else { ST.playing=false; ST.ended=true; renderStoryStage(); } },wait); };
-  if(ST.sound && canSpeak()){
-    try{ const u=new SpeechSynthesisUtterance(txt.replace(/₹/g, ST.lang==="hi"?"रुपये ":"rupees ")); const v=pickVoice(ST.lang); if(v) u.voice=v; u.lang=ST.lang==="hi"?"hi-IN":"en-IN"; u.rate=1.07;
+  const voice = ST.sound && canSpeak() ? pickVoice(ST.lang) : null;
+  const note=$("#stNote"); if(note) note.textContent = ST.sound && canSpeak() && !voice ? (ST.lang==="hi"?"This device has no Hindi voice installed, so Hindi plays as captions. Switch to EN for the voice.":"This device has no English voice installed, so the story plays as captions.") : "";
+  if(voice){
+    try{ const u=new SpeechSynthesisUtterance(txt.replace(/₹/g, ST.lang==="hi"?"रुपये ":"rupees ")); u.voice=voice; u.lang=ST.lang==="hi"?"hi-IN":"en-IN"; u.rate=1.07;
       let done=false; const fin=()=>{ if(!done){ done=true; next(); } }; u.onend=fin; u.onerror=fin;
       ST.timer=setTimeout(fin, Math.max(minMs, txt.length*95)); // fallback if the browser never fires onend
       speechSynthesis.speak(u); return; }catch(e){}
@@ -4572,7 +4574,7 @@ function viewStory(app){
      <div class="row wrapr" style="gap:8px;margin-top:14px"><button class="btn hv" id="stPlay" style="width:auto;padding:10px 22px;margin:0"></button><button class="btn small sec" id="stNext" style="margin:0">Next ›</button></div>
      <div id="stEnd" class="hidden sheet tight" style="margin-top:14px"><b>See it for real</b><p class="small" style="margin:4px 0 10px">Every step above is a working screen in this app.</p>
       <button class="btn small" id="stTry" style="margin:0 6px 6px 0">Try it yourself, step by step</button><button class="btn small sec" id="stScreens" style="margin:0 6px 6px 0">See the real screens (8 stops)</button></div>
-     ${sp?"":`<p class="small muted" style="margin-top:10px">This browser can't speak, so the story plays with captions only.</p>`}
+     <p class="small muted" id="stNote" style="margin-top:10px">${sp?"":"This browser can't speak, so the story plays with captions only."}</p>
     </div></div></div>`;
   $("#back").onclick=()=>{ storyStop(); go(S.user?homeOf():"login"); };
   app.querySelectorAll("[data-sl]").forEach(x=>x.onclick=()=>{ ST.lang=x.dataset.sl; try{localStorage.setItem("ll_story_lang",ST.lang);}catch(e){} app.querySelectorAll("[data-sl]").forEach(y=>y.classList.toggle("on",y===x)); storyBeat(ST.i); });
@@ -4583,6 +4585,7 @@ function viewStory(app){
   $("#stScreens").onclick=()=>{ storyStop(); tourStart(); };
   renderStoryStage();
 }
+try{ if(canSpeak()){ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; } }catch(e){}
 function storyStart(){ closeModal(); storyStop(); ST.i=0; ST.ended=false; ST.playing=true; S.view="story"; render(); storyBeat(0); }
 
 $("#logoBtn").onclick=()=>{ if(S.user) go(homeOf()); else go("login"); };
