@@ -161,6 +161,14 @@ button.tilem:hover{border-color:var(--leaf)}
 .hero p{margin:0;color:#cfe3d6;font-size:15px;max-width:44ch}
 .hero svg.scene{display:block;width:100%;height:auto}
 .fresh{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+/* simple landing page */
+.landing{padding:28px 0 8px}
+.landing h1{margin:0 0 10px;font-size:32px;line-height:1.1;color:var(--forest)}
+.landing p{margin:0 0 20px;color:var(--muted);font-size:16.5px;max-width:46ch}
+.landing .btn{min-height:60px;font-size:18px;margin:0}
+.landing-h{font-size:16px;color:var(--muted);font-weight:600;margin:30px 0 4px}
+.logo{min-height:44px}
+@media (max-width:560px){.landing h1{font-size:28px}}
 
 /* scan button */
 .scanbtn{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;min-height:200px;border:0;border-radius:var(--r-panel);background:var(--casing);color:#fff;cursor:pointer;margin:10px 0 6px;overflow:hidden;font-weight:700;font-size:20px}
@@ -3372,16 +3380,12 @@ function homeOf(){ return S.user&&S.user.role==="admin"?"admin":"home"; }
 /* ---------- login ---------- */
 function viewLogin(app){
   const fresh=freshIds();
-  app.innerHTML = `<section class="hero"><div class="txt"><h1>Every dead battery, scanned three times</h1><p>One QR sticker follows each battery from pickup to the recycler's gate, with weight, a photo and the money at every hand-off.</p></div>${heroScene()}</section>
+  app.innerHTML = `<section class="landing"><h1>Every dead battery, scanned three times</h1><p>One QR sticker follows each battery from pickup to the recycler's gate, with weight, a photo and the money at every hand-off.</p>
+   <button class="btn hv" id="startStory">▶ Watch LeadLoop in 45 seconds</button></section>
   ${S.pendingId?`<div class="banner info">You scanned ${sticker(S.pendingId,1)}. Choose who you are and it opens.</div>`:""}
-  <div class="choose">
-   <button class="btn hv" id="startStory">▶ Watch LeadLoop in 45 seconds</button><p class="ch">One screen, eight short steps, with a voice in English or Hindi.</p>
-   <button class="btn sec" id="startDemo">Try it yourself, step by step</button><p class="ch">Log a real battery on fresh sticker ${esc(fresh[0]||"")} and follow it to the recycler. A bar at the bottom tells you what to tap.</p>
-   <div class="row wrapr ch" style="gap:6px 14px"><button class="link" id="startTour">See the real screens (8 stops)</button><button class="link" id="seeScan">What a QR scan does</button></div>
-  </div>
-  <p class="sub" style="margin-top:14px">Or sign in as any demo user. Your role decides what the scanner does.</p>
+  <h2 class="landing-h">Or sign in as a demo user</h2>
   ${chainHTML(null)}
-  ${fresh.length?`<div class="sheet tight" style="margin-top:18px"><h3>Fresh stickers for a live pickup</h3><div class="fresh">${fresh.map(id=>sticker(id,1)).join("")}</div><div class="small muted" style="margin-top:6px">Each works once. Printed sheet: QR sheet in the control room.</div></div>`:""}
+  <div class="hidden" aria-hidden="true"><button id="startDemo" tabindex="-1">Try it yourself, step by step</button><button id="startTour" tabindex="-1">See the real screens (8 stops)</button><button id="seeScan" tabindex="-1">What a QR scan does</button></div>
   ${foot()}`;
   $("#startDemo").onclick=()=>{ demoStart(); demoGo(0); };
   $("#startTour").onclick=tourStart;
@@ -4588,7 +4592,7 @@ function viewStory(app){
 try{ if(canSpeak()){ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; } }catch(e){}
 function storyStart(){ closeModal(); storyStop(); ST.i=0; ST.ended=false; ST.playing=true; S.view="story"; render(); storyBeat(0); }
 
-$("#logoBtn").onclick=()=>{ if(S.user) go(homeOf()); else go("login"); };
+$("#logoBtn").onclick=()=>{ if(TT.on) tourStop(); go("login"); };
 S.pendingId = readHash();
 render();
 initDB().then(()=>{});
