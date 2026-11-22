@@ -423,6 +423,2437 @@ details summary{cursor:pointer}
 <div id="demoRoot"></div>
 <div id="tourRoot"></div>
 <div id="modalRoot"></div>
+<script id="seedData" type="application/json">{
+"batteries": {
+"LL-0001": {
+"id": "LL-0001",
+"status": "closed",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "major",
+"vehicleMasked": "DL**…4471",
+"diedWhen": "this_month",
+"leaking": false,
+"pickupKg": 29.7,
+"pickedUpBy": "V-101",
+"pickedUpAt": "2026-09-08T04:21:00.000Z",
+"pickupGps": {
+"lat": 28.66447,
+"lng": 77.29543,
+"acc": 6
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 2,
+"paidToDriverInr": 1810,
+"driverUpiRef": "446300087109",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"yardKg": 29.3,
+"yardAt": "2026-09-09T09:21:00.000Z",
+"condition": "Intact",
+"recyclerKg": 29.1,
+"closedAt": "2026-09-18T10:21:00.000Z",
+"events": [
+{
+"type": "pickup",
+"at": "2026-09-08T04:21:00.000Z",
+"by": "V-101",
+"role": "vendor",
+"gps": {
+"lat": 28.66447,
+"lng": 77.29543,
+"acc": 6
+},
+"kg": 29.7,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "major",
+"vehicleMasked": "DL**…4471",
+"diedWhen": "this_month",
+"leaking": false,
+"durationSec": 71,
+"batteriesInSale": 2,
+"labelPhoto": null,
+"paidToDriverInr": 1810,
+"driverUpiRef": "446300087109"
+},
+{
+"type": "yard_receipt",
+"at": "2026-09-09T09:21:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"gps": {
+"lat": 28.63609,
+"lng": 77.32192,
+"acc": 15
+},
+"kg": 29.3,
+"photo": null,
+"condition": "Intact",
+"diffPct": -1.3,
+"flagged": false
+},
+{
+"type": "dispatch",
+"at": "2026-09-17T09:30:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"truckId": "TL-0001",
+"manifestNo": "MF-Y02-260917",
+"truckNo": "DL 1L AB 4021"
+},
+{
+"type": "recycler_receipt",
+"at": "2026-09-18T10:21:00.000Z",
+"by": "R-302",
+"role": "recycler",
+"gps": {
+"lat": 28.80002,
+"lng": 77.03218,
+"acc": 6
+},
+"kg": 29.1,
+"diffPct": -0.7,
+"flagged": false,
+"truckId": "TL-0001"
+}
+],
+"updatedAt": "2026-09-18T10:21:00.000Z",
+"truckId": "TL-0001",
+"dispatchedAt": "2026-09-17T09:30:00.000Z",
+"payoutId": "PO-0001"
+},
+"LL-0002": {
+"id": "LL-0002",
+"status": "closed",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "HR**…2219",
+"diedWhen": "this_week",
+"leaking": false,
+"pickupKg": 30.4,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-09-12T04:50:00.000Z",
+"pickupGps": {
+"lat": 28.47815,
+"lng": 77.06724,
+"acc": 15
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"paidToDriverInr": 1850,
+"driverUpiRef": "446300166299",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"yardKg": 30.0,
+"yardAt": "2026-09-14T06:50:00.000Z",
+"condition": "Casing damaged",
+"recyclerKg": 29.9,
+"closedAt": "2026-09-22T11:50:00.000Z",
+"events": [
+{
+"type": "pickup",
+"at": "2026-09-12T04:50:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.47815,
+"lng": 77.06724,
+"acc": 15
+},
+"kg": 30.4,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "HR**…2219",
+"diedWhen": "this_week",
+"leaking": false,
+"durationSec": 51,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"paidToDriverInr": 1850,
+"driverUpiRef": "446300166299"
+},
+{
+"type": "yard_receipt",
+"at": "2026-09-14T06:50:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"gps": {
+"lat": 28.41316,
+"lng": 76.99338,
+"acc": 6
+},
+"kg": 30.0,
+"photo": null,
+"condition": "Casing damaged",
+"diffPct": -1.3,
+"flagged": false
+},
+{
+"type": "dispatch",
+"at": "2026-09-21T08:15:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"truckId": "TL-0002",
+"manifestNo": "MF-Y01-260921",
+"truckNo": "HR 55 AK 7713"
+},
+{
+"type": "recycler_receipt",
+"at": "2026-09-22T11:50:00.000Z",
+"by": "R-301",
+"role": "recycler",
+"gps": {
+"lat": 28.36032,
+"lng": 76.93161,
+"acc": 8
+},
+"kg": 29.9,
+"diffPct": -0.3,
+"flagged": false,
+"truckId": "TL-0002"
+}
+],
+"updatedAt": "2026-09-22T11:50:00.000Z",
+"truckId": "TL-0002",
+"dispatchedAt": "2026-09-21T08:15:00.000Z",
+"payoutId": "PO-0002"
+},
+"LL-0003": {
+"id": "LL-0003",
+"status": "closed",
+"channel": "vendor",
+"source": "inverter",
+"brand": "major",
+"vehicleMasked": "",
+"diedWhen": "older",
+"leaking": false,
+"pickupKg": 26.7,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-09-24T04:24:00.000Z",
+"pickupGps": {
+"lat": 28.46046,
+"lng": 77.05689,
+"acc": 8
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 3,
+"paidToDriverInr": 1630,
+"driverUpiRef": "446300245489",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"yardKg": 26.6,
+"yardAt": "2026-09-25T09:24:00.000Z",
+"condition": "Intact",
+"recyclerKg": 26.5,
+"closedAt": "2026-10-05T12:24:00.000Z",
+"events": [
+{
+"type": "pickup",
+"at": "2026-09-24T04:24:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.46046,
+"lng": 77.05689,
+"acc": 8
+},
+"kg": 26.7,
+"photo": null,
+"source": "inverter",
+"brand": "major",
+"vehicleMasked": "",
+"diedWhen": "older",
+"leaking": false,
+"durationSec": 79,
+"batteriesInSale": 3,
+"labelPhoto": null,
+"paidToDriverInr": 1630,
+"driverUpiRef": "446300245489"
+},
+{
+"type": "yard_receipt",
+"at": "2026-09-25T09:24:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"gps": {
+"lat": 28.41981,
+"lng": 77.00347,
+"acc": 12
+},
+"kg": 26.6,
+"photo": null,
+"condition": "Intact",
+"diffPct": -0.4,
+"flagged": false
+},
+{
+"type": "correction",
+"at": "2026-09-26T07:10:00.000Z",
+"by": "A-01",
+"role": "admin",
+"field": "Vehicle number",
+"before": "HR**…5510",
+"after": "(blank)",
+"reason": "Wrong entry: inverter battery has no vehicle"
+},
+{
+"type": "dispatch",
+"at": "2026-10-04T08:40:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"truckId": "TL-0003",
+"manifestNo": "MF-Y01-261004",
+"truckNo": "HR 55 AK 7713"
+},
+{
+"type": "recycler_receipt",
+"at": "2026-10-05T12:24:00.000Z",
+"by": "R-301",
+"role": "recycler",
+"gps": {
+"lat": 28.3476,
+"lng": 76.9436,
+"acc": 6
+},
+"kg": 26.5,
+"diffPct": -0.4,
+"flagged": false,
+"truckId": "TL-0003"
+}
+],
+"updatedAt": "2026-10-05T12:24:00.000Z",
+"truckId": "TL-0003",
+"dispatchedAt": "2026-10-04T08:40:00.000Z",
+"payoutId": "PO-0003"
+},
+"LL-0004": {
+"id": "LL-0004",
+"status": "closed",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "regional",
+"vehicleMasked": "DL**…0937",
+"diedWhen": "this_week",
+"leaking": true,
+"pickupKg": 30.1,
+"pickedUpBy": "V-101",
+"pickedUpAt": "2026-10-08T02:11:00.000Z",
+"pickupGps": {
+"lat": 28.681,
+"lng": 77.29359,
+"acc": 12
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"paidToDriverInr": 1840,
+"driverUpiRef": "446300324679",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"yardKg": 30.0,
+"yardAt": "2026-10-09T03:11:00.000Z",
+"condition": "Leaking",
+"recyclerKg": 29.7,
+"closedAt": "2026-10-16T07:11:00.000Z",
+"events": [
+{
+"type": "pickup",
+"at": "2026-10-08T02:11:00.000Z",
+"by": "V-101",
+"role": "vendor",
+"gps": {
+"lat": 28.681,
+"lng": 77.29359,
+"acc": 12
+},
+"kg": 30.1,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "regional",
+"vehicleMasked": "DL**…0937",
+"diedWhen": "this_week",
+"leaking": true,
+"durationSec": 52,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"paidToDriverInr": 1840,
+"driverUpiRef": "446300324679"
+},
+{
+"type": "yard_receipt",
+"at": "2026-10-09T03:11:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"gps": {
+"lat": 28.6351,
+"lng": 77.32704,
+"acc": 15
+},
+"kg": 30.0,
+"photo": null,
+"condition": "Leaking",
+"diffPct": -0.3,
+"flagged": false
+},
+{
+"type": "dispatch",
+"at": "2026-10-15T09:05:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"truckId": "TL-0004",
+"manifestNo": "MF-Y02-261015",
+"truckNo": "DL 1L AB 4021"
+},
+{
+"type": "recycler_receipt",
+"at": "2026-10-16T07:11:00.000Z",
+"by": "R-302",
+"role": "recycler",
+"gps": {
+"lat": 28.80236,
+"lng": 77.04629,
+"acc": 12
+},
+"kg": 29.7,
+"diffPct": -1.0,
+"flagged": false,
+"truckId": "TL-0004"
+}
+],
+"updatedAt": "2026-10-16T07:11:00.000Z",
+"truckId": "TL-0004",
+"dispatchedAt": "2026-10-15T09:05:00.000Z",
+"payoutId": "PO-0004"
+},
+"LL-0005": {
+"id": "LL-0005",
+"status": "closed",
+"channel": "dealer",
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "DL**…5512",
+"diedWhen": "this_month",
+"leaking": false,
+"pickupKg": 29.6,
+"pickedUpBy": "D-201",
+"pickedUpAt": "2026-10-14T03:46:00.000Z",
+"pickupGps": {
+"lat": 28.63033,
+"lng": 77.28364,
+"acc": 6
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"exchange": true,
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"yardKg": 29.5,
+"yardAt": "2026-10-16T06:46:00.000Z",
+"condition": "Intact",
+"deliveredBy": "V-101",
+"recyclerKg": 29.7,
+"closedAt": "2026-10-25T11:46:00.000Z",
+"events": [
+{
+"type": "dealer_takeback",
+"at": "2026-10-14T03:46:00.000Z",
+"by": "D-201",
+"role": "dealer",
+"gps": {
+"lat": 28.63033,
+"lng": 77.28364,
+"acc": 6
+},
+"kg": 29.6,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "DL**…5512",
+"diedWhen": "this_month",
+"leaking": false,
+"durationSec": 53,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"exchange": true
+},
+{
+"type": "yard_receipt",
+"at": "2026-10-16T06:46:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"gps": {
+"lat": 28.6331,
+"lng": 77.33482,
+"acc": 12
+},
+"kg": 29.5,
+"photo": null,
+"condition": "Intact",
+"diffPct": -0.3,
+"flagged": false
+},
+{
+"type": "dispatch",
+"at": "2026-10-24T08:50:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"truckId": "TL-0005",
+"manifestNo": "MF-Y02-261024",
+"truckNo": "DL 1L AB 4021"
+},
+{
+"type": "recycler_receipt",
+"at": "2026-10-25T11:46:00.000Z",
+"by": "R-302",
+"role": "recycler",
+"gps": {
+"lat": 28.80544,
+"lng": 77.03669,
+"acc": 15
+},
+"kg": 29.7,
+"diffPct": 0.7,
+"flagged": false,
+"truckId": "TL-0005"
+}
+],
+"updatedAt": "2026-10-25T11:46:00.000Z",
+"truckId": "TL-0005",
+"dispatchedAt": "2026-10-24T08:50:00.000Z",
+"payoutId": "PO-0005"
+},
+"LL-0006": {
+"id": "LL-0006",
+"status": "closed",
+"channel": "vendor",
+"source": "car",
+"brand": "major",
+"vehicleMasked": "HR**…8801",
+"diedWhen": "older",
+"leaking": false,
+"pickupKg": 13.1,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-10-25T01:08:00.000Z",
+"pickupGps": {
+"lat": 28.46843,
+"lng": 77.05906,
+"acc": 6
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 2,
+"paidToDriverInr": 800,
+"driverUpiRef": "446300483059",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"yardKg": 13.0,
+"yardAt": "2026-10-26T02:08:00.000Z",
+"condition": "Intact",
+"recyclerKg": 12.9,
+"closedAt": "2026-11-03T06:08:00.000Z",
+"events": [
+{
+"type": "pickup",
+"at": "2026-10-25T01:08:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.46843,
+"lng": 77.05906,
+"acc": 6
+},
+"kg": 13.1,
+"photo": null,
+"source": "car",
+"brand": "major",
+"vehicleMasked": "HR**…8801",
+"diedWhen": "older",
+"leaking": false,
+"durationSec": 79,
+"batteriesInSale": 2,
+"labelPhoto": null,
+"paidToDriverInr": 800,
+"driverUpiRef": "446300483059"
+},
+{
+"type": "yard_receipt",
+"at": "2026-10-26T02:08:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"gps": {
+"lat": 28.41309,
+"lng": 76.98995,
+"acc": 15
+},
+"kg": 13.0,
+"photo": null,
+"condition": "Intact",
+"diffPct": -0.8,
+"flagged": false
+},
+{
+"type": "dispatch",
+"at": "2026-11-02T09:10:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"truckId": "TL-0006",
+"manifestNo": "MF-Y01-261102",
+"truckNo": "HR 55 AK 7713"
+},
+{
+"type": "recycler_receipt",
+"at": "2026-11-03T06:08:00.000Z",
+"by": "R-301",
+"role": "recycler",
+"gps": {
+"lat": 28.35298,
+"lng": 76.93899,
+"acc": 8
+},
+"kg": 12.9,
+"diffPct": -0.8,
+"flagged": false,
+"truckId": "TL-0006"
+}
+],
+"updatedAt": "2026-11-03T06:08:00.000Z",
+"truckId": "TL-0006",
+"dispatchedAt": "2026-11-02T09:10:00.000Z",
+"payoutId": "PO-0006"
+},
+"LL-0007": {
+"id": "LL-0007",
+"status": "closed",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "unreadable",
+"vehicleMasked": "DL**…3304",
+"diedWhen": "this_month",
+"leaking": false,
+"pickupKg": 31.1,
+"pickedUpBy": "V-101",
+"pickedUpAt": "2026-11-02T00:03:00.000Z",
+"pickupGps": {
+"lat": 28.66907,
+"lng": 77.28731,
+"acc": 12
+},
+"flagged": true,
+"flags": [
+{
+"type": "weight_mismatch",
+"stage": "gate",
+"at": "2026-11-11T06:03:00.000Z",
+"baseKg": 30.8,
+"newKg": 28.3,
+"diffPct": -8.1,
+"thresholdPct": 5
+}
+],
+"batteriesInSale": 3,
+"paidToDriverInr": 1900,
+"driverUpiRef": "446300562249",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"yardKg": 30.8,
+"yardAt": "2026-11-03T02:03:00.000Z",
+"condition": "Intact",
+"recyclerKg": 28.3,
+"closedAt": "2026-11-11T06:03:00.000Z",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-02T00:03:00.000Z",
+"by": "V-101",
+"role": "vendor",
+"gps": {
+"lat": 28.66907,
+"lng": 77.28731,
+"acc": 12
+},
+"kg": 31.1,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "unreadable",
+"vehicleMasked": "DL**…3304",
+"diedWhen": "this_month",
+"leaking": false,
+"durationSec": 72,
+"batteriesInSale": 3,
+"labelPhoto": null,
+"paidToDriverInr": 1900,
+"driverUpiRef": "446300562249"
+},
+{
+"type": "yard_receipt",
+"at": "2026-11-03T02:03:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"gps": {
+"lat": 28.63483,
+"lng": 77.33337,
+"acc": 6
+},
+"kg": 30.8,
+"photo": null,
+"condition": "Intact",
+"diffPct": -1.0,
+"flagged": false
+},
+{
+"type": "dispatch",
+"at": "2026-11-10T08:30:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"truckId": "TL-0007",
+"manifestNo": "MF-Y02-261110",
+"truckNo": "DL 1L AB 4021"
+},
+{
+"type": "recycler_receipt",
+"at": "2026-11-11T06:03:00.000Z",
+"by": "R-302",
+"role": "recycler",
+"gps": {
+"lat": 28.80562,
+"lng": 77.03465,
+"acc": 12
+},
+"kg": 28.3,
+"diffPct": -8.1,
+"flagged": true,
+"truckId": "TL-0007"
+}
+],
+"updatedAt": "2026-11-11T06:03:00.000Z",
+"truckId": "TL-0007",
+"dispatchedAt": "2026-11-10T08:30:00.000Z",
+"payoutId": "PO-0007"
+},
+"LL-0008": {
+"id": "LL-0008",
+"status": "closed",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "regional",
+"vehicleMasked": "HR**…7720",
+"diedWhen": "this_week",
+"leaking": false,
+"pickupKg": 29.8,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-11-07T06:21:00.000Z",
+"pickupGps": {
+"lat": 28.46659,
+"lng": 77.06703,
+"acc": 8
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"paidToDriverInr": 1820,
+"driverUpiRef": "446300641439",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"yardKg": 29.8,
+"yardAt": "2026-11-08T11:21:00.000Z",
+"condition": "Intact",
+"recyclerKg": 29.7,
+"closedAt": "2026-11-15T15:21:00.000Z",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-07T06:21:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.46659,
+"lng": 77.06703,
+"acc": 8
+},
+"kg": 29.8,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "regional",
+"vehicleMasked": "HR**…7720",
+"diedWhen": "this_week",
+"leaking": false,
+"durationSec": 80,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"paidToDriverInr": 1820,
+"driverUpiRef": "446300641439"
+},
+{
+"type": "yard_receipt",
+"at": "2026-11-08T11:21:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"gps": {
+"lat": 28.41158,
+"lng": 77.00299,
+"acc": 15
+},
+"kg": 29.8,
+"photo": null,
+"condition": "Intact",
+"diffPct": 0.0,
+"flagged": false
+},
+{
+"type": "dispatch",
+"at": "2026-11-14T08:20:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"truckId": "TL-0008",
+"manifestNo": "MF-Y01-261114",
+"truckNo": "HR 55 AK 7713"
+},
+{
+"type": "recycler_receipt",
+"at": "2026-11-15T15:21:00.000Z",
+"by": "R-301",
+"role": "recycler",
+"gps": {
+"lat": 28.34607,
+"lng": 76.94069,
+"acc": 6
+},
+"kg": 29.7,
+"diffPct": -0.3,
+"flagged": false,
+"truckId": "TL-0008"
+}
+],
+"updatedAt": "2026-11-15T15:21:00.000Z",
+"truckId": "TL-0008",
+"dispatchedAt": "2026-11-14T08:20:00.000Z",
+"payoutId": "PO-0009"
+},
+"LL-0009": {
+"id": "LL-0009",
+"status": "at_yard",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "major",
+"vehicleMasked": "DL**…1189",
+"diedWhen": "this_week",
+"leaking": false,
+"pickupKg": 31.5,
+"pickedUpBy": "V-101",
+"pickedUpAt": "2026-11-13T05:26:00.000Z",
+"pickupGps": {
+"lat": 28.67231,
+"lng": 77.2812,
+"acc": 6
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 2,
+"paidToDriverInr": 1920,
+"driverUpiRef": "446300720629",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"yardKg": 31.5,
+"yardAt": "2026-11-14T06:26:00.000Z",
+"condition": "Intact",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-13T05:26:00.000Z",
+"by": "V-101",
+"role": "vendor",
+"gps": {
+"lat": 28.67231,
+"lng": 77.2812,
+"acc": 6
+},
+"kg": 31.5,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "major",
+"vehicleMasked": "DL**…1189",
+"diedWhen": "this_week",
+"leaking": false,
+"durationSec": 54,
+"batteriesInSale": 2,
+"labelPhoto": null,
+"paidToDriverInr": 1920,
+"driverUpiRef": "446300720629"
+},
+{
+"type": "yard_receipt",
+"at": "2026-11-14T06:26:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"gps": {
+"lat": 28.63383,
+"lng": 77.32747,
+"acc": 6
+},
+"kg": 31.5,
+"photo": null,
+"condition": "Intact",
+"diffPct": 0.0,
+"flagged": false
+}
+],
+"updatedAt": "2026-11-14T06:26:00.000Z",
+"payoutId": "PO-0010"
+},
+"LL-0010": {
+"id": "LL-0010",
+"status": "at_yard",
+"channel": "vendor",
+"source": "inverter",
+"brand": "local",
+"vehicleMasked": "",
+"diedWhen": "older",
+"leaking": false,
+"pickupKg": 25.0,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-11-15T05:35:00.000Z",
+"pickupGps": {
+"lat": 28.46672,
+"lng": 77.06839,
+"acc": 12
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"paidToDriverInr": 1530,
+"driverUpiRef": "446300799819",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"yardKg": 24.7,
+"yardAt": "2026-11-16T09:35:00.000Z",
+"condition": "Casing damaged",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-15T05:35:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.46672,
+"lng": 77.06839,
+"acc": 12
+},
+"kg": 25.0,
+"photo": null,
+"source": "inverter",
+"brand": "local",
+"vehicleMasked": "",
+"diedWhen": "older",
+"leaking": false,
+"durationSec": 71,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"paidToDriverInr": 1530,
+"driverUpiRef": "446300799819"
+},
+{
+"type": "yard_receipt",
+"at": "2026-11-16T09:35:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"gps": {
+"lat": 28.42026,
+"lng": 77.00456,
+"acc": 15
+},
+"kg": 24.7,
+"photo": null,
+"condition": "Casing damaged",
+"diffPct": -1.2,
+"flagged": false
+},
+{
+"type": "dispatch",
+"at": "2026-11-19T09:00:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"truckId": "TL-0009",
+"manifestNo": "MF-Y01-261119",
+"truckNo": "HR 55 AK 7713"
+}
+],
+"updatedAt": "2026-11-16T09:35:00.000Z",
+"truckId": "TL-0009",
+"dispatchedAt": "2026-11-19T09:00:00.000Z",
+"payoutId": "PO-0011"
+},
+"LL-0011": {
+"id": "LL-0011",
+"status": "at_yard",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "DL**…6650",
+"diedWhen": "this_month",
+"leaking": true,
+"pickupKg": 28.8,
+"pickedUpBy": "V-101",
+"pickedUpAt": "2026-11-04T03:11:00.000Z",
+"pickupGps": {
+"lat": 28.66554,
+"lng": 77.28585,
+"acc": 12
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 4,
+"paidToDriverInr": 1760,
+"driverUpiRef": "446300879009",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"yardKg": 28.7,
+"yardAt": "2026-11-06T05:11:00.000Z",
+"condition": "Leaking",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-04T03:11:00.000Z",
+"by": "V-101",
+"role": "vendor",
+"gps": {
+"lat": 28.66554,
+"lng": 77.28585,
+"acc": 12
+},
+"kg": 28.8,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "DL**…6650",
+"diedWhen": "this_month",
+"leaking": true,
+"durationSec": 78,
+"batteriesInSale": 4,
+"labelPhoto": null,
+"paidToDriverInr": 1760,
+"driverUpiRef": "446300879009"
+},
+{
+"type": "yard_receipt",
+"at": "2026-11-06T05:11:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"gps": {
+"lat": 28.6359,
+"lng": 77.33924,
+"acc": 12
+},
+"kg": 28.7,
+"photo": null,
+"condition": "Leaking",
+"diffPct": -0.3,
+"flagged": false
+}
+],
+"updatedAt": "2026-11-06T05:11:00.000Z",
+"payoutId": "PO-0008"
+},
+"LL-0012": {
+"id": "LL-0012",
+"status": "at_yard",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "unreadable",
+"vehicleMasked": "HR**…3391",
+"diedWhen": "this_week",
+"leaking": false,
+"pickupKg": 30.1,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-11-17T04:46:00.000Z",
+"pickupGps": {
+"lat": 28.45974,
+"lng": 77.06626,
+"acc": 6
+},
+"flagged": true,
+"flags": [
+{
+"type": "weight_mismatch",
+"stage": "yard",
+"at": "2026-11-18T09:46:00.000Z",
+"baseKg": 30.1,
+"newKg": 26.5,
+"diffPct": -12.0,
+"thresholdPct": 5
+}
+],
+"batteriesInSale": 1,
+"paidToDriverInr": 1840,
+"driverUpiRef": "446300958199",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"yardKg": 26.5,
+"yardAt": "2026-11-18T09:46:00.000Z",
+"condition": "Intact",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-17T04:46:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.45974,
+"lng": 77.06626,
+"acc": 6
+},
+"kg": 30.1,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "unreadable",
+"vehicleMasked": "HR**…3391",
+"diedWhen": "this_week",
+"leaking": false,
+"durationSec": 64,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"paidToDriverInr": 1840,
+"driverUpiRef": "446300958199"
+},
+{
+"type": "yard_receipt",
+"at": "2026-11-18T09:46:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"gps": {
+"lat": 28.42867,
+"lng": 76.99211,
+"acc": 8
+},
+"kg": 26.5,
+"photo": null,
+"condition": "Intact",
+"diffPct": -12.0,
+"flagged": true
+},
+{
+"type": "dispatch",
+"at": "2026-11-19T09:00:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"truckId": "TL-0009",
+"manifestNo": "MF-Y01-261119",
+"truckNo": "HR 55 AK 7713"
+}
+],
+"updatedAt": "2026-11-18T09:46:00.000Z",
+"truckId": "TL-0009",
+"dispatchedAt": "2026-11-19T09:00:00.000Z",
+"payoutId": "PO-0012"
+},
+"LL-0013": {
+"id": "LL-0013",
+"status": "at_yard",
+"channel": "dealer",
+"source": "bike",
+"brand": "major",
+"vehicleMasked": "DL**…4410",
+"diedWhen": "this_month",
+"leaking": false,
+"pickupKg": 5.1,
+"pickedUpBy": "D-201",
+"pickedUpAt": "2026-11-18T01:56:00.000Z",
+"pickupGps": {
+"lat": 28.62699,
+"lng": 77.27216,
+"acc": 8
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"exchange": true,
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"yardKg": 5.1,
+"yardAt": "2026-11-19T05:56:00.000Z",
+"condition": "Intact",
+"deliveredBy": "V-101",
+"events": [
+{
+"type": "dealer_takeback",
+"at": "2026-11-18T01:56:00.000Z",
+"by": "D-201",
+"role": "dealer",
+"gps": {
+"lat": 28.62699,
+"lng": 77.27216,
+"acc": 8
+},
+"kg": 5.1,
+"photo": null,
+"source": "bike",
+"brand": "major",
+"vehicleMasked": "DL**…4410",
+"diedWhen": "this_month",
+"leaking": false,
+"durationSec": 63,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"exchange": true
+},
+{
+"type": "yard_receipt",
+"at": "2026-11-19T05:56:00.000Z",
+"by": "Y-02",
+"role": "yard",
+"gps": {
+"lat": 28.6358,
+"lng": 77.33006,
+"acc": 6
+},
+"kg": 5.1,
+"photo": null,
+"condition": "Intact",
+"diffPct": 0.0,
+"flagged": false
+}
+],
+"updatedAt": "2026-11-19T05:56:00.000Z",
+"payoutId": "PO-0013"
+},
+"LL-0014": {
+"id": "LL-0014",
+"status": "at_yard",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "regional",
+"vehicleMasked": "HR**…0072",
+"diedWhen": "this_week",
+"leaking": false,
+"pickupKg": 29.3,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-11-19T05:40:00.000Z",
+"pickupGps": {
+"lat": 28.46438,
+"lng": 77.06955,
+"acc": 12
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 2,
+"paidToDriverInr": 1790,
+"driverUpiRef": "446301116579",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"yardKg": 29.6,
+"yardAt": "2026-11-20T08:40:00.000Z",
+"condition": "Intact",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-19T05:40:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.46438,
+"lng": 77.06955,
+"acc": 12
+},
+"kg": 29.3,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "regional",
+"vehicleMasked": "HR**…0072",
+"diedWhen": "this_week",
+"leaking": false,
+"durationSec": 76,
+"batteriesInSale": 2,
+"labelPhoto": null,
+"paidToDriverInr": 1790,
+"driverUpiRef": "446301116579"
+},
+{
+"type": "yard_receipt",
+"at": "2026-11-20T08:40:00.000Z",
+"by": "Y-01",
+"role": "yard",
+"gps": {
+"lat": 28.41211,
+"lng": 76.98704,
+"acc": 15
+},
+"kg": 29.6,
+"photo": null,
+"condition": "Intact",
+"diffPct": 1.0,
+"flagged": false
+}
+],
+"updatedAt": "2026-11-20T08:40:00.000Z",
+"payoutId": "PO-0014"
+},
+"LL-0015": {
+"id": "LL-0015",
+"status": "picked_up",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "DL**…2231",
+"diedWhen": "this_week",
+"leaking": false,
+"pickupKg": 29.1,
+"pickedUpBy": "V-101",
+"pickedUpAt": "2026-11-20T05:09:00.000Z",
+"pickupGps": {
+"lat": 28.67598,
+"lng": 77.29701,
+"acc": 6
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"paidToDriverInr": 1780,
+"driverUpiRef": "446301195769",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-20T05:09:00.000Z",
+"by": "V-101",
+"role": "vendor",
+"gps": {
+"lat": 28.67598,
+"lng": 77.29701,
+"acc": 6
+},
+"kg": 29.1,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "DL**…2231",
+"diedWhen": "this_week",
+"leaking": false,
+"durationSec": 78,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"paidToDriverInr": 1780,
+"driverUpiRef": "446301195769"
+}
+],
+"updatedAt": "2026-11-20T05:09:00.000Z"
+},
+"LL-0016": {
+"id": "LL-0016",
+"status": "picked_up",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "major",
+"vehicleMasked": "HR**…9014",
+"diedWhen": "this_week",
+"leaking": false,
+"pickupKg": 30.9,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-11-20T01:08:00.000Z",
+"pickupGps": {
+"lat": 28.4609,
+"lng": 77.06891,
+"acc": 15
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 2,
+"paidToDriverInr": 1880,
+"driverUpiRef": "446301274959",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-20T01:08:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.4609,
+"lng": 77.06891,
+"acc": 15
+},
+"kg": 30.9,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "major",
+"vehicleMasked": "HR**…9014",
+"diedWhen": "this_week",
+"leaking": false,
+"durationSec": 60,
+"batteriesInSale": 2,
+"labelPhoto": null,
+"paidToDriverInr": 1880,
+"driverUpiRef": "446301274959"
+}
+],
+"updatedAt": "2026-11-20T01:08:00.000Z"
+},
+"LL-0017": {
+"id": "LL-0017",
+"status": "picked_up",
+"channel": "dealer",
+"source": "inverter",
+"brand": "regional",
+"vehicleMasked": "",
+"diedWhen": "older",
+"leaking": false,
+"pickupKg": 24.9,
+"pickedUpBy": "D-201",
+"pickedUpAt": "2026-11-12T02:34:00.000Z",
+"pickupGps": {
+"lat": 28.63618,
+"lng": 77.27435,
+"acc": 15
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"exchange": true,
+"events": [
+{
+"type": "dealer_takeback",
+"at": "2026-11-12T02:34:00.000Z",
+"by": "D-201",
+"role": "dealer",
+"gps": {
+"lat": 28.63618,
+"lng": 77.27435,
+"acc": 15
+},
+"kg": 24.9,
+"photo": null,
+"source": "inverter",
+"brand": "regional",
+"vehicleMasked": "",
+"diedWhen": "older",
+"leaking": false,
+"durationSec": 77,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"exchange": true
+}
+],
+"updatedAt": "2026-11-12T02:34:00.000Z"
+},
+"LL-0018": {
+"id": "LL-0018",
+"status": "picked_up",
+"channel": "dealer",
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "DL**…7765",
+"diedWhen": "this_month",
+"leaking": true,
+"pickupKg": 31.3,
+"pickedUpBy": "D-201",
+"pickedUpAt": "2026-11-21T02:43:00.000Z",
+"pickupGps": {
+"lat": 28.6349,
+"lng": 77.2711,
+"acc": 8
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"exchange": true,
+"events": [
+{
+"type": "dealer_takeback",
+"at": "2026-11-21T02:43:00.000Z",
+"by": "D-201",
+"role": "dealer",
+"gps": {
+"lat": 28.6349,
+"lng": 77.2711,
+"acc": 8
+},
+"kg": 31.3,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "local",
+"vehicleMasked": "DL**…7765",
+"diedWhen": "this_month",
+"leaking": true,
+"durationSec": 49,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"exchange": true
+}
+],
+"updatedAt": "2026-11-21T02:43:00.000Z"
+},
+"LL-0019": {
+"id": "LL-0019",
+"status": "picked_up",
+"channel": "vendor",
+"source": "car",
+"brand": "major",
+"vehicleMasked": "DL**…1208",
+"diedWhen": "this_month",
+"leaking": false,
+"pickupKg": 15.7,
+"pickedUpBy": "V-101",
+"pickedUpAt": "2026-11-21T04:53:00.000Z",
+"pickupGps": {
+"lat": 28.67963,
+"lng": 77.28192,
+"acc": 15
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 1,
+"paidToDriverInr": 960,
+"driverUpiRef": "446301512529",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-21T04:53:00.000Z",
+"by": "V-101",
+"role": "vendor",
+"gps": {
+"lat": 28.67963,
+"lng": 77.28192,
+"acc": 15
+},
+"kg": 15.7,
+"photo": null,
+"source": "car",
+"brand": "major",
+"vehicleMasked": "DL**…1208",
+"diedWhen": "this_month",
+"leaking": false,
+"durationSec": 70,
+"batteriesInSale": 1,
+"labelPhoto": null,
+"paidToDriverInr": 960,
+"driverUpiRef": "446301512529"
+}
+],
+"updatedAt": "2026-11-21T04:53:00.000Z"
+},
+"LL-0020": {
+"id": "LL-0020",
+"status": "picked_up",
+"channel": "vendor",
+"source": "e-rickshaw",
+"brand": "unreadable",
+"vehicleMasked": "",
+"diedWhen": "this_week",
+"leaking": false,
+"pickupKg": 30.1,
+"pickedUpBy": "V-102",
+"pickedUpAt": "2026-11-21T04:55:00.000Z",
+"pickupGps": {
+"lat": 28.45963,
+"lng": 77.07169,
+"acc": 6
+},
+"flagged": false,
+"flags": [],
+"batteriesInSale": 3,
+"paidToDriverInr": 1840,
+"driverUpiRef": "446301591719",
+"events": [
+{
+"type": "pickup",
+"at": "2026-11-21T04:55:00.000Z",
+"by": "V-102",
+"role": "vendor",
+"gps": {
+"lat": 28.45963,
+"lng": 77.07169,
+"acc": 6
+},
+"kg": 30.1,
+"photo": null,
+"source": "e-rickshaw",
+"brand": "unreadable",
+"vehicleMasked": "",
+"diedWhen": "this_week",
+"leaking": false,
+"durationSec": 81,
+"batteriesInSale": 3,
+"labelPhoto": null,
+"paidToDriverInr": 1840,
+"driverUpiRef": "446301591719"
+}
+],
+"updatedAt": "2026-11-21T04:55:00.000Z"
+},
+"LL-0021": {
+"id": "LL-0021",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0022": {
+"id": "LL-0022",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0023": {
+"id": "LL-0023",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0024": {
+"id": "LL-0024",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0025": {
+"id": "LL-0025",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0026": {
+"id": "LL-0026",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0027": {
+"id": "LL-0027",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0028": {
+"id": "LL-0028",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0029": {
+"id": "LL-0029",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0030": {
+"id": "LL-0030",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0031": {
+"id": "LL-0031",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+},
+"LL-0032": {
+"id": "LL-0032",
+"status": "unused",
+"events": [],
+"flagged": false,
+"flags": [],
+"updatedAt": "2026-11-21T06:30:00.000Z"
+}
+},
+"payouts": {
+"PO-0001": {
+"id": "PO-0001",
+"kind": "payout",
+"vendorId": "V-101",
+"batteryId": "LL-0001",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"kg": 29.3,
+"rate": 69,
+"gross": 2022,
+"deductions": [],
+"net": 2022,
+"upiRef": "446300150461",
+"status": "paid",
+"at": "2026-09-09T09:21:00.000Z",
+"by": "Y-02"
+},
+"PO-0002": {
+"id": "PO-0002",
+"kind": "payout",
+"vendorId": "V-102",
+"batteryId": "LL-0002",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"kg": 30.0,
+"rate": 69,
+"gross": 2070,
+"deductions": [],
+"net": 2070,
+"upiRef": "446300229651",
+"status": "paid",
+"at": "2026-09-14T06:50:00.000Z",
+"by": "Y-01"
+},
+"PO-0003": {
+"id": "PO-0003",
+"kind": "payout",
+"vendorId": "V-102",
+"batteryId": "LL-0003",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"kg": 26.6,
+"rate": 69,
+"gross": 1835,
+"deductions": [],
+"net": 1835,
+"upiRef": "446300308841",
+"status": "paid",
+"at": "2026-09-25T09:24:00.000Z",
+"by": "Y-01"
+},
+"PO-0004": {
+"id": "PO-0004",
+"kind": "payout",
+"vendorId": "V-101",
+"batteryId": "LL-0004",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"kg": 30.0,
+"rate": 69,
+"gross": 2070,
+"deductions": [],
+"net": 2070,
+"upiRef": "446300388031",
+"status": "paid",
+"at": "2026-10-09T03:11:00.000Z",
+"by": "Y-02"
+},
+"PO-0005": {
+"id": "PO-0005",
+"kind": "payout",
+"vendorId": "V-101",
+"batteryId": "LL-0005",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"kg": 29.5,
+"rate": 69,
+"gross": 2036,
+"deductions": [],
+"net": 2036,
+"upiRef": "446300467221",
+"status": "paid",
+"at": "2026-10-16T06:46:00.000Z",
+"by": "Y-02"
+},
+"PO-0006": {
+"id": "PO-0006",
+"kind": "payout",
+"vendorId": "V-102",
+"batteryId": "LL-0006",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"kg": 13.0,
+"rate": 69,
+"gross": 897,
+"deductions": [],
+"net": 897,
+"upiRef": "446300546411",
+"status": "paid",
+"at": "2026-10-26T02:08:00.000Z",
+"by": "Y-01"
+},
+"PO-0007": {
+"id": "PO-0007",
+"kind": "payout",
+"vendorId": "V-101",
+"batteryId": "LL-0007",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"kg": 30.8,
+"rate": 69,
+"gross": 2125,
+"deductions": [],
+"net": 2125,
+"upiRef": "446300625601",
+"status": "paid",
+"at": "2026-11-03T02:03:00.000Z",
+"by": "Y-02"
+},
+"DD-0001": {
+"id": "DD-0001",
+"kind": "deduction",
+"vendorId": "V-101",
+"batteryId": "LL-0007",
+"truckId": "TL-0007",
+"kgGap": 2.5,
+"amount": 173,
+"diffPct": -8.1,
+"reason": "Gate weight 28.3 kg vs yard 30.8 kg (-8.1%), over the ±5% threshold",
+"status": "recovered",
+"at": "2026-11-11T06:03:00.000Z",
+"recoveredIn": "PO-0010",
+"recoveredAt": "2026-11-14T06:26:00.000Z"
+},
+"PO-0008": {
+"id": "PO-0008",
+"kind": "payout",
+"vendorId": "V-101",
+"batteryId": "LL-0011",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"kg": 28.7,
+"rate": 69,
+"gross": 1980,
+"deductions": [],
+"net": 1980,
+"upiRef": "446300942361",
+"status": "paid",
+"at": "2026-11-06T05:11:00.000Z",
+"by": "Y-02"
+},
+"PO-0009": {
+"id": "PO-0009",
+"kind": "payout",
+"vendorId": "V-102",
+"batteryId": "LL-0008",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"kg": 29.8,
+"rate": 69,
+"gross": 2056,
+"deductions": [],
+"net": 2056,
+"upiRef": "446300704791",
+"status": "paid",
+"at": "2026-11-08T11:21:00.000Z",
+"by": "Y-01"
+},
+"PO-0010": {
+"id": "PO-0010",
+"kind": "payout",
+"vendorId": "V-101",
+"batteryId": "LL-0009",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"kg": 31.5,
+"rate": 69,
+"gross": 2174,
+"deductions": [
+{
+"id": "DD-0001",
+"amount": 173,
+"batteryId": "LL-0007"
+}
+],
+"net": 2001,
+"upiRef": "446300783981",
+"status": "paid",
+"at": "2026-11-14T06:26:00.000Z",
+"by": "Y-02"
+},
+"PO-0011": {
+"id": "PO-0011",
+"kind": "payout",
+"vendorId": "V-102",
+"batteryId": "LL-0010",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"kg": 24.7,
+"rate": 69,
+"gross": 1704,
+"deductions": [],
+"net": 1704,
+"upiRef": "446300863171",
+"status": "paid",
+"at": "2026-11-16T09:35:00.000Z",
+"by": "Y-01"
+},
+"PO-0012": {
+"id": "PO-0012",
+"kind": "payout",
+"vendorId": "V-102",
+"batteryId": "LL-0012",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"kg": 26.5,
+"rate": 69,
+"gross": 1829,
+"deductions": [],
+"net": 1829,
+"upiRef": "446301021551",
+"status": "paid",
+"at": "2026-11-18T09:46:00.000Z",
+"by": "Y-01"
+},
+"PO-0013": {
+"id": "PO-0013",
+"kind": "payout",
+"vendorId": "V-101",
+"batteryId": "LL-0013",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"kg": 5.1,
+"rate": 69,
+"gross": 352,
+"deductions": [],
+"net": 352,
+"upiRef": "446301100741",
+"status": "paid",
+"at": "2026-11-19T05:56:00.000Z",
+"by": "Y-02"
+},
+"PO-0014": {
+"id": "PO-0014",
+"kind": "payout",
+"vendorId": "V-102",
+"batteryId": "LL-0014",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"kg": 29.6,
+"rate": 69,
+"gross": 2042,
+"deductions": [],
+"net": 2042,
+"upiRef": "446301179931",
+"status": "paid",
+"at": "2026-11-20T08:40:00.000Z",
+"by": "Y-01"
+}
+},
+"truckloads": {
+"TL-0001": {
+"id": "TL-0001",
+"manifestNo": "MF-Y02-260917",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"batteryIds": [
+"LL-0001"
+],
+"kgAtYard": 29.3,
+"truckNo": "DL 1L AB 4021",
+"dispatchedAt": "2026-09-17T09:30:00.000Z",
+"dispatchedBy": "Y-02",
+"status": "received",
+"receivedAt": "2026-09-18T10:21:00.000Z",
+"settlementId": "ST-0001"
+},
+"TL-0002": {
+"id": "TL-0002",
+"manifestNo": "MF-Y01-260921",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"batteryIds": [
+"LL-0002"
+],
+"kgAtYard": 30.0,
+"truckNo": "HR 55 AK 7713",
+"dispatchedAt": "2026-09-21T08:15:00.000Z",
+"dispatchedBy": "Y-01",
+"status": "received",
+"receivedAt": "2026-09-22T11:50:00.000Z",
+"settlementId": "ST-0002"
+},
+"TL-0003": {
+"id": "TL-0003",
+"manifestNo": "MF-Y01-261004",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"batteryIds": [
+"LL-0003"
+],
+"kgAtYard": 26.6,
+"truckNo": "HR 55 AK 7713",
+"dispatchedAt": "2026-10-04T08:40:00.000Z",
+"dispatchedBy": "Y-01",
+"status": "received",
+"receivedAt": "2026-10-05T12:24:00.000Z",
+"settlementId": "ST-0003"
+},
+"TL-0004": {
+"id": "TL-0004",
+"manifestNo": "MF-Y02-261015",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"batteryIds": [
+"LL-0004"
+],
+"kgAtYard": 30.0,
+"truckNo": "DL 1L AB 4021",
+"dispatchedAt": "2026-10-15T09:05:00.000Z",
+"dispatchedBy": "Y-02",
+"status": "received",
+"receivedAt": "2026-10-16T07:11:00.000Z",
+"settlementId": "ST-0004"
+},
+"TL-0005": {
+"id": "TL-0005",
+"manifestNo": "MF-Y02-261024",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"batteryIds": [
+"LL-0005"
+],
+"kgAtYard": 29.5,
+"truckNo": "DL 1L AB 4021",
+"dispatchedAt": "2026-10-24T08:50:00.000Z",
+"dispatchedBy": "Y-02",
+"status": "received",
+"receivedAt": "2026-10-25T11:46:00.000Z",
+"settlementId": "ST-0005"
+},
+"TL-0006": {
+"id": "TL-0006",
+"manifestNo": "MF-Y01-261102",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"batteryIds": [
+"LL-0006"
+],
+"kgAtYard": 13.0,
+"truckNo": "HR 55 AK 7713",
+"dispatchedAt": "2026-11-02T09:10:00.000Z",
+"dispatchedBy": "Y-01",
+"status": "received",
+"receivedAt": "2026-11-03T06:08:00.000Z",
+"settlementId": "ST-0006"
+},
+"TL-0007": {
+"id": "TL-0007",
+"manifestNo": "MF-Y02-261110",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"batteryIds": [
+"LL-0007"
+],
+"kgAtYard": 30.8,
+"truckNo": "DL 1L AB 4021",
+"dispatchedAt": "2026-11-10T08:30:00.000Z",
+"dispatchedBy": "Y-02",
+"status": "received",
+"receivedAt": "2026-11-11T06:03:00.000Z",
+"settlementId": "ST-0007"
+},
+"TL-0008": {
+"id": "TL-0008",
+"manifestNo": "MF-Y01-261114",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"batteryIds": [
+"LL-0008"
+],
+"kgAtYard": 29.8,
+"truckNo": "HR 55 AK 7713",
+"dispatchedAt": "2026-11-14T08:20:00.000Z",
+"dispatchedBy": "Y-01",
+"status": "received",
+"receivedAt": "2026-11-15T15:21:00.000Z",
+"settlementId": "ST-0008"
+},
+"TL-0009": {
+"id": "TL-0009",
+"manifestNo": "MF-Y01-261119",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"batteryIds": [
+"LL-0010",
+"LL-0012"
+],
+"kgAtYard": 51.2,
+"truckNo": "HR 55 AK 7713",
+"dispatchedAt": "2026-11-19T09:00:00.000Z",
+"dispatchedBy": "Y-01",
+"status": "in_transit"
+}
+},
+"settlements": {
+"ST-0001": {
+"id": "ST-0001",
+"truckId": "TL-0001",
+"manifestNo": "MF-Y02-260917",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"lines": [
+{
+"batteryId": "LL-0001",
+"vendorId": "V-101",
+"yardKg": 29.3,
+"recyclerKg": 29.1,
+"vendorPaid": 2022,
+"fee": 116.4,
+"diffPct": -0.7,
+"flagged": false
+}
+],
+"vendorPayments": 2022,
+"fee": 116.4,
+"total": 2138.4,
+"gateCheckedAt": "2026-09-18T10:21:00.000Z",
+"dueAt": "2026-09-28T10:21:00Z",
+"status": "repaid",
+"deductions": [],
+"createdAt": "2026-09-18T10:21:00.000Z",
+"repaidAt": "2026-09-27T10:00:00.000Z",
+"repaidRef": "UTR R302 0927 118"
+},
+"ST-0002": {
+"id": "ST-0002",
+"truckId": "TL-0002",
+"manifestNo": "MF-Y01-260921",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"lines": [
+{
+"batteryId": "LL-0002",
+"vendorId": "V-102",
+"yardKg": 30.0,
+"recyclerKg": 29.9,
+"vendorPaid": 2070,
+"fee": 119.6,
+"diffPct": -0.3,
+"flagged": false
+}
+],
+"vendorPayments": 2070,
+"fee": 119.6,
+"total": 2189.6,
+"gateCheckedAt": "2026-09-22T11:50:00.000Z",
+"dueAt": "2026-10-02T11:50:00Z",
+"status": "repaid",
+"deductions": [],
+"createdAt": "2026-09-22T11:50:00.000Z",
+"repaidAt": "2026-09-30T11:00:00.000Z",
+"repaidRef": "UTR R301 0930 204"
+},
+"ST-0003": {
+"id": "ST-0003",
+"truckId": "TL-0003",
+"manifestNo": "MF-Y01-261004",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"lines": [
+{
+"batteryId": "LL-0003",
+"vendorId": "V-102",
+"yardKg": 26.6,
+"recyclerKg": 26.5,
+"vendorPaid": 1835,
+"fee": 106.0,
+"diffPct": -0.4,
+"flagged": false
+}
+],
+"vendorPayments": 1835,
+"fee": 106.0,
+"total": 1941.0,
+"gateCheckedAt": "2026-10-05T12:24:00.000Z",
+"dueAt": "2026-10-15T12:24:00Z",
+"status": "repaid",
+"deductions": [],
+"createdAt": "2026-10-05T12:24:00.000Z",
+"repaidAt": "2026-10-14T10:30:00.000Z",
+"repaidRef": "UTR R301 1014 377"
+},
+"ST-0004": {
+"id": "ST-0004",
+"truckId": "TL-0004",
+"manifestNo": "MF-Y02-261015",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"lines": [
+{
+"batteryId": "LL-0004",
+"vendorId": "V-101",
+"yardKg": 30.0,
+"recyclerKg": 29.7,
+"vendorPaid": 2070,
+"fee": 118.8,
+"diffPct": -1.0,
+"flagged": false
+}
+],
+"vendorPayments": 2070,
+"fee": 118.8,
+"total": 2188.8,
+"gateCheckedAt": "2026-10-16T07:11:00.000Z",
+"dueAt": "2026-10-26T07:11:00Z",
+"status": "repaid",
+"deductions": [],
+"createdAt": "2026-10-16T07:11:00.000Z",
+"repaidAt": "2026-10-25T10:00:00.000Z",
+"repaidRef": "UTR R302 1025 431"
+},
+"ST-0005": {
+"id": "ST-0005",
+"truckId": "TL-0005",
+"manifestNo": "MF-Y02-261024",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"lines": [
+{
+"batteryId": "LL-0005",
+"vendorId": "V-101",
+"yardKg": 29.5,
+"recyclerKg": 29.7,
+"vendorPaid": 2036,
+"fee": 118.8,
+"diffPct": 0.7,
+"flagged": false
+}
+],
+"vendorPayments": 2036,
+"fee": 118.8,
+"total": 2154.8,
+"gateCheckedAt": "2026-10-25T11:46:00.000Z",
+"dueAt": "2026-11-04T11:46:00Z",
+"status": "repaid",
+"deductions": [],
+"createdAt": "2026-10-25T11:46:00.000Z",
+"repaidAt": "2026-11-04T10:15:00.000Z",
+"repaidRef": "UTR R302 1104 502"
+},
+"ST-0006": {
+"id": "ST-0006",
+"truckId": "TL-0006",
+"manifestNo": "MF-Y01-261102",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"lines": [
+{
+"batteryId": "LL-0006",
+"vendorId": "V-102",
+"yardKg": 13.0,
+"recyclerKg": 12.9,
+"vendorPaid": 897,
+"fee": 51.6,
+"diffPct": -0.8,
+"flagged": false
+}
+],
+"vendorPayments": 897,
+"fee": 51.6,
+"total": 948.6,
+"gateCheckedAt": "2026-11-03T06:08:00.000Z",
+"dueAt": "2026-11-13T06:08:00Z",
+"status": "repaid",
+"deductions": [],
+"createdAt": "2026-11-03T06:08:00.000Z",
+"repaidAt": "2026-11-12T10:00:00.000Z",
+"repaidRef": "UTR R301 1112 618"
+},
+"ST-0007": {
+"id": "ST-0007",
+"truckId": "TL-0007",
+"manifestNo": "MF-Y02-261110",
+"yardId": "Y-02",
+"recyclerId": "R-302",
+"lines": [
+{
+"batteryId": "LL-0007",
+"vendorId": "V-101",
+"yardKg": 30.8,
+"recyclerKg": 28.3,
+"vendorPaid": 2125,
+"fee": 113.2,
+"diffPct": -8.1,
+"flagged": true
+}
+],
+"vendorPayments": 2125,
+"fee": 113.2,
+"total": 2238.2,
+"gateCheckedAt": "2026-11-11T06:03:00.000Z",
+"dueAt": "2026-11-21T06:03:00Z",
+"status": "due",
+"deductions": [
+{
+"id": "DD-0001",
+"vendorId": "V-101",
+"batteryId": "LL-0007",
+"amount": 173
+}
+],
+"createdAt": "2026-11-11T06:03:00.000Z"
+},
+"ST-0008": {
+"id": "ST-0008",
+"truckId": "TL-0008",
+"manifestNo": "MF-Y01-261114",
+"yardId": "Y-01",
+"recyclerId": "R-301",
+"lines": [
+{
+"batteryId": "LL-0008",
+"vendorId": "V-102",
+"yardKg": 29.8,
+"recyclerKg": 29.7,
+"vendorPaid": 2056,
+"fee": 118.8,
+"diffPct": -0.3,
+"flagged": false
+}
+],
+"vendorPayments": 2056,
+"fee": 118.8,
+"total": 2174.8,
+"gateCheckedAt": "2026-11-15T15:21:00.000Z",
+"dueAt": "2026-11-25T15:21:00Z",
+"status": "due",
+"deductions": [],
+"createdAt": "2026-11-15T15:21:00.000Z"
+}
+},
+"partners": {
+"V-101": {
+"id": "V-101",
+"type": "Scrap vendor",
+"area": "Shahdara, East Delhi",
+"yardId": "Y-02",
+"joinedAt": "2026-08-20",
+"safetyKit": "issued",
+"scale": "issued",
+"scaleSerial": "SC-0311",
+"taxStatus": "udyam_done",
+"allowancePerBattery": 10
+},
+"V-102": {
+"id": "V-102",
+"type": "Scrap vendor",
+"area": "Sector 29, Gurugram",
+"yardId": "Y-01",
+"joinedAt": "2026-08-27",
+"safetyKit": "issued",
+"scale": "issued",
+"scaleSerial": "SC-0318",
+"taxStatus": "udyam_help",
+"allowancePerBattery": 10
+},
+"D-201": {
+"id": "D-201",
+"type": "Battery dealer",
+"area": "Laxmi Nagar, Delhi",
+"yardId": "Y-02",
+"joinedAt": "2026-09-30",
+"safetyKit": "pending",
+"scale": "own",
+"scaleSerial": "",
+"taxStatus": "gst_done",
+"allowancePerBattery": 10
+}
+},
+"audit": {
+"AU-0001": {
+"id": "AU-0001",
+"at": "2026-08-20T06:00:00.000Z",
+"by": "A-01",
+"action": "Partner onboarded",
+"target": "V-101",
+"detail": "Safety kit and scale SC-0311 issued",
+"before": null,
+"after": null,
+"reason": null
+},
+"AU-0002": {
+"id": "AU-0002",
+"at": "2026-08-27T06:00:00.000Z",
+"by": "A-01",
+"action": "Partner onboarded",
+"target": "V-102",
+"detail": "Safety kit and scale SC-0318 issued; Udyam help booked",
+"before": null,
+"after": null,
+"reason": null
+},
+"AU-0003": {
+"id": "AU-0003",
+"at": "2026-09-01T05:30:00.000Z",
+"by": "A-01",
+"action": "Setting changed",
+"target": "config/settings",
+"detail": "Weight-mismatch threshold",
+"before": "—",
+"after": "±5%",
+"reason": "Launch setting"
+},
+"AU-0004": {
+"id": "AU-0004",
+"at": "2026-09-26T07:10:00.000Z",
+"by": "A-01",
+"action": "Record corrected",
+"target": "LL-0003",
+"detail": "Vehicle number",
+"before": "HR**…5510",
+"after": "(blank)",
+"reason": "Wrong entry: inverter battery has no vehicle"
+},
+"AU-0005": {
+"id": "AU-0005",
+"at": "2026-11-11T06:05:00.000Z",
+"by": "R-302",
+"action": "Deduction raised",
+"target": "DD-0001",
+"detail": "₹173 from V-101's next payout (LL-0007 gate gap −8.1%)",
+"before": null,
+"after": null,
+"reason": null
+},
+"AU-0006": {
+"id": "AU-0006",
+"at": "2026-11-14T06:27:00.000Z",
+"by": "Y-02",
+"action": "Deduction recovered",
+"target": "DD-0001",
+"detail": "Netted from payout for LL-0009",
+"before": null,
+"after": null,
+"reason": null
+},
+"AU-0007": {
+"id": "AU-0007",
+"at": "2026-11-14T07:00:00.000Z",
+"by": "A-01",
+"action": "Alert reviewed",
+"target": "LL-0007",
+"detail": "Gate weight flag. Gap confirmed on R-302's gate photo; DD-0001 recovered",
+"before": null,
+"after": null,
+"reason": null
+}
+},
+"config": {
+"settings": {
+"weightThresholdPct": 5
+}
+},
+"reviews": {
+"flag_LL-0007_gate": {
+"key": "flag:LL-0007:gate",
+"at": "2026-11-14T07:00:00.000Z",
+"by": "A-01",
+"note": "Gap confirmed on R-302's gate photo; DD-0001 recovered from V-101 in PO-0010"
+}
+}
+}</script>
 <script>
 "use strict";
 /* ---------- constants ---------- */
@@ -600,7 +3031,8 @@ function localDB(seed){
 function resetLocalData(){ try{ localStorage.removeItem(LOCAL_KEY); localStorage.removeItem("ll_demo"); }catch(e){} location.reload(); }
 async function initLocal(){
   let seed=null;
-  try{ const r=await fetch("data/seed.json",{cache:"no-store"}); seed=await r.json(); }catch(e){ seed=null; }
+  try{ const r=await fetch("data/seed.json",{cache:"no-store"}); if(r.ok) seed=await r.json(); }catch(e){ seed=null; }
+  if(!seed){ try{ seed=JSON.parse(document.getElementById("seedData").textContent); }catch(e){ seed=null; } } // built-in copy: index.html works on its own
   if(!seed){ S.dbState="none"; render(); return; }
   S.local=true; S.db=localDB(seed);
   if(!S.downloads) S.downloads={save:async({filename,data})=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([data],{type:"text/csv"})); a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500); }};
