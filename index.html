@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LeadLoop Checkpoint</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=Figtree:wght@400;500;600;700;800&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Mukta:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <style>
@@ -13,17 +13,17 @@
   --forest:#14492f; --leaf:#1f7a4d; --leafSoft:#e2efe6; --saffron:#e0962a; --saffronSoft:#fbecd2; --saffronInk:#7a4600;
   --hivis:#d8f04a; --casing:#2b3236; --casing2:#3a4348; --paper:#f1f3ee; --card:#ffffff; --ink:#1b2420; --muted:#5b665f; --line:#d9dfd8;
   --red:#b3261e; --redSoft:#fbe4e1; --blue:#245a8f; --blueSoft:#e4edf7;
-  --slab:"Zilla Slab",Georgia,serif; --sans:"Figtree","Hind",system-ui,sans-serif;
+  --slab:"Bricolage Grotesque","Mukta",system-ui,sans-serif; --sans:"Mukta",system-ui,sans-serif;
   --r-panel:22px; --r-sheet:14px; --r-slip:6px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.45}
 body.demo-on,body.tour-on{padding-bottom:160px}
 .tourbar .prog i{position:relative;overflow:hidden}
 .tourbar .prog b{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--hivis);animation:tfill linear forwards}
 @keyframes tfill{to{width:100%}}
 .tourbar .go{min-width:120px}
-:lang(hi), .hi{font-family:"Hind",var(--sans)}
+:lang(hi), .hi{font-family:"Mukta",var(--sans)}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
 .wrap{max-width:560px;margin:0 auto;padding:14px 16px 48px}
@@ -85,6 +85,7 @@ p.sub{color:var(--muted);margin:0 0 14px;font-size:15px;max-width:60ch}
 /* ---------- buttons & inputs ---------- */
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:14px;border:0;background:var(--forest);color:#fff;font-weight:700;font-size:17px;cursor:pointer;padding:10px 16px;margin:8px 0;text-align:center;transition:transform .08s}
 .btn:active{transform:scale(.985)}
+.btn>svg{width:22px;height:22px;flex:none}
 .btn.sec{background:#fff;color:var(--forest);border:2px solid var(--forest)}
 .btn.ghost{background:transparent;color:var(--muted);border:1.5px dashed var(--line);font-weight:600;font-size:15px;min-height:46px}
 .btn.hv{background:var(--hivis);color:var(--casing)}
@@ -409,6 +410,60 @@ details summary{cursor:pointer}
 .sd-steps .d{display:block;font-size:13.5px;color:var(--muted);margin-top:3px}
 .livqr{text-align:center;flex:none}
 .livqr svg{width:150px;height:150px;display:block;margin-bottom:4px}
+
+.choose .btn{margin:10px 0 2px}
+.choose .ch{margin:0 2px 6px;font-size:13px;color:var(--muted)}
+.spd{margin-left:6px;background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:999px;font:inherit;font-size:11.5px;font-weight:800;padding:1px 8px;cursor:pointer}
+
+h1,h2,.logo{letter-spacing:-.5px}
+h1{font-weight:800}
+/* story */
+.story .st-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.story h1{margin:4px 0 0}
+.st-ctl{display:flex;gap:8px;align-items:center}
+.hbtn2{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.flow{display:flex;align-items:center;gap:4px;margin:16px 0 14px;overflow-x:auto;padding-bottom:4px}
+.fl{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:74px;font-size:12px;font-weight:700;color:var(--muted);opacity:.45;transition:opacity .3s,transform .3s}
+.fl .ic{width:48px;height:48px;border-radius:14px;background:#fff;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center}
+.fl .ic svg{width:32px;height:32px}
+.fl.on{opacity:1;color:var(--ink);transform:translateY(-2px)}
+.fl.on .ic{border-color:var(--forest);box-shadow:0 0 0 3px var(--hivis)}
+.flow .arr{flex:1;min-width:10px;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 10px);margin-bottom:18px}
+.st-main{display:grid;grid-template-columns:250px 1fr;gap:26px;align-items:center}
+@media (max-width:640px){.st-main{grid-template-columns:1fr;justify-items:center;gap:14px}.st-side{width:100%}}
+.beatn{font-weight:800;font-size:13px;color:var(--leaf)}
+.st-side .cap{font-family:var(--slab);font-size:23px;line-height:1.25;font-weight:700;margin:6px 0 12px;min-height:3.75em}
+.st-side .cap.hi{font-family:"Mukta",sans-serif;font-size:22px;font-weight:700}
+@media (max-width:640px){.st-side .cap{font-size:19px;min-height:0}}
+.dots{display:flex;gap:6px}
+.dots button{width:26px;height:8px;border-radius:4px;border:0;background:#d5dbd3;cursor:pointer;padding:0}
+.dots button.d{background:var(--leaf)} .dots button.on{background:var(--forest);width:40px}
+.ph-bar.upi{background:#3a2a8c}
+.ph-ok svg{width:14px;height:14px}
+.ph-lang{display:flex;gap:4px;font-size:11px;font-weight:800}.ph-lang i{font-style:normal;border:1.5px solid var(--line);border-radius:999px;padding:1px 8px}.ph-lang i.on{background:var(--forest);color:#fff;border-color:var(--forest)}
+.ph-btn{margin-top:4px;background:var(--forest);color:#fff;text-align:center;border-radius:10px;padding:9px;font-weight:800;animation:sdin .4s 1.1s both}
+.ph-pay{background:#fffdf7;border:1px solid #e6dcc6;border-left:4px solid var(--saffron);border-radius:6px;padding:8px;display:grid;grid-template-columns:1fr auto;align-items:center;animation:sdin .4s .9s both}
+.ph-pay b{font-family:var(--slab);font-size:20px}.ph-pay small{grid-column:1/-1;color:var(--muted)}
+.ph-slip{background:#fffdf7;border:1px solid #e6dcc6;border-left:4px solid var(--saffron);border-radius:6px;padding:8px;display:flex;flex-direction:column}
+.ph-slip b{font-family:var(--slab);font-size:18px}.ph-slip small{color:var(--muted);font-size:11px}
+.ph-row span svg{width:11px;height:11px;vertical-align:-1px}
+.ph-alert{border-left:4px solid var(--red);background:#fff;border:1px solid var(--line);border-left-width:4px;border-radius:8px;padding:6px 8px;display:flex;flex-direction:column;animation:sdin .35s both}
+.ph-alert.red{border-left-color:var(--red)}.ph-alert.amber{border-left-color:var(--saffron)}.ph-alert.info{border-left-color:var(--blue)}
+.ph-alert:nth-child(2){animation-delay:.25s}.ph-alert:nth-child(3){animation-delay:.5s}.ph-alert:nth-child(4){animation-delay:.75s}
+.ph-alert small{color:var(--muted);font-size:11px}
+.ph-field{position:absolute;inset:0;background:var(--forest);display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:30px 10px 10px;align-content:center}
+.ph-field div{background:#fff;border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:1px;animation:sdin .35s both}
+.ph-field div:nth-child(2n){animation-delay:.15s}.ph-field div:nth-child(n+3){animation-delay:.3s}.ph-field div:nth-child(n+5){animation-delay:.45s}
+.ph-field .em{font-size:20px;line-height:1.1;font-weight:800;color:var(--forest)}
+.ph-field b{font-size:12.5px;line-height:1.15}.ph-field small{font-size:10.5px;color:var(--muted);line-height:1.2}
+@media (max-width:640px){
+  .flow{gap:2px;margin:10px 0 8px;overflow:visible}
+  .fl{min-width:0;flex:0 0 auto;font-size:9.5px;width:50px;text-align:center;line-height:1.1}
+  .fl .ic{width:36px;height:36px;border-radius:10px}.fl .ic svg{width:24px;height:24px}
+  .flow .arr{min-width:2px;margin-bottom:22px}
+  .story .phone{width:216px;height:390px;border-radius:32px;padding:10px}
+  .story h1{font-size:24px}
+}
 
 </style>
 </head>
@@ -3116,12 +3171,12 @@ function heroScene(){
   <g transform="translate(150 66) scale(1.35)">${ICON.yard().replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>
   <g transform="translate(300 64) scale(1.4)">${ICON.recycler().replace(/^<svg[^>]*>|<\/svg>$/g,"")}</g>
   <path id="route" d="M60 148 C110 148 130 148 182 148 S 280 148 334 148" fill="none" stroke="${C.hivis}" stroke-width="3" stroke-dasharray="7 7" opacity=".85"/>
-  ${[60,182,334].map((x,i)=>`<g transform="translate(${x-11} 137)"><rect width="22" height="22" rx="5" fill="${C.hivis}"/><text x="11" y="15.5" text-anchor="middle" font-family="Figtree,sans-serif" font-weight="800" font-size="12" fill="${C.casing}">${i+1}</text></g>`).join("")}
+  ${[60,182,334].map((x,i)=>`<g transform="translate(${x-11} 137)"><rect width="22" height="22" rx="5" fill="${C.hivis}"/><text x="11" y="15.5" text-anchor="middle" font-family="Mukta,sans-serif" font-weight="800" font-size="12" fill="${C.casing}">${i+1}</text></g>`).join("")}
   <g id="token"><rect x="-10" y="-22" width="20" height="13" rx="3" fill="${C.casing}" stroke="${C.hivis}" stroke-width="1.5"/><rect x="-6" y="-25" width="3" height="3" fill="${C.casing}"/><rect x="3" y="-25" width="3" height="3" fill="${C.casing}"/>
     <animateMotion class="am" dur="3.6s" begin="0.4s" fill="freeze" calcMode="spline" keyPoints="0;0.47;0.47;1" keyTimes="0;0.4;0.6;1" keySplines=".4 0 .2 1;0 0 1 1;.4 0 .2 1"><mpath href="#route"/></animateMotion></g>
-  <text x="60" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Figtree,sans-serif">Pickup</text>
-  <text x="182" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Figtree,sans-serif">Yard weigh-in</text>
-  <text x="334" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Figtree,sans-serif">Recycler gate</text>
+  <text x="60" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Mukta,sans-serif">Pickup</text>
+  <text x="182" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Mukta,sans-serif">Yard weigh-in</text>
+  <text x="334" y="180" text-anchor="middle" font-size="11" font-weight="700" fill="#cfe3d6" font-family="Mukta,sans-serif">Recycler gate</text>
   </svg>`;
 }
 
@@ -3134,7 +3189,7 @@ function ringHTML(sec){
 /* weighing-scale dial 0–40 kg; needle follows typed weight */
 function dialHTML(w){
   const ticks=[0,10,20,30,40].map(v=>{const a=Math.PI*(1-v/40),x1=75+52*Math.cos(a),y1=78-52*Math.sin(a),x2=75+44*Math.cos(a),y2=78-44*Math.sin(a),tx=75+34*Math.cos(a),ty=78-34*Math.sin(a)+4;
-    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.casing}" stroke-width="2"/><text x="${tx}" y="${ty}" font-size="9" text-anchor="middle" fill="#5f6b64" font-family="Figtree,sans-serif" font-weight="700">${v}</text>`}).join("");
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.casing}" stroke-width="2"/><text x="${tx}" y="${ty}" font-size="9" text-anchor="middle" fill="#5f6b64" font-family="Mukta,sans-serif" font-weight="700">${v}</text>`}).join("");
   return `<div class="dial"><svg viewBox="0 0 150 96"><path d="M17 78a58 58 0 0 1 116 0" fill="#fff" stroke="${C.casing}" stroke-width="4"/><path d="M23 78a52 52 0 0 1 104 0" fill="none" stroke="${C.leafSoft||'#e2efe6'}" stroke-width="0"/>${ticks}
    <g class="needle" id="needle" style="transform:rotate(${needleDeg(w)}deg)"><line x1="75" y1="78" x2="75" y2="30" stroke="${C.saffron}" stroke-width="3.5" stroke-linecap="round"/></g><circle cx="75" cy="78" r="6" fill="${C.casing}"/><rect x="10" y="82" width="130" height="10" rx="3" fill="${C.casing}"/></svg></div>`;
 }
@@ -3290,7 +3345,8 @@ function renderDemo(){
 /* ---------- router ---------- */
 function render(){
   document.body.classList.toggle("wide", ["admin","qrsheet","how"].includes(S.view));
-  document.body.classList.toggle("mid", ["truck","settlement","payouts"].includes(S.view));
+  document.body.classList.toggle("mid", ["truck","settlement","payouts","story"].includes(S.view));
+  if(S.view!=="story" && typeof ST!=="undefined" && ST.playing) storyStop();
   renderHeader(); renderDemo(); renderTour();
   if(S.timerInt && S.view!=="pickup"){ clearInterval(S.timerInt); S.timerInt=null; }
   const app=$("#app");
@@ -3302,9 +3358,10 @@ function render(){
   if(S._lastKey!==key){ S._lastKey=key; try{ window.scrollTo(0,0); }catch(e){} }
   if(v==="how") return viewHow(app);
   if(v==="scan") return viewScanDemo(app);
+  if(v==="story") return viewStory(app);
   if(!S.user||v==="login") return viewLogin(app);
   if(S.dbState==="loading") { app.innerHTML=`<div class="row" style="margin-top:30px;justify-content:center"><div class="spinner"></div><span class="muted">Loading records…</span></div>`; return; }
-  const V={scan:viewScanDemo,home:viewHome,pickup:viewPickup,yard:viewYard,timeline:viewTimeline,admin:viewAdmin,qrsheet:viewQRSheet,done:viewDone,payouts:viewPayouts,dispatch:viewDispatch,truck:viewTruck,settlement:viewSettlement};
+  const V={story:viewStory,scan:viewScanDemo,home:viewHome,pickup:viewPickup,yard:viewYard,timeline:viewTimeline,admin:viewAdmin,qrsheet:viewQRSheet,done:viewDone,payouts:viewPayouts,dispatch:viewDispatch,truck:viewTruck,settlement:viewSettlement};
   (V[v]||viewHome)(app);
 }
 function slowNote(){ return S.dbState==="slow" ? `<div class="banner warn">Records may be out of date. The record store hasn't answered yet.</div>` : ""; }
@@ -3317,15 +3374,18 @@ function viewLogin(app){
   const fresh=freshIds();
   app.innerHTML = `<section class="hero"><div class="txt"><h1>Every dead battery, scanned three times</h1><p>One QR sticker follows each battery from pickup to the recycler's gate, with weight, a photo and the money at every hand-off.</p></div>${heroScene()}</section>
   ${S.pendingId?`<div class="banner info">You scanned ${sticker(S.pendingId,1)}. Choose who you are and it opens.</div>`:""}
-  <button class="btn hv" id="startTour">▶ Play the 2-minute tour</button>
-  <button class="btn sec" id="startDemo">Try it step by step</button>
-  <button class="btn ghost" id="seeScan">${ICON.qr(C.forest)} See what happens when a sticker is scanned</button>
+  <div class="choose">
+   <button class="btn hv" id="startStory">▶ Watch LeadLoop in 45 seconds</button><p class="ch">One screen, eight short steps, with a voice in English or Hindi.</p>
+   <button class="btn sec" id="startDemo">Try it yourself, step by step</button><p class="ch">Log a real battery on fresh sticker ${esc(fresh[0]||"")} and follow it to the recycler. A bar at the bottom tells you what to tap.</p>
+   <div class="row wrapr ch" style="gap:6px 14px"><button class="link" id="startTour">See the real screens (8 stops)</button><button class="link" id="seeScan">What a QR scan does</button></div>
+  </div>
   <p class="sub" style="margin-top:14px">Or sign in as any demo user. Your role decides what the scanner does.</p>
   ${chainHTML(null)}
   ${fresh.length?`<div class="sheet tight" style="margin-top:18px"><h3>Fresh stickers for a live pickup</h3><div class="fresh">${fresh.map(id=>sticker(id,1)).join("")}</div><div class="small muted" style="margin-top:6px">Each works once. Printed sheet: QR sheet in the control room.</div></div>`:""}
   ${foot()}`;
   $("#startDemo").onclick=()=>{ demoStart(); demoGo(0); };
   $("#startTour").onclick=tourStart;
+  $("#startStory").onclick=storyStart;
   $("#seeScan").onclick=()=>{ SD.i=0; SD.paused=false; go("scan"); };
   app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
     S.user=userById(b.dataset.u); try{localStorage.setItem("ll_user",S.user.id);}catch(e){}
@@ -4289,51 +4349,44 @@ function viewQRSheet(app){
 }
 
 /* ---------- hands-free tour: plays through the app on its own, writes nothing ---------- */
-const TOUR_MS = 7000;
+const TOUR_MS = 4800;
+const SPEEDS=[1,1.5,2];
 const firstWhere = (m,f) => [...m.values()].sort((a,c)=>(a.id||"").localeCompare(c.id||"")).find(f);
 function tourShow(u,view,prep){
   if(u){ S.user=userById(u); }
   S.form=null; if(prep) prep(); S.view=view; render();
 }
 const TOUR = [
- {cap:"One QR sticker follows each dead battery from the scrap vendor to the recycler. Three scans, with weight, photo and money at every hand-off.", run:()=>{ S.user=null; S.view="login"; render(); }},
- {cap:"How it works: the deck's ten steps sit on three scans. Pickup, yard weigh-in, recycler gate.", run:()=>{ S.view="how"; render(); }, focus:".how"},
- {cap:"What one scan does: a phone camera reads the sticker, the app opens at that battery, and the scanner's role decides what happens next.", ms:21000, run:()=>{ SD.i=0; SD.paused=false; S.view="scan"; render(); }},
- {cap:"Scan 1 · Scrap vendor V-101 scans a fresh sticker and fills the form in about a minute, including what the driver was paid and the UPI reference.", ms:9000, run:()=>{
+ {cap:"Scan 1 · Scrap vendor V-101 scans a fresh sticker and fills the form in about a minute, including what the driver was paid and the UPI reference.", ms:6000, run:()=>{
     const id=freshIds()[0]; tourShow("V-101","pickup",()=>{ S.id=id; S.scanAt=Date.now()-41000; S.gpsResult=null;
       S.form={source:"e-rickshaw",brand:"major",vehicle:"DL1EA4455",died:"this_week",weight:"30.4",photo:null,label:null,leaking:"no",paid:"1850",upi:"412398765432",sale:"2"}; }); }, focus:".slip"},
- {cap:"Scan 2 · The LeadLoop yard re-weighs the battery. The gap against pickup is checked (±5%), and the scrap vendor is paid ₹69/kg the same day.", ms:9000, run:()=>{
+ {cap:"Scan 2 · The LeadLoop yard re-weighs the battery. The gap against pickup is checked (±5%), and the scrap vendor is paid ₹69/kg the same day.", ms:6000, run:()=>{
     const b=firstWhere(S.batteries,x=>x.status==="picked_up"); if(!b) return tourShow("Y-02","home");
     tourShow(b.pickedUpBy==="V-102"?"Y-01":"Y-02","yard",()=>{ S.id=b.id; S.form={weight:String(Math.round((b.pickupKg-0.3)*10)/10),photo:null,condition:"Intact",upi:"412345678901"}; }); }, focus:"#diff"},
  {cap:"The scrap vendor sees every payout with its UPI reference, the ₹10 allowance, and any deduction for a weight gap.", run:()=>tourShow("V-101","payouts")},
- {cap:"The yard loads batteries onto the recycler's truck under one manifest number.", run:()=>tourShow("Y-02","dispatch")},
  {cap:"Scan 3 · The recycler opens the truckload and scans each battery at its gate.", run:()=>{
     const t=[...S.trucks.values()].filter(x=>x.status!=="received").sort((a,c)=>c.dispatchedAt.localeCompare(a.dispatchedAt))[0]||[...S.trucks.values()].sort((a,c)=>c.dispatchedAt.localeCompare(a.dispatchedAt))[0];
     if(!t) return tourShow("R-301","home"); tourShow(t.recyclerId,"truck",()=>{ S.ref=t.id; }); }},
- {cap:"The gate weight must match the yard within ±5%. A bigger gap flags the record, and the missing lead comes off the scrap vendor's next payout.", ms:9000, run:()=>{
+ {cap:"The gate weight must match the yard within ±5%. A bigger gap flags the record, and the missing lead comes off the scrap vendor's next payout.", ms:6000, run:()=>{
     const b=firstWhere(S.batteries,x=>x.status==="at_yard"&&x.truckId); if(!b) return;
     tourShow((S.trucks.get(b.truckId)||{}).recyclerId||b.recyclerId,"timeline",()=>{ S.id=b.id; S.ref=b.truckId; S.form={weight:String(Math.round(b.yardKg*0.92*10)/10)}; }); }, focus:"#gdiff"},
  {cap:"Each completed truckload produces a settlement statement: partner payments plus ₹4/kg, due 10 days after the gate check.", run:()=>{
     const s=[...S.settlements.values()].sort((a,c)=>(a.status==="repaid")-(c.status==="repaid")||c.createdAt.localeCompare(a.createdAt))[0];
     if(!s) return; tourShow(s.recyclerId,"settlement",()=>{ S.ref=s.id; }); }},
- {cap:"Every scan builds the custody trail: who, when, where, weight, photo and payment, ready for the recycler's EPR filing.", run:()=>{
-    const b=firstWhere(S.batteries,x=>x.status==="closed"&&x.flagged)||firstWhere(S.batteries,x=>x.status==="closed"); if(!b) return;
-    tourShow("A-01","timeline",()=>{ S.id=b.id; S.ref=null; }); }, focus:".tl"},
  {cap:"LeadLoop control room: an alerts inbox for weight flags, batteries over 10 or 90 days and missing scans, each with an owner and a next step.", run:()=>{ S.crTab="alerts"; tourShow("A-01","admin"); }},
  {cap:"Cash: what LeadLoop advanced to partners, what each recycler has repaid, and what is overdue.", run:()=>{ S.crTab="money"; tourShow("A-01","admin"); }},
- {cap:"Partners: safety kit, scale, the ₹10 delivery-and-record allowance and GST or Udyam help.", run:()=>{ S.crTab="partners"; tourShow("A-01","admin"); }},
- {cap:"Monthly report per collection centre, exported as CSV for the recycler's CPCB filing.", run:()=>{ S.crTab="reports"; tourShow("A-01","admin"); }},
- {cap:"Corrections need a reason and keep the old value; every write is in the audit log.", run:()=>{ S.crTab="audit"; tourShow("A-01","admin"); }},
  {cap:"That's the loop. Try it yourself with the step-by-step demo, or scan a printed sticker with your phone.", ms:60000, run:()=>{ S.view="login"; S.user=null; render(); }, end:true}
 ];
-const TT = {on:false,i:0,paused:false,timer:null,saved:null};
+const TT = {on:false,i:0,paused:false,timer:null,saved:null,speed:1};
+try{ const v=parseFloat(localStorage.getItem("ll_speed")); if(SPEEDS.includes(v)) TT.speed=v; }catch(e){}
+const stepMs = st => (st.ms||TOUR_MS)/TT.speed;
 function tourStart(){
   closeModal();
   TT.saved={user:S.user?S.user.id:null,view:S.view,id:S.id,ref:S.ref,crTab:S.crTab,demo:S.demo.on};
   S.demo.on=false; TT.on=true; TT.paused=false; tourGo(0);
 }
 function tourStop(){
-  try{ if((location.hash||"").toLowerCase()==="#tour") history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+  try{ if(/^#(tour|screens)$/i.test(location.hash||"")) history.replaceState(null,"",location.pathname+location.search); }catch(e){}
   clearTimeout(TT.timer); TT.on=false; if(S.timerInt){ clearInterval(S.timerInt); S.timerInt=null; }
   const s=TT.saved||{}; S.user=s.user?userById(s.user):null; S.view=S.user?(s.view||homeOf()):"login"; S.id=s.id; S.ref=s.ref; S.crTab=s.crTab||"alerts"; S.demo.on=!!s.demo; S.form=null;
   render();
@@ -4345,23 +4398,25 @@ function tourGo(i){
   try{ st.run(); }catch(e){}
   if(st.focus) setTimeout(()=>{ const el=document.querySelector(st.focus); if(el) el.scrollIntoView({block:"center",behavior:"smooth"}); },400);
   renderTour(true);
-  if(!TT.paused && !st.end) TT.timer=setTimeout(()=>tourGo(TT.i+1), st.ms||TOUR_MS);
+  if(!TT.paused && !st.end) TT.timer=setTimeout(()=>tourGo(TT.i+1), stepMs(st));
 }
 function renderTour(force){
   document.body.classList.toggle("tour-on",TT.on);
   const el=$("#tourRoot");
   if(!TT.on){ el.innerHTML=""; el.dataset.k=""; return; }
   const k=TT.i+"|"+TT.paused; if(!force && el.dataset.k===k && el.firstChild) return; el.dataset.k=k;
-  const st=TOUR[TT.i], ms=st.ms||TOUR_MS;
+  const st=TOUR[TT.i], ms=stepMs(st);
   el.innerHTML=`<div class="demobar tourbar" role="region" aria-label="App tour"><button class="x" id="tX">Exit tour ✕</button><div class="in">
     <div class="prog" aria-hidden="true">${TOUR.map((_,k)=>`<i class="${k<TT.i?"d":""}">${k===TT.i&&!TT.paused&&!st.end?`<b style="animation-duration:${ms}ms"></b>`:k===TT.i?`<b style="width:100%;animation:none"></b>`:""}</i>`).join("")}</div>
-    <div class="stepn">Tour · ${TT.i+1} of ${TOUR.length}${S.user?` · viewing as ${esc(S.user.id)}`:""} · nothing is saved</div>
+    <div class="stepn">Tour · ${TT.i+1} of ${TOUR.length}${S.user?` · viewing as ${esc(S.user.id)}`:""} · nothing is saved <button class="spd" id="tSpd" title="Change speed">${TT.speed}×</button></div>
     <div class="txt">${esc(st.cap)}</div>
     <div class="ctl">${st.end?`<button class="go" id="tHands">Try it step by step</button><button class="nv" id="tAgain" aria-label="Play again" title="Play again">↺</button>`:
       `<button class="nv" id="tP" ${TT.i===0?"disabled":""} aria-label="Previous">‹</button><button class="go" id="tPause">${TT.paused?"▶ Play":"❚❚ Pause"}</button><button class="nv" id="tN" aria-label="Next">›</button>`}</div>
   </div></div>`;
   $("#tX").onclick=tourStop;
+  if($("#tSpd")&&st.end) $("#tSpd").onclick=()=>{ TT.speed=SPEEDS[(SPEEDS.indexOf(TT.speed)+1)%SPEEDS.length]; try{localStorage.setItem("ll_speed",TT.speed);}catch(e){} renderTour(true); };
   if(st.end){ $("#tHands").onclick=()=>{ TT.on=false; renderTour(); demoStart(); demoGo(1); }; $("#tAgain").onclick=()=>{ TT.paused=false; tourGo(0); }; return; }
+  $("#tSpd").onclick=()=>{ TT.speed=SPEEDS[(SPEEDS.indexOf(TT.speed)+1)%SPEEDS.length]; try{localStorage.setItem("ll_speed",TT.speed);}catch(e){} tourGo(TT.i); };
   $("#tP").onclick=()=>tourGo(TT.i-1);
   $("#tN").onclick=()=>tourGo(TT.i+1);
   $("#tPause").onclick=()=>{ TT.paused=!TT.paused; if(TT.paused){ clearTimeout(TT.timer); renderTour(); } else tourGo(TT.i); };
@@ -4374,12 +4429,15 @@ document.addEventListener("click",e=>{
 },true);
 function openDemoChooser(){
   modal(`<h2>See LeadLoop work</h2>
-   <button class="btn hv" id="chTour">▶ Play the tour<span class="small" style="font-weight:600;opacity:.8">· about 2 minutes, hands-free</span></button>
-   <p class="small muted" style="margin:2px 0 10px">Walks through all three scans, the money and the control room on its own. Nothing is saved.</p>
-   <button class="btn sec" id="chDemo">Try it step by step</button>
+   <button class="btn hv" id="chStory">▶ Watch the 45-second story</button>
+   <p class="small muted" style="margin:2px 0 10px">One screen, eight short steps, with a voice in English or Hindi.</p>
+   <button class="btn sec" id="chTour">See the real screens<span class="small" style="font-weight:600;opacity:.8">· 8 stops, about 45 s</span></button>
+   <p class="small muted" style="margin:2px 0 10px">Plays through the app's own screens on its own. Nothing is saved.</p>
+   <button class="btn sec" id="chDemo">Try it yourself, step by step</button>
    <p class="small muted" style="margin:2px 0 10px">You tag fresh sticker ${esc(freshIds()[0]||"")}, weigh it in, dispatch it and gate-check it, switching role with one tap at each step. Saves real records.</p>
    ${S.demo.on?`<button class="btn ghost" id="chOff">Close the step-by-step demo</button>`:""}`);
   $("#chTour").onclick=tourStart;
+  $("#chStory").onclick=storyStart;
   $("#chDemo").onclick=()=>{ closeModal(); demoStart(); demoGo(S.demo.step||0); };
   if($("#chOff")) $("#chOff").onclick=()=>{ closeModal(); demoOff(); };
 }
@@ -4425,17 +4483,118 @@ function viewScanDemo(app){
   $("#sdPause").onclick=()=>{ SD.paused=!SD.paused; render(); };
   $("#sdNext").onclick=()=>{ SD.i=(SD.i+1)%SCAN_STEPS.length; render(); };
   $("#sdTry").onclick=()=>{ S.user=userById("V-101"); try{localStorage.setItem("ll_user","V-101");}catch(e){} startGPS(); S.scanAt=Date.now(); routeBattery(fresh); };
-  if(!SD.paused) SD.timer=setTimeout(()=>{ if(S.view==="scan"){ SD.i=(SD.i+1)%SCAN_STEPS.length; render(); } },4200);
+  if(!SD.paused) SD.timer=setTimeout(()=>{ if(S.view==="scan"){ SD.i=(SD.i+1)%SCAN_STEPS.length; render(); } },TT.on?2300/TT.speed:3200);
 }
+
+/* ---------- The 45-second story: one screen, 8 beats, optional narration (EN / हिंदी) ---------- */
+const FLOW = [["driver","Driver"],["vendor","Scrap vendor"],["yard","LeadLoop yard"],["truck","Truck"],["recycler","Recycler"],["admin","Control room"]];
+const BEATS = [
+ {f:[0,1], en:"A driver sells a dead battery to a partner scrap vendor, as today, and is paid by UPI in minutes.",
+  hi:"ड्राइवर अपनी खराब बैटरी पार्टनर स्क्रैप वेंडर को बेचता है, और कुछ ही मिनटों में UPI से पैसे पाता है।", t:"Sell"},
+ {f:[1], en:"Scan one. The scrap vendor sticks a QR sticker on the battery, scans it, and logs weight and photos in under ninety seconds.",
+  hi:"स्कैन एक। वेंडर बैटरी पर QR स्टिकर लगाता है, फ़ोन से स्कैन करता है, और नब्बे सेकंड में वज़न और फ़ोटो दर्ज करता है।", t:"Scan 1 · Tag"},
+ {f:[2], en:"Scan two. Our yard re-weighs it. It matches pickup within five percent, so the scrap vendor is paid sixty-nine rupees a kilo the same day.",
+  hi:"स्कैन दो। LeadLoop यार्ड बैटरी को फिर तौलता है। वज़न पाँच प्रतिशत के अंदर मिला, तो वेंडर को उसी दिन उनहत्तर रुपये प्रति किलो मिलते हैं।", t:"Scan 2 · Weigh + pay"},
+ {f:[3], en:"The yard loads full truckloads for the recycler, each under one manifest number.",
+  hi:"यार्ड पूरी ट्रक-लोड बैटरियाँ रीसाइक्लर को भेजता है, हर ट्रक एक मैनिफ़ेस्ट नंबर के साथ।", t:"Dispatch"},
+ {f:[4], en:"Scan three. The recycler weighs it again at its gate. A gap over five percent is flagged, and comes off the scrap vendor's next payment.",
+  hi:"स्कैन तीन। रीसाइक्लर गेट पर फिर तौलता है। पाँच प्रतिशत से ज़्यादा फ़र्क हो तो रिकॉर्ड फ़्लैग होता है, और फ़र्क वेंडर के अगले भुगतान से कटता है।", t:"Scan 3 · Gate check"},
+ {f:[4,2], en:"The recycler repays LeadLoop in about ten days, plus four rupees a kilo. That fee is our revenue.",
+  hi:"रीसाइक्लर लगभग दस दिन में LeadLoop को पैसे लौटाता है, साथ में चार रुपये प्रति किलो फ़ीस। यही हमारी कमाई है।", t:"Settle"},
+ {f:[5], en:"Our control room flags weight gaps, batteries held over ten days and missing scans, and builds the monthly report for the recycler's CPCB filing.",
+  hi:"कंट्रोल रूम वज़न के फ़र्क, दस दिन से ज़्यादा रुकी बैटरी और छूटे स्कैन दिखाता है, और रीसाइक्लर की CPCB फ़ाइलिंग के लिए मासिक रिपोर्ट बनाता है।", t:"Control room"},
+ {f:[0,1,2,3,4,5], en:"Built for the field: big buttons, Hindi or English, photos instead of typing, and any phone camera can scan.",
+  hi:"फ़ील्ड के लिए बना: बड़े बटन, हिंदी या अंग्रेज़ी, टाइपिंग की जगह फ़ोटो, और किसी भी फ़ोन का कैमरा स्कैन कर सकता है।", t:"Made for the field"}
+];
+const ST = {i:0, playing:false, timer:null, lang:"en", sound:true, ended:false};
+try{ const l=localStorage.getItem("ll_story_lang"); if(l==="hi"||l==="en") ST.lang=l; const s=localStorage.getItem("ll_story_sound"); if(s==="0") ST.sound=false; }catch(e){}
+const canSpeak = () => { try{ return "speechSynthesis" in window && typeof SpeechSynthesisUtterance==="function"; }catch(e){ return false; } };
+function pickVoice(lang){
+  try{ const vs=speechSynthesis.getVoices()||[]; const want=lang==="hi"?["hi-IN","hi"]:["en-IN","en-GB","en-US","en"];
+    for(const w of want){ const v=vs.find(v=>(v.lang||"").toLowerCase().startsWith(w.toLowerCase())); if(v) return v; } }catch(e){}
+  return null;
+}
+function storyStop(){ clearTimeout(ST.timer); ST.playing=false; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} }
+function storyBeat(i){
+  clearTimeout(ST.timer); try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){}
+  ST.i=Math.max(0,Math.min(BEATS.length-1,i)); ST.ended=false;
+  if(S.view==="story") renderStoryStage();
+  if(!ST.playing) return;
+  const b=BEATS[ST.i], txt=b[ST.lang], minMs=ST.lang==="hi"?5200:4600, started=Date.now();
+  const next=()=>{ if(!ST.playing) return; const wait=Math.max(0,minMs-(Date.now()-started))+500;
+    ST.timer=setTimeout(()=>{ if(!ST.playing) return; if(ST.i<BEATS.length-1) storyBeat(ST.i+1); else { ST.playing=false; ST.ended=true; renderStoryStage(); } },wait); };
+  if(ST.sound && canSpeak()){
+    try{ const u=new SpeechSynthesisUtterance(txt.replace(/₹/g, ST.lang==="hi"?"रुपये ":"rupees ")); const v=pickVoice(ST.lang); if(v) u.voice=v; u.lang=ST.lang==="hi"?"hi-IN":"en-IN"; u.rate=1.07;
+      let done=false; const fin=()=>{ if(!done){ done=true; next(); } }; u.onend=fin; u.onerror=fin;
+      ST.timer=setTimeout(fin, Math.max(minMs, txt.length*95)); // fallback if the browser never fires onend
+      speechSynthesis.speak(u); return; }catch(e){}
+  }
+  ST.timer=setTimeout(next, 0);
+}
+function storyPhone(i){
+  const rows=a=>a.map(([k,v,c])=>`<div class="ph-row"><span>${k}</span><b ${c?`style="color:${c}"`:""}>${v}</b></div>`).join("");
+  const app=(who,ic,title,body)=>`<div class="ph-app"><div class="ph-bar">${ICON.logo()}<b>LeadLoop</b><span>${who}</span></div><div class="ph-body"><div class="ph-stk">${ICON.qr()}LL-0021</div><div class="ph-title">${ic}${title}</div>${body}</div></div>`;
+  const ok=`<span class="ph-ok">${ICN.check}</span>`;
+  switch(i){
+    case 0: return `<div class="ph-app"><div class="ph-bar upi"><b>UPI</b><span>Paid</span></div><div class="ph-body ph-done"><div class="ph-check">${ICN.check}</div><b style="font-size:22px">₹1,830</b><small>to the driver · UPI ref 4123 9876 5432</small><div class="ph-row" style="width:100%"><span>Local rate</span><b>₹60–62/kg</b></div><div class="ph-row" style="width:100%"><span>Time to pay</span><b>under 15 min</b></div></div></div>`;
+    case 1: return app("V-101",ICON.vendor(),"Battery pickup",`<div class="ph-lang"><i class="on">EN</i><i>हिंदी</i></div>`+rows([["Source","E-rickshaw"],["Weight","30.2 kg"],["Photo + label","✓ ✓"],["Paid to driver","₹1,830 UPI"]])+`<div class="ph-btn">Save pickup · 52 s</div>`);
+    case 2: return app("Y-02",ICON.yard(),"Yard weigh-in",rows([["Pickup","30.2 kg"],["Yard","30.0 kg"],["Difference","−0.7% ✓",C.forest]])+`<div class="ph-pay"><span>Pay V-101 today</span><b>₹2,070</b><small>₹67 + ₹2 match × 30 kg · UPI</small></div>`);
+    case 3: return `<div class="ph-app"><div class="ph-bar">${ICON.logo()}<b>LeadLoop</b><span>Y-02</span></div><div class="ph-body"><div class="ph-slip"><small>Manifest</small><b>MF-Y02-261122</b><small>Y-02 → recycler R-302 · truck DL 1L AB 4021</small></div>${["LL-0021","LL-0009","LL-0013"].map(x=>`<div class="ph-row"><span>${ICON.qr()} ${x}</span><b>loaded ${ICN.check}</b></div>`).join("")}<div class="ph-btn">Dispatch truckload</div></div></div>`;
+    case 4: return app("R-302",ICON.recycler(),"Gate check",rows([["Yard","30.0 kg"],["Gate","29.9 kg"],["Difference","−0.3% ✓",C.forest]])+`<div class="ph-block">${ICN.tri} Over ±5%? Record flagged; the gap comes off the partner's next payment</div>`);
+    case 5: return `<div class="ph-app"><div class="ph-bar">${ICON.logo()}<b>LeadLoop</b><span>R-302</span></div><div class="ph-body"><div class="ph-slip"><small>Settlement statement</small><b>₹2,190</b><small>due 10 days after the gate check</small></div>${rows([["Partner paid by LeadLoop","₹2,070"],["LeadLoop fee ₹4/kg","₹120"],["Recycler repays","₹2,190"]])}</div></div>`;
+    case 6: return `<div class="ph-app"><div class="ph-bar">${ICON.logo()}<b>Control room</b><span>A-01</span></div><div class="ph-body">${[["red","Weight gap −12% at yard","LL-0012 · owner Y-01"],["amber","16 days at yard, target 10","LL-0011 · owner Y-02"],["amber","No yard scan for 10 days","LL-0017 · owner D-201"],["info","Monthly report ready","CPCB filing CSV"]].map(([c,a,b])=>`<div class="ph-alert ${c}"><b>${a}</b><small>${b}</small></div>`).join("")}</div></div>`;
+    default: return `<div class="ph-field">${[["👆","Big buttons","one thumb, gloves on"],["अ","Hindi or English","switch any time"],["📷","Photos, not typing","weight, label, scale"],["⏱","Under 90 s","per battery"],["📱","Any phone camera","no app to install"],["✓","Can't be reused","one QR, one battery"]].map(([e,a,b])=>`<div><span class="em">${e}</span><b>${a}</b><small>${b}</small></div>`).join("")}</div>`;
+  }
+}
+function renderStoryStage(){
+  const st=$("#story"); if(!st) return;
+  const b=BEATS[ST.i];
+  st.querySelector(".flow").innerHTML=FLOW.map(([k,l],n)=>`<div class="fl ${b.f.includes(n)?"on":""}"><span class="ic">${k==="driver"?ICON.erick():k==="truck"?`<span style="color:${C.forest};display:flex">${ICN.truck.replace('viewBox','width="30" height="30" viewBox')}</span>`:roleIcon(k)}</span><span>${l}</span></div>`).join(`<i class="arr" aria-hidden="true"></i>`);
+  st.querySelector(".screen").innerHTML=storyPhone(ST.i);
+  st.querySelector(".screen").style.animation="none"; void st.querySelector(".screen").offsetWidth; st.querySelector(".screen").style.animation="";
+  st.querySelector(".beatn").textContent=`${ST.i+1} / ${BEATS.length} · ${b.t}`;
+  const cap=st.querySelector(".cap"); cap.textContent=b[ST.lang]; cap.className="cap"+(ST.lang==="hi"?" hi":"");
+  st.querySelector(".dots").innerHTML=BEATS.map((_,n)=>`<button class="${n===ST.i?"on":n<ST.i?"d":""}" data-beat="${n}" aria-label="Beat ${n+1}"></button>`).join("");
+  st.querySelectorAll("[data-beat]").forEach(x=>x.onclick=()=>{ storyBeat(+x.dataset.beat); });
+  $("#stPlay").innerHTML = ST.playing ? "❚❚ Pause" : ST.ended ? "↺ Play again" : (ST.i===0?"▶ Play with voice":"▶ Resume");
+  if(!ST.sound) $("#stPlay").innerHTML=$("#stPlay").innerHTML.replace(" with voice","");
+  $("#stEnd").classList.toggle("hidden",!ST.ended);
+}
+function viewStory(app){
+  const sp=canSpeak();
+  app.innerHTML=`${backBtn()}<div id="story" class="story">
+   <div class="st-head"><h1>LeadLoop in 45 seconds</h1>
+    <div class="st-ctl"><div class="lang"><button data-sl="en" class="${ST.lang==="en"?"on":""}">EN</button><button data-sl="hi" class="${ST.lang==="hi"?"on":""}">हिंदी</button></div>
+     ${sp?`<button class="hbtn2" id="stSnd" aria-pressed="${ST.sound}">${ST.sound?"🔊 Voice on":"🔇 Voice off"}</button>`:""}</div></div>
+   <div class="flow" aria-hidden="true"></div>
+   <div class="st-main"><div class="phone"><div class="notch"></div><div class="screen"></div></div>
+    <div class="st-side"><div class="beatn"></div><p class="cap" aria-live="polite"></p><div class="dots"></div>
+     <div class="row wrapr" style="gap:8px;margin-top:14px"><button class="btn hv" id="stPlay" style="width:auto;padding:10px 22px;margin:0"></button><button class="btn small sec" id="stNext" style="margin:0">Next ›</button></div>
+     <div id="stEnd" class="hidden sheet tight" style="margin-top:14px"><b>See it for real</b><p class="small" style="margin:4px 0 10px">Every step above is a working screen in this app.</p>
+      <button class="btn small" id="stTry" style="margin:0 6px 6px 0">Try it yourself, step by step</button><button class="btn small sec" id="stScreens" style="margin:0 6px 6px 0">See the real screens (8 stops)</button></div>
+     ${sp?"":`<p class="small muted" style="margin-top:10px">This browser can't speak, so the story plays with captions only.</p>`}
+    </div></div></div>`;
+  $("#back").onclick=()=>{ storyStop(); go(S.user?homeOf():"login"); };
+  app.querySelectorAll("[data-sl]").forEach(x=>x.onclick=()=>{ ST.lang=x.dataset.sl; try{localStorage.setItem("ll_story_lang",ST.lang);}catch(e){} app.querySelectorAll("[data-sl]").forEach(y=>y.classList.toggle("on",y===x)); storyBeat(ST.i); });
+  if($("#stSnd")) $("#stSnd").onclick=()=>{ ST.sound=!ST.sound; try{localStorage.setItem("ll_story_sound",ST.sound?"1":"0");}catch(e){} $("#stSnd").textContent=ST.sound?"🔊 Voice on":"🔇 Voice off"; $("#stSnd").setAttribute("aria-pressed",ST.sound); storyBeat(ST.i); };
+  $("#stPlay").onclick=()=>{ if(ST.playing){ storyStop(); renderStoryStage(); return; } ST.playing=true; storyBeat(ST.ended?0:ST.i); };
+  $("#stNext").onclick=()=>storyBeat((ST.i+1)%BEATS.length);
+  $("#stTry").onclick=()=>{ storyStop(); demoStart(); demoGo(1); };
+  $("#stScreens").onclick=()=>{ storyStop(); tourStart(); };
+  renderStoryStage();
+}
+function storyStart(){ closeModal(); storyStop(); ST.i=0; ST.ended=false; ST.playing=true; S.view="story"; render(); storyBeat(0); }
 
 $("#logoBtn").onclick=()=>{ if(S.user) go(homeOf()); else go("login"); };
 S.pendingId = readHash();
 render();
 initDB().then(()=>{});
 /* once records arrive, honour a #LL-xxxx deep link */
-const wantsTour = () => (location.hash||"").toLowerCase()==="#tour";
-window.addEventListener("hashchange",()=>{ if(wantsTour()&&!TT.on&&S.batteries.size) tourStart(); });
-(function waitHash(){ if(S.dbState==="ready"&&S.batteries.size){ if(wantsTour()) return tourStart(); if(S.pendingId&&S.user) takeHash(); else if(S.pendingId) render(); return; } if(S.dbState==="none"||S.dbState.startsWith("error")) return; setTimeout(waitHash,250); })();
+const hashIs = h => (location.hash||"").toLowerCase()===h;
+const wantsTour = () => hashIs("#screens");
+const openStory = () => { ST.i=0; ST.playing=false; ST.ended=false; S.view="story"; render(); };
+window.addEventListener("hashchange",()=>{ if(!S.batteries.size) return; if(wantsTour()&&!TT.on) tourStart(); else if(hashIs("#tour")||hashIs("#story")) openStory(); });
+(function waitHash(){ if(S.dbState==="ready"&&S.batteries.size){ if(wantsTour()) return tourStart(); if(hashIs("#tour")||hashIs("#story")) return openStory(); if(S.pendingId&&S.user) takeHash(); else if(S.pendingId) render(); return; } if(S.dbState==="none"||S.dbState.startsWith("error")) return; setTimeout(waitHash,250); })();
 </script>
 </body>
 </html>
