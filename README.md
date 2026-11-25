@@ -72,9 +72,11 @@ storage now says so instead of dropping records silently.
 
 ## Run it locally
 
-Double-click `index.html` for a pitch with no network: it renders and the whole
-demo works from `file://`. Camera, geolocation and clipboard access need a real
-origin, so use a server when you want to scan with a phone:
+Double-click `index.html` (Chrome or Edge) for a pitch with no network:
+everything it needs is inside the file. Camera, geolocation and clipboard access
+need a real origin, so use a server when you want to scan with a phone. Some
+browsers block `localStorage` on `file://`; the app still runs, but records then
+last only for that session:
 
 ```bash
 python -m http.server 8000

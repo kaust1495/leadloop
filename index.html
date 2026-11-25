@@ -3059,7 +3059,7 @@ tfoot td{background:var(--paper-2)}
 .atk .try b{color:var(--saffronInk)}
 .atk .ctr{font-size:13.5px;border-top:1px dashed var(--line);padding-top:8px}
 .atk .ctr b{color:var(--forest)}
-.atk .see{margin-top:7px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8C8271}
+.atk .see{margin-top:7px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
 
 @media print{
   @page{size:A4;margin:12mm 10mm}
@@ -7093,12 +7093,19 @@ function qrBaseWarn(){
   if(/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i.test(b)) return "Phones can't open localhost. Put this computer's LAN address instead, like http://192.168.1.24:8000/.";
   return "";
 }
-function setQrBase(v){ S.qrBase=String(v||"").trim().replace(/#.*$/,""); try{ localStorage.setItem(QR_BASE_KEY,S.qrBase); }catch(e){} }
+function setQrBase(v){
+  let b=String(v||"").trim().replace(/#.*$/,"");
+  /* a bare 192.168.1.24:8000 is what people type: give it a scheme so phones open it */
+  if(b && !/^https?:\/\//i.test(b)) b="http://"+b.replace(/^[a-z][a-z0-9+.-]*:\/\//i,"").replace(/^\/+/,"");
+  S.qrBase=b; try{ localStorage.setItem(QR_BASE_KEY,S.qrBase); }catch(e){}
+}
 function viewQRSheet(app){
   const all=[...S.batteries.values()].sort((a,c)=>a.id.localeCompare(c.id));
   const fresh=all.filter(b=>b.status==="unused"), used=all.filter(b=>b.status!=="unused");
   const card=b=>`<div class="qrc ${b.status==="unused"?"fresh":""}">${svgQR(qrHref(b.id))}<div>${sticker(b.id,1)}</div><div>${statusMark(b.status)}</div></div>`;
-  const base=qrBase(), warn=qrBaseWarn();
+  const base=qrBase(), warn=qrBaseWarn(),
+    fallback = STANDALONE ? `Leave it blank to use the address this page was opened from (${esc(APP_URL)}).`
+      : "This copy has no web address of its own, so until you set one the codes point at the published copy.";
   app.innerHTML=`${backBtn()}<h1 style="margin-top:4px">QR stickers</h1>
   <p class="sub">Each code holds a web address plus the battery ID, so a phone's camera app opens that battery directly. The app reads the same codes with Scan battery QR.</p>
   <div class="qr-print-head"><b>LeadLoop sticker set</b> · codes open <b>${esc(base||"no address set")}</b> · ${all.length} codes · printed ${esc(fmtD(new Date().toISOString()))}</div>
@@ -7107,7 +7114,7 @@ function viewQRSheet(app){
    <div class="row"><input class="t" id="qrBase" value="${esc(S.qrBase||"")}" placeholder="http://192.168.1.24:8000/" inputmode="url" autocomplete="off" spellcheck="false">
     <button class="btn small sec" id="qrUsePage" style="margin:0">Use this page's address</button>
     <button class="btn small" id="qrPrint" style="margin:0">Print sticker sheet</button></div>
-   <p class="hint">For a pitch with no internet, run this file from this computer: <code>python -m http.server 8000</code> in the project folder. Then put the address <code>ipconfig</code> shows for this computer here, like <code>http://192.168.1.24:8000/</code>. Phones on the same Wi-Fi open the stickers with no internet at all. Leave it blank to use the address this page was opened from (${esc(APP_URL)}).</p>
+   <p class="hint">For a pitch with no internet, run this file from this computer: <code>python -m http.server 8000</code> in the project folder. Then put the address <code>ipconfig</code> shows for this computer here, like <code>http://192.168.1.24:8000/</code>. Phones on the same Wi-Fi open the stickers with no internet at all. ${fallback}</p>
    ${warn?`<div class="banner warn" style="margin:10px 0 0">${esc(warn)}</div>`:""}
    <p class="hint">Printing gives A4 sheets, three stickers across with cut lines. Stick one on each battery before the pickup.</p></div>
   <h2>Fresh stickers (${fresh.length}): use for a live pickup</h2><div class="qrgrid">${fresh.map(card).join("")||'<p class="muted">All used.</p>'}</div>
