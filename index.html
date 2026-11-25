@@ -3327,6 +3327,9 @@ function modal(html,wide){ $("#modalRoot").innerHTML = `<div class="overlay" id=
 function closeModal(){ $("#modalRoot").innerHTML=""; }
 const emptyHTML = (mark,title,body) => `<div class="empty"><div class="e">${mark}</div><b>${esc(title)}</b><p class="small muted" style="margin:4px 0 0">${esc(body)}</p></div>`;
 
+/* every modal's close button is wired here, so no inline handler is needed */
+document.addEventListener("click",e=>{ const c=e.target.closest("[data-close]"); if(c) closeModal(); });
+
 /* ---------- DB ---------- */
 const COLS = {batteries:"batteries",payouts:"payouts",truckloads:"trucks",settlements:"settlements",partners:"partners",audit:"audit",reviews:"reviews"};
 /* Outside Claude (e.g. on Vercel) the page runs on a browser-local copy of the demo data */
@@ -3700,7 +3703,7 @@ function wireScan(){
     const bs=$("#bScan"); bs.classList.add("busy"); bs.querySelector("span:nth-child(2)").textContent="Reading the QR…";
     let txt=null; try{ txt=await decodeQRFile(f); }catch(e){ txt=null; }
     let m=null; try{ m = txt && decodeURIComponent(txt).toUpperCase().match(ID_RE); }catch(e){ m=null; }
-    if(!m){ render(); modal(`<h2>Couldn't read the QR</h2><p>Hold the phone 15–25 cm from the sticker, keep it flat and in focus, and try again. Or simulate the scan with a demo ID.</p><button class="btn" onclick="closeModal()">Try again</button>`); return; }
+    if(!m){ render(); modal(`<h2>Couldn't read the QR</h2><p>Hold the phone 15–25 cm from the sticker, keep it flat and in focus, and try again. Or simulate the scan with a demo ID.</p><button class="btn" data-close>Try again</button>`); return; }
     routeBattery(m[0]);
   };
   $("#bSim").onclick=()=>{ startGPS(); S.scanAt=Date.now(); simulatePicker(); };
@@ -3720,16 +3723,16 @@ function simulatePicker(){
    <p class="small muted">Stickers that fit your role right now</p><div class="chips">${sug.map(btn).join("")||'<span class="muted small">None right now</span>'}</div>
    <details style="margin-top:14px"><summary class="small muted">Other stickers, to see what gets blocked</summary><div class="chips" style="margin-top:8px">${rest.map(btn).join("")}</div></details>
    <label class="f">Or type an ID</label><div class="row"><input class="t" id="simId" placeholder="LL-0021"><button class="btn small" id="simGo" style="margin:0;min-height:54px">Open</button></div>
-   <button class="btn ghost" onclick="closeModal()">Cancel</button>`);
+   <button class="btn ghost" data-close>Cancel</button>`);
   document.querySelectorAll("[data-sim]").forEach(b=>b.onclick=()=>{ closeModal(); routeBattery(b.dataset.sim); });
-  $("#simGo").onclick=()=>{ const v=($("#simId").value||"").toUpperCase().match(ID_RE); closeModal(); if(v) routeBattery(v[0]); else modal(`<h2>Not a LeadLoop ID</h2><p>IDs look like LL-0021.</p><button class="btn" onclick="closeModal()">OK</button>`); };
+  $("#simGo").onclick=()=>{ const v=($("#simId").value||"").toUpperCase().match(ID_RE); closeModal(); if(v) routeBattery(v[0]); else modal(`<h2>Not a LeadLoop ID</h2><p>IDs look like LL-0021.</p><button class="btn" data-close>OK</button>`); };
 }
 /* decides what a battery opens for the current role; quiet = no blocking pop-ups (role switch, deep link, demo) */
 function routeBattery(id,opt){
   const quiet=opt&&opt.quiet;
   const b=S.batteries.get(id), role=S.user.role;
-  const stop=html=>{ if(quiet){ S.view="timeline"; render(); } else modal(html+`<button class="btn" onclick="closeModal()">OK</button>`); };
-  if(!b){ if(!quiet) modal(`<h2>Not a LeadLoop sticker</h2><p>${sticker(id,1)} is not in the sticker registry.</p><button class="btn" onclick="closeModal()">OK</button>`); else go(homeOf()); return; }
+  const stop=html=>{ if(quiet){ S.view="timeline"; render(); } else modal(html+`<button class="btn" data-close>OK</button>`); };
+  if(!b){ if(!quiet) modal(`<h2>Not a LeadLoop sticker</h2><p>${sticker(id,1)} is not in the sticker registry.</p><button class="btn" data-close>OK</button>`); else go(homeOf()); return; }
   S.id=id; S.form=null;
   if(!S.scanAt||quiet) S.scanAt=Date.now();
   if(role==="vendor"||role==="dealer"){
@@ -3903,7 +3906,7 @@ async function savePickup(){
   if(miss.length){ $("#formErr").innerHTML=`<div class="banner err">${esc(L.need)} ${miss.map(esc).join(", ")}</div>`; return; }
   const btn=$("#save"); btn.disabled=true; btn.textContent="…";
   const cur=S.batteries.get(S.id);
-  if(!cur||cur.status!=="unused"){ modal(`<h2>Sticker already used</h2><p>Someone registered ${esc(S.id)} a moment ago.</p><button class="btn" onclick="closeModal()">OK</button>`); go("home"); return; }
+  if(!cur||cur.status!=="unused"){ modal(`<h2>Sticker already used</h2><p>Someone registered ${esc(S.id)} a moment ago.</p><button class="btn" data-close>OK</button>`); go("home"); return; }
   const gps = S.gpsResult===undefined ? await Promise.race([S.gpsPromise||Promise.resolve(null),new Promise(r=>setTimeout(()=>r(null),1500))]) : S.gpsResult;
   const at=new Date().toISOString(), dur=Math.round((Date.now()-S.scanAt)/1000), sale=+f.sale;
   const payF = dealer ? {exchange:true} : {paidToDriverInr:paid,driverUpiRef:upi};
@@ -3988,7 +3991,7 @@ async function saveYard(){
   const w=parseFloat(f.weight), miss=[];
   if(!(w>0)) miss.push("weight"); if(!f.photo) miss.push("photo"); if(!f.condition) miss.push("condition"); if((f.upi||"").trim().length<6) miss.push("UPI reference");
   if(miss.length){ $("#formErr").innerHTML=`<div class="banner err">Please add: ${miss.join(", ")}</div>`; return; }
-  const cur=S.batteries.get(S.id); if(!cur){ toast("That record is no longer here. Reload to continue."); return go("home"); } if(cur.status!=="picked_up"){ modal(`<h2>Already received</h2><button class="btn" onclick="closeModal()">OK</button>`); return; }
+  const cur=S.batteries.get(S.id); if(!cur){ toast("That record is no longer here. Reload to continue."); return go("home"); } if(cur.status!=="picked_up"){ modal(`<h2>Already received</h2><button class="btn" data-close>OK</button>`); return; }
   $("#save").disabled=true;
   if(!S.gpsPromise) startGPS();
   const gps=await Promise.race([S.gpsPromise,new Promise(r=>setTimeout(()=>r(null),1500))]);
@@ -4404,7 +4407,7 @@ function viewAdmin(app){
   const nav=app.querySelector(".crnav"), onTab=nav&&nav.querySelector("button.on");
   if(onTab&&nav.scrollWidth>nav.clientWidth+1) nav.scrollLeft=Math.max(0,onTab.offsetLeft-(nav.clientWidth-onTab.offsetWidth)/2);
 }
-function crHead(t,sub,right){ return `<div class="crhead"><div><h1>${t}</h1>${sub?`<p class="sub" style="margin:4px 0 0">${sub}</p>`:""}</div>${right||""}</div>`; }
+function crHead(t,sub,right){ return `<div class="crhead"><div><h1>${esc(t)}</h1>${sub?`<p class="sub" style="margin:4px 0 0">${esc(sub)}</p>`:""}</div>${right||""}</div>`; }
 function crAlerts(AL,M){
   const all=[...S.batteries.values()], inC=all.filter(b=>b.status==="picked_up"||b.status==="at_yard");
   const atY=all.filter(b=>b.status==="at_yard"), oldest=Math.max(0,...atY.map(custodyDays));
@@ -4543,7 +4546,7 @@ function crSettings(){
 function wireAdmin(tab,AL){
   if(tab==="alerts") document.querySelectorAll("[data-rev]").forEach(b=>b.onclick=()=>{
     const a=AL.find(x=>x.key===b.dataset.rev);
-    modal(`<h2>Mark reviewed</h2><p class="small">${esc(a.title)}</p><label class="f" for="rvN">What was done</label><input class="t" id="rvN" placeholder="e.g. Called the yard; dispatch booked for Monday"><div id="rvE"></div><button class="btn" id="rvGo">Mark reviewed</button><button class="btn ghost" onclick="closeModal()">Cancel</button>`);
+    modal(`<h2>Mark reviewed</h2><p class="small">${esc(a.title)}</p><label class="f" for="rvN">What was done</label><input class="t" id="rvN" placeholder="e.g. Called the yard; dispatch booked for Monday"><div id="rvE"></div><button class="btn" id="rvGo">Mark reviewed</button><button class="btn ghost" data-close>Cancel</button>`);
     $("#rvGo").onclick=async()=>{ const note=($("#rvN").value||"").trim(); if(note.length<3){ $("#rvE").innerHTML=`<div class="banner err">Add a short note.</div>`; return; }
       const id=a.key.replace(/[\/:]/g,"_");
       try{ await saveDoc("reviews/"+id,{key:a.key,at:new Date().toISOString(),by:S.user.id,note}); }catch(e){ $("#rvE").innerHTML=`<div class="banner err">${errText(e)}</div>`; return; }
@@ -4600,10 +4603,10 @@ function wireAdmin(tab,AL){
       S.fix={id:f.id,field:f.field,val:"",reason:"",note:""}; toast("Correction saved"); render();
     };
   }
-  if(tab==="settings"&&$("#rst")) $("#rst").onclick=()=>{ modal(`<h2>Reset demo data?</h2><p>Every record on this device goes back to the starting demo data. Records made here are deleted.</p><button class="btn" id="rsGo">Reset demo data</button><button class="btn ghost" onclick="closeModal()">Cancel</button>`); $("#rsGo").onclick=resetLocalData; };
+  if(tab==="settings"&&$("#rst")) $("#rst").onclick=()=>{ modal(`<h2>Reset demo data?</h2><p>Every record on this device goes back to the starting demo data. Records made here are deleted.</p><button class="btn" id="rsGo">Reset demo data</button><button class="btn ghost" data-close>Cancel</button>`); $("#rsGo").onclick=resetLocalData; };
   /* the ±5% tolerance is fixed in this pitch build: no settings write path */
 }
-function csvCell(v){ v = v==null ? "" : String(v); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
+function csvCell(v){ v = v==null ? "" : String(v); if(/^[=+\-@\t\r]/.test(v) && !/^-?\d+(\.\d+)?$/.test(v)) v = "'"+v; return /[",\n\r]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
 function buildCSV(rows){
   const H=["battery_id","status","channel","source","brand","vehicle_masked","died_when","leaking_at_pickup","picked_up_by","picked_up_at","pickup_gps","pickup_kg","paid_to_driver_inr","driver_upi_ref","batteries_in_sale","collection_centre","recycler_id","yard_weighed_in_at","yard_kg","yard_condition","yard_vs_pickup_pct","partner_payout_id","partner_paid_inr","manifest_no","dispatched_at","recycler_gate_at","recycler_kg","gate_vs_yard_pct","flagged","flag_details","days_in_custody","handoffs_logged","photos_logged","leadloop_fee_inr"];
   const out=[H.join(",")];
