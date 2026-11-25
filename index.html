@@ -3243,7 +3243,7 @@ const S = {
 };
 try{ const u = localStorage.getItem("ll_user"); if(u) S.user = USERS.find(x=>x.id===u)||null; }catch(e){}
 try{ const l = localStorage.getItem("ll_lang"); if(l==="hi"||l==="en") S.lang=l; }catch(e){}
-try{ const d = JSON.parse(localStorage.getItem("ll_demo")||"null"); if(d&&typeof d.step==="number") S.demo=Object.assign(S.demo,d); }catch(e){}
+try{ const d = JSON.parse(localStorage.getItem("ll_demo")||"null"); if(d&&typeof d==="object") S.demo={on:!!d.on,step:Number.isFinite(+d.step)?Math.max(0,Math.min(99,Math.floor(+d.step))):0,id:typeof d.id==="string"?d.id:null}; }catch(e){}
 if(S.user) S.view = S.user.role==="admin" ? "admin" : "home";
 
 /* ---------- helpers ---------- */
@@ -3335,7 +3335,7 @@ function localDB(seed){
   let store={};
   try{ store=JSON.parse(localStorage.getItem(LOCAL_KEY)||"null")||null; }catch(e){ store=null; }
   if(!store){ store={}; for(const [c,docs] of Object.entries(seed)) for(const [id,d] of Object.entries(docs)) store[c+"/"+id]=d; }
-  const persist=()=>{ try{ localStorage.setItem(LOCAL_KEY,JSON.stringify(store)); }catch(e){} };
+  const persist=()=>{ try{ localStorage.setItem(LOCAL_KEY,JSON.stringify(store)); }catch(e){ if(!S.storeFull){ S.storeFull=true; try{ toast("This device is out of space: recent changes may not be kept."); }catch(x){} } } };
   persist();
   const subs=[];
   const snap=col=>({metadata:{fromCache:false},docs:Object.keys(store).filter(p=>p.split("/")[0]===col&&p.split("/").length===2).map(p=>({id:p.split("/")[1],exists:true,data:()=>JSON.parse(JSON.stringify(store[p]))}))});
@@ -3508,8 +3508,8 @@ async function decodeQRFile(file){
 function pickFile(inputId){
   return new Promise(res=>{
     const inp=$("#"+inputId); inp.value="";
-    const on=()=>{ inp.removeEventListener("change",on); res(inp.files&&inp.files[0]||null); };
-    inp.addEventListener("change",on); inp.click();
+    const on=()=>{ inp.removeEventListener("change",on); inp.removeEventListener("cancel",on); res(inp.files&&inp.files[0]||null); };
+    inp.addEventListener("change",on); inp.addEventListener("cancel",on); inp.click();
   });
 }
 function svgQR(text,cell=4){
@@ -3552,7 +3552,7 @@ function go(view,ref){
 }
 
 /* ---------- deep links: QR codes encode APP_URL#LL-xxxx ---------- */
-const readHash = () => { const m=decodeURIComponent(location.hash||"").toUpperCase().match(ID_RE); return m?m[0]:null; };
+const readHash = () => { try{ const m=decodeURIComponent(location.hash||"").toUpperCase().match(ID_RE); return m?m[0]:null; }catch(e){ return null; } };
 function takeHash(){
   const id=readHash(); if(!id) return;
   if(!S.user||S.dbState!=="ready"||!S.batteries.size){ S.pendingId=id; render(); return; }
@@ -3590,7 +3590,7 @@ function renderDemo(){
   const el=$("#demoRoot");
   if(!S.demo.on){ el.innerHTML=""; return; }
   if(!S.demo.id && S.batteries.size){ S.demo.id=freshIds()[0]||null; saveDemo(); }
-  const i=S.demo.step, s=DEMO[i], b=S.batteries.get(S.demo.id), id=S.demo.id||"a fresh sticker";
+  const i=Math.max(0,Math.min(DEMO.length-1,S.demo.step|0)), s=DEMO[i], b=S.batteries.get(S.demo.id), id=S.demo.id||"a fresh sticker";
   const isDone = s.done ? !!s.done(b) : false;
   const who = s.u ? (S.user&&S.user.id===s.u ? `Stay as ${s.u}` : `Switch to ${s.u}`) : "";
   const label = s.btn ? s.btn() : `${who}${i===1||i===2||i===5?" and open "+id:""}`;
@@ -3699,7 +3699,7 @@ function wireScan(){
     const f=await pickFile("fileScan"); if(!f) return;
     const bs=$("#bScan"); bs.classList.add("busy"); bs.querySelector("span:nth-child(2)").textContent="Reading the QR…";
     let txt=null; try{ txt=await decodeQRFile(f); }catch(e){ txt=null; }
-    const m = txt && decodeURIComponent(txt).toUpperCase().match(ID_RE);
+    let m=null; try{ m = txt && decodeURIComponent(txt).toUpperCase().match(ID_RE); }catch(e){ m=null; }
     if(!m){ render(); modal(`<h2>Couldn't read the QR</h2><p>Hold the phone 15–25 cm from the sticker, keep it flat and in focus, and try again. Or simulate the scan with a demo ID.</p><button class="btn" onclick="closeModal()">Try again</button>`); return; }
     routeBattery(m[0]);
   };
@@ -3917,7 +3917,8 @@ async function savePickup(){
   S.done={id:S.id,dur,kind:"pickup"}; S.form=null; S.view="done"; render();
 }
 function viewDone(app){
-  const L=T[S.lang], d=S.done||{};
+  if(!S.done||!S.done.id){ S.view="home"; return render(); }
+  const L=T[S.lang], d=S.done;
   const pick = d.kind==="pickup", r=66, Lc=2*Math.PI*r, frac=pick?Math.min((d.dur||0)/90,1):1, late=pick&&d.dur>90;
   const b=S.batteries.get(d.id), po=d.payoutId&&S.payouts.get(d.payoutId);
   const resultRows = b ? (pick
@@ -3987,7 +3988,7 @@ async function saveYard(){
   const w=parseFloat(f.weight), miss=[];
   if(!(w>0)) miss.push("weight"); if(!f.photo) miss.push("photo"); if(!f.condition) miss.push("condition"); if((f.upi||"").trim().length<6) miss.push("UPI reference");
   if(miss.length){ $("#formErr").innerHTML=`<div class="banner err">Please add: ${miss.join(", ")}</div>`; return; }
-  const cur=S.batteries.get(S.id); if(cur.status!=="picked_up"){ modal(`<h2>Already received</h2><button class="btn" onclick="closeModal()">OK</button>`); return; }
+  const cur=S.batteries.get(S.id); if(!cur){ toast("That record is no longer here. Reload to continue."); return go("home"); } if(cur.status!=="picked_up"){ modal(`<h2>Already received</h2><button class="btn" onclick="closeModal()">OK</button>`); return; }
   $("#save").disabled=true;
   if(!S.gpsPromise) startGPS();
   const gps=await Promise.race([S.gpsPromise,new Promise(r=>setTimeout(()=>r(null),1500))]);
@@ -4229,7 +4230,7 @@ function viewTimeline(app){
 }
 async function saveGate(id){
   const w=parseFloat(S.form.weight); if(!(w>0)){ $("#formErr").innerHTML=`<div class="banner err">Enter your weight.</div>`; return; }
-  const cur=S.batteries.get(id); if(cur.status!=="at_yard"){ render(); return; }
+  const cur=S.batteries.get(id); if(!cur||cur.status!=="at_yard"){ render(); return; }
   $("#close").disabled=true;
   const t=thr();
   startGPS(); const gps=await Promise.race([S.gpsPromise,new Promise(r=>setTimeout(()=>r(null),1500))]);
@@ -4391,6 +4392,7 @@ function viewAdmin(app){
   else if(tab==="reports") body=crReports();
   else if(tab==="audit") body=crAudit();
   else if(tab==="settings") body=crSettings();
+  if(!body){ S.crTab="alerts"; body=crAlerts(AL,M); }
   app.innerHTML=`${slowNote()}<div class="cr"><nav class="crnav" aria-label="Control room">${navGroups.map(([lab,items])=>`<div class="crgroup"><span class="crlab">${lab}</span>${items.map(([k,t,n])=>`<button data-tab="${k}" class="${tab===k?"on":""}">${t}${n?`<span class="cnt">${n}</span>`:""}</button>`).join("")}</div>`).join("")}</nav><div>${body}</div></div>`;
   app.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{ const k=b.dataset.tab; if(k==="qr") return go("qrsheet"); if(k==="how") return go("how"); if(k==="scan"){ SD.i=0; SD.paused=false; return go("scan"); } S.crTab=k; render(); });
   app.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ S.crTab=b.dataset.go; render(); });
