@@ -142,3 +142,25 @@ and the same sweep was repeated on the deployed origin under the live CSP.
   inline handlers are gone, but it breaks on every hand edit, so the
   origin allow-list is the honest middle ground.
 - **Rate limiting / DMARC** — no server and no mail domain in this repo.
+
+## Round 2 — offline, print, and the cheat screen
+
+Three follow-ups from the ranked list landed after the audit, all inside
+`index.html`:
+
+- **Offline.** jsQR 1.4.0 and qrcode-generator 1.4.4 are embedded in the page,
+  and the Bricolage Grotesque / Mukta subsets are `data:` URIs in the font
+  block. The page now makes no network request at all: verified as zero
+  resource entries, zero console messages, and `document.fonts` showing the
+  embedded Latin and Devanagari faces loaded. Supersedes finding 23 (nothing to
+  preload) and drops the CDN origin from the CSP.
+- **Print.** The sticker sheet has an address field (defaults to the page's own
+  origin, remembered in `ll_qr_base`, warns on `file://` and `localhost`) and
+  prints A4: `@page` with 12 mm / 10 mm margins, three 63 mm columns, 34 mm
+  codes, 12 stickers per page, three pages for 32.
+- **What stops cheating.** A new screen (control room → Demo, the Demo menu, or
+  How it works) maps twelve attacks to the counter for each, then lists what the
+  design does not stop.
+
+The CSP is now origin-free apart from `'self'` and `data:`/`blob:` for images
+and fonts; `'unsafe-inline'` stays for the inline scripts, as above.
