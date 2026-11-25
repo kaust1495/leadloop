@@ -124,6 +124,14 @@ re-verified across every screen.
   font preload.
 - **Phase 5 — repo hygiene:** README accuracy, ignore rules, copy checks.
 
+## Status
+
+All five phases landed and are live: `e1c46d6` (P0), `6426df7` (security),
+`ae0732d` (accessibility), `7d10a71` (paint and performance), `57ddaea` (repo).
+Each phase was checked on its own, then all 22 view states were swept at 375 px
+and 1440 px — no console messages, no empty screens, no horizontal overflow —
+and the same sweep was repeated on the deployed origin under the live CSP.
+
 ## Deliberately not changed
 
 - **`Access-Control-Allow-Origin: *`** — Vercel's static default; the site
