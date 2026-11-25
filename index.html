@@ -68,6 +68,8 @@ h3{font-size:15px;margin:0 0 6px}
 p.sub{color:var(--muted);margin:0 0 14px;font-size:15px;max-width:60ch}
 .muted{color:var(--muted)} .small{font-size:13px}
 .hidden{display:none!important}
+.skip{position:absolute;left:-9999px;top:0;z-index:2000}
+.skip:focus{left:8px;top:8px;padding:10px 14px;background:var(--card,#fff);color:var(--ink,#111);border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.22);font-weight:700}
 
 /* ---------- three surfaces: sheet (records), slip (money/manifests), panel (live scans) ---------- */
 .sheet{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sheet);padding:16px;margin:12px 0}
@@ -731,11 +733,12 @@ tfoot td{background:var(--paper-2)}
 </style>
 </head>
 <body>
+<a class="skip" href="#app">Skip to content</a>
 <header class="top"><div class="in">
   <button class="logo" id="logoBtn" aria-label="LeadLoop home"><svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="8" width="24" height="17" rx="4" fill="none" stroke="#fff" stroke-width="2.4"/><rect x="7" y="4" width="5" height="4" rx="1" fill="#fff"/><rect x="18" y="4" width="5" height="4" rx="1" fill="#fff"/><path d="M9 17.5a6 6 0 0 1 10.5-3.5M21 15.5a6 6 0 0 1-10.5 3.5" fill="none" stroke="#d8f04a" stroke-width="2.4" stroke-linecap="round"/></svg>LeadLoop</button>
   <div class="hd-actions" id="hdActions"></div>
 </div></header>
-<main class="wrap" id="app"><div class="row" style="margin-top:30px;justify-content:center"><div class="spinner"></div><span class="muted">Loading…</span></div></main>
+<main class="wrap" id="app" tabindex="-1"><div class="row" style="margin-top:30px;justify-content:center"><div class="spinner"></div><span class="muted">Loading…</span></div></main>
 <input type="file" id="fileScan" accept="image/*" capture="environment" class="hidden">
 <input type="file" id="filePhoto" accept="image/*" capture="environment" class="hidden">
 <div id="demoRoot"></div>
@@ -3323,12 +3326,28 @@ function tile(o){
   return `<${tag} class="tilem ${o.tone||""}" ${o.go?`data-go="${esc(o.go)}"`:""}><span class="l">${esc(o.l)}</span><span class="v">${o.v}${o.u?`<small>${esc(o.u)}</small>`:""}</span>${bar}<span class="c">${o.c||""}</span></${tag}>`;
 }
 function toast(msg){ const d=document.createElement("div"); d.className="toast"; d.setAttribute("role","status"); d.textContent=msg; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
-function modal(html,wide){ $("#modalRoot").innerHTML = `<div class="overlay" id="ov"><div class="modal${wide?" wide":""}" role="dialog" aria-modal="true">${html}</div></div>`; $("#ov").addEventListener("click",e=>{ if(e.target.id==="ov") closeModal(); }); }
-function closeModal(){ $("#modalRoot").innerHTML=""; }
+let _modalReturn=null;
+function modal(html,wide){ _modalReturn=document.activeElement; $("#modalRoot").innerHTML = `<div class="overlay" id="ov"><div class="modal${wide?" wide":""}" role="dialog" aria-modal="true" tabindex="-1">${html}</div></div>`; const ov=$("#ov"); if(!ov) return; ov.addEventListener("click",e=>{ if(e.target.id==="ov") closeModal(); }); const m=ov.querySelector(".modal"), f=m.querySelector('input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),a[href]'); try{ (f||m).focus(); }catch(e){} }
+function closeModal(){ $("#modalRoot").innerHTML=""; try{ if(_modalReturn&&_modalReturn.isConnected) _modalReturn.focus(); }catch(e){} _modalReturn=null; }
 const emptyHTML = (mark,title,body) => `<div class="empty"><div class="e">${mark}</div><b>${esc(title)}</b><p class="small muted" style="margin:4px 0 0">${esc(body)}</p></div>`;
 
 /* every modal's close button is wired here, so no inline handler is needed */
 document.addEventListener("click",e=>{ const c=e.target.closest("[data-close]"); if(c) closeModal(); });
+/* Escape closes a dialog, Tab stays inside it, and Enter/Space opens a clickable row */
+document.addEventListener("keydown",e=>{
+  const ov=document.getElementById("ov");
+  if(ov){
+    if(e.key==="Escape"){ e.preventDefault(); closeModal(); return; }
+    if(e.key!=="Tab") return;
+    const f=[...ov.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetParent!==null);
+    if(!f.length){ e.preventDefault(); return; }
+    const first=f[0], last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+    return;
+  }
+  if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("tr.click[data-open],tr.click[data-settle]")){ e.preventDefault(); e.target.click(); }
+});
 
 /* ---------- DB ---------- */
 const COLS = {batteries:"batteries",payouts:"payouts",truckloads:"trucks",settlements:"settlements",partners:"partners",audit:"audit",reviews:"reviews"};
@@ -3609,11 +3628,18 @@ function renderDemo(){
   $("#dmGo").onclick=()=> isDone&&i<DEMO.length-1 ? demoGo(i+1) : demoGo(i);
 }
 
+/* post-render a11y pass: name each chip group and make wide tables keyboard-scrollable */
+function decorate(root){
+  root.querySelectorAll(".chips").forEach(g=>{ const p=g.previousElementSibling; if(p&&p.classList.contains("f")){ g.setAttribute("role","group"); g.setAttribute("aria-label",(p.textContent||"").trim()); } });
+  root.querySelectorAll(".tablewrap").forEach(el=>{ if(el.scrollWidth>el.clientWidth+1){ el.setAttribute("tabindex","0"); el.setAttribute("aria-label","Scrollable table"); } else el.removeAttribute("tabindex"); });
+}
+
 /* ---------- router ---------- */
 function render(){
   document.body.classList.toggle("wide", ["admin","qrsheet","how"].includes(S.view));
   document.body.classList.toggle("mid", ["truck","settlement","payouts","story"].includes(S.view));
   document.body.classList.toggle("landing-on", S.view==="login");
+  document.documentElement.lang = ((S.view==="story"&&typeof ST!=="undefined"&&ST.lang==="hi")||S.lang==="hi") ? "hi" : "en";
   if(S.view!=="story" && typeof ST!=="undefined" && ST.playing) storyStop();
   renderHeader(); renderDemo(); renderTour();
   if(S.timerInt && S.view!=="pickup"){ clearInterval(S.timerInt); S.timerInt=null; }
@@ -3630,7 +3656,7 @@ function render(){
   if(!S.user||v==="login") return viewLogin(app);
   if(S.dbState==="loading") { app.innerHTML=`<div class="row" style="margin-top:30px;justify-content:center"><div class="spinner"></div><span class="muted">Loading records…</span></div>`; return; }
   const V={story:viewStory,scan:viewScanDemo,home:viewHome,pickup:viewPickup,yard:viewYard,timeline:viewTimeline,admin:viewAdmin,qrsheet:viewQRSheet,done:viewDone,payouts:viewPayouts,dispatch:viewDispatch,truck:viewTruck,settlement:viewSettlement};
-  (V[v]||viewHome)(app);
+  (V[v]||viewHome)(app); decorate(app);
 }
 function slowNote(){ return S.dbState==="slow" ? `<div class="banner warn">Records may be out of date. The record store hasn't answered yet.</div>` : ""; }
 function foot(){ return `<div class="foot">${ICON.shield()}<span>LeadLoop is a neutral chain-of-custody checkpoint. Each LeadLoop yard is a registered recycler's battery collection centre, operated by LeadLoop. LeadLoop keeps the evidence trail; EPR certificates are generated by registered recyclers.</span></div>`; }
@@ -3722,7 +3748,7 @@ function simulatePicker(){
   modal(`<h2>Simulate a scan</h2>
    <p class="small muted">Stickers that fit your role right now</p><div class="chips">${sug.map(btn).join("")||'<span class="muted small">None right now</span>'}</div>
    <details style="margin-top:14px"><summary class="small muted">Other stickers, to see what gets blocked</summary><div class="chips" style="margin-top:8px">${rest.map(btn).join("")}</div></details>
-   <label class="f">Or type an ID</label><div class="row"><input class="t" id="simId" placeholder="LL-0021"><button class="btn small" id="simGo" style="margin:0;min-height:54px">Open</button></div>
+   <label class="f" for="simId">Or type an ID</label><div class="row"><input class="t" id="simId" placeholder="LL-0021"><button class="btn small" id="simGo" style="margin:0;min-height:54px">Open</button></div>
    <button class="btn ghost" data-close>Cancel</button>`);
   document.querySelectorAll("[data-sim]").forEach(b=>b.onclick=()=>{ closeModal(); routeBattery(b.dataset.sim); });
   $("#simGo").onclick=()=>{ const v=($("#simId").value||"").toUpperCase().match(ID_RE); closeModal(); if(v) routeBattery(v[0]); else modal(`<h2>Not a LeadLoop ID</h2><p>IDs look like LL-0021.</p><button class="btn" data-close>OK</button>`); };
@@ -4026,10 +4052,10 @@ function viewPayouts(app){
    ${tile({l:"Comes off next payout",v:inr(pend),tone:pend?"amber":"",c:pend?"Weight gap at a recycler gate":"No deductions waiting"})}</div>
   ${pays.length?`<h2>Latest payment</h2>${payoutSlip(pays[0])}`:""}
   <h2>Ledger</h2><p class="small muted" style="margin:-4px 0 8px">Every line opens that battery's custody trail.</p>
-  <div class="tablewrap rt"><table><thead><tr><th>Date</th><th>Battery</th><th class="num">kg</th><th class="num">Gross</th><th class="num">Deducted</th><th class="num">Paid</th><th>UPI ref</th><th>Status</th></tr></thead><tbody>
+  <div class="tablewrap rt"><table><thead><tr><th scope="col">Date</th><th scope="col">Battery</th><th scope="col" class="num">kg</th><th scope="col" class="num">Gross</th><th scope="col" class="num">Deducted</th><th scope="col" class="num">Paid</th><th scope="col">UPI ref</th><th scope="col">Status</th></tr></thead><tbody>
   ${rows.map(p=>p.kind==="deduction"
-    ?`<tr class="click" data-open="${esc(p.batteryId)}"><td class="lead">${fmtDs(p.at)} · deduction ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Gap" class="num">${kg1(p.kgGap)}</td><td data-l="Gross"></td><td data-l="Amount" class="num">− ${inr(p.amount)}</td><td data-l="Paid"></td><td data-l="Why" class="wrap">${esc(p.reason)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`
-    :`<tr class="click" data-open="${esc(p.batteryId)}"><td class="lead">${fmtDs(p.at)} · ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="kg" class="num">${kg1(p.kg)}</td><td data-l="Gross" class="num">${inr(p.gross)}</td><td data-l="Deducted" class="num">${(p.deductions||[]).length?"− "+inr(p.gross-p.net):""}</td><td data-l="Paid" class="num"><b>${inr(p.net)}</b></td><td data-l="UPI ref">${esc(p.upiRef)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="8">${S.user.role==="dealer"?emptyHTML("₹","Tagging fee only","Dealers aren't paid for batteries: the partner scrap vendor who collects them is. You earn the ₹10 tagging fee above."):emptyHTML("₹","No payouts yet","You're paid when a battery you logged is weighed in at the yard.")}</td></tr>`}
+    ?`<tr class="click" role="button" tabindex="0" data-open="${esc(p.batteryId)}"><td class="lead">${fmtDs(p.at)} · deduction ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Gap" class="num">${kg1(p.kgGap)}</td><td data-l="Gross"></td><td data-l="Amount" class="num">− ${inr(p.amount)}</td><td data-l="Paid"></td><td data-l="Why" class="wrap">${esc(p.reason)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`
+    :`<tr class="click" role="button" tabindex="0" data-open="${esc(p.batteryId)}"><td class="lead">${fmtDs(p.at)} · ${esc(p.id)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="kg" class="num">${kg1(p.kg)}</td><td data-l="Gross" class="num">${inr(p.gross)}</td><td data-l="Deducted" class="num">${(p.deductions||[]).length?"− "+inr(p.gross-p.net):""}</td><td data-l="Paid" class="num"><b>${inr(p.net)}</b></td><td data-l="UPI ref">${esc(p.upiRef)}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="8">${S.user.role==="dealer"?emptyHTML("₹","Tagging fee only","Dealers aren't paid for batteries: the partner scrap vendor who collects them is. You earn the ₹10 tagging fee above."):emptyHTML("₹","No payouts yet","You're paid when a battery you logged is weighed in at the yard.")}</td></tr>`}
   </tbody></table></div>`;
   $("#back").onclick=()=>go("home");
   app.querySelectorAll("[data-open]").forEach(el=>el.onclick=()=>{ S.id=el.dataset.open; go("timeline"); });
@@ -4083,9 +4109,9 @@ function viewTruck(app){
    <div class="tot"><span>${bs.length} batteries</span><span>${kg(t.kgAtYard)} at yard${done.length?` · ${kg(kgR)} at gate`:""}</span></div></div>
   ${(()=>{const pc=t.status==="received"?100:Math.min(95,10+80*(done.length/Math.max(1,bs.length)));return `<div class="tprog"><div class="tpbar"><i style="width:${pc}%"></i></div><div class="tprow"><span class="on">Dispatched ${esc(fmtDs(t.dispatchedAt))}</span><span class="${done.length?"on":""}">Gate ${done.length} of ${bs.length}</span><span class="${t.settlementId?"on":""}">Statement</span></div></div>`;})()}
   ${rec&&t.status!=="received"?`<div class="banner info">Scan each battery at your gate, or tap one below. The statement is made when the last one is checked.</div>`:""}
-  <div class="tablewrap rt"><table><thead><tr><th>Battery</th><th class="num">Yard kg</th><th class="num">Gate kg</th><th class="num">Gap</th><th>Status</th><th></th></tr></thead><tbody>
+  <div class="tablewrap rt"><table><thead><tr><th scope="col">Battery</th><th scope="col" class="num">Yard kg</th><th scope="col" class="num">Gate kg</th><th scope="col" class="num">Gap</th><th scope="col">Status</th><th scope="col"></th></tr></thead><tbody>
   ${bs.map(b=>{ const p=pct(b.yardKg,b.recyclerKg), bad=p!=null&&Math.abs(p)>thr();
-    return `<tr class="click" data-open="${esc(b.id)}"><td class="lead">${sticker(b.id,1)}</td><td data-l="Yard kg" class="num">${kg1(b.yardKg)}</td><td data-l="Gate kg" class="num">${b.recyclerKg!=null?kg1(b.recyclerKg):"—"}</td><td data-l="Gap" class="num" style="color:${bad?"var(--red)":"inherit"}">${p==null?"—":(p>=0?"+":"")+p.toFixed(1)+"%"}</td><td data-l="Status">${statusMark(b.status)} ${flagMark(b)}</td><td data-l="">${rec&&b.status!=="closed"?`<span class="btn small" style="margin:0">Gate check</span>`:""}</td></tr>`;}).join("")}
+    return `<tr class="click" role="button" tabindex="0" data-open="${esc(b.id)}"><td class="lead">${sticker(b.id,1)}</td><td data-l="Yard kg" class="num">${kg1(b.yardKg)}</td><td data-l="Gate kg" class="num">${b.recyclerKg!=null?kg1(b.recyclerKg):"—"}</td><td data-l="Gap" class="num" style="color:${bad?"var(--red)":"inherit"}">${p==null?"—":(p>=0?"+":"")+p.toFixed(1)+"%"}</td><td data-l="Status">${statusMark(b.status)} ${flagMark(b)}</td><td data-l="">${rec&&b.status!=="closed"?`<span class="btn small" style="margin:0">Gate check</span>`:""}</td></tr>`;}).join("")}
   </tbody></table></div>
   ${t.settlementId?`<button class="btn" id="st" style="margin-top:14px">Open settlement statement ${esc(t.settlementId)}</button>`:""}`;
   $("#back").onclick=()=>go(homeOf());
@@ -4101,7 +4127,7 @@ function viewSettlement(app){
   <div class="slip"><div class="sh"><div><div class="small muted">${esc(s.id)} · ${esc(userLabel(s.recyclerId))} owes LeadLoop</div><div class="amt">${inr2(s.total)}</div></div>${settleMark(s)}</div>
    <dl><dt>Truckload</dt><dd>${esc(s.manifestNo)} from ${esc(s.yardId)}</dd><dt>Partner payments advanced</dt><dd class="num">${inr(s.vendorPayments)}</dd><dt>LeadLoop fee · ₹${FEE_PER_KG}/kg</dt><dd class="num">${inr2(s.fee)}</dd><dt>Gate check done</dt><dd>${fmtDT(s.gateCheckedAt)}</dd><dt>Due</dt><dd>${fmtD(s.dueAt)} (gate check + ${REPAY_DAYS} days)</dd>${s.status==="repaid"?`<dt>Repaid</dt><dd>${fmtD(s.repaidAt)}, ref ${esc(s.repaidRef)}</dd>`:""}</dl>
    <div class="tot"><span>Recycler repays</span><b>${inr2(s.total)}</b></div></div>
-  <div class="tablewrap rt"><table><thead><tr><th>Battery</th><th>Partner</th><th class="num">Yard kg</th><th class="num">Gate kg</th><th class="num">Gap</th><th class="num">Partner paid</th><th class="num">Fee ₹${FEE_PER_KG}/kg</th></tr></thead><tbody>
+  <div class="tablewrap rt"><table><thead><tr><th scope="col">Battery</th><th scope="col">Partner</th><th scope="col" class="num">Yard kg</th><th scope="col" class="num">Gate kg</th><th scope="col" class="num">Gap</th><th scope="col" class="num">Partner paid</th><th scope="col" class="num">Fee ₹${FEE_PER_KG}/kg</th></tr></thead><tbody>
    ${s.lines.map(l=>`<tr><td class="lead">${esc(l.batteryId)} ${l.flagged?mk("flag","tri","Gap over "+thr()+"%"):""}</td><td data-l="Partner">${esc(l.vendorId)}</td><td data-l="Yard kg" class="num">${kg1(l.yardKg)}</td><td data-l="Gate kg" class="num">${kg1(l.recyclerKg)}</td><td data-l="Gap" class="num">${(l.diffPct>=0?"+":"")+l.diffPct}%</td><td data-l="Partner paid" class="num">${inr(l.vendorPaid)}</td><td data-l="Fee" class="num">${inr2(l.fee)}</td></tr>`).join("")}
    </tbody><tfoot><tr><td data-l="Total" colspan="5">Total</td><td data-l="Partner payments" class="num">${inr(s.vendorPayments)}</td><td data-l="Fee" class="num">${inr2(s.fee)}</td></tr></tfoot></table></div>
   ${(s.deductions||[]).length?`<div class="banner warn small">${s.deductions.map(d=>`Gap over ${thr()}% on ${esc(d.batteryId)}: ${inr(d.amount)} comes off ${esc(d.vendorId)}'s next payout (${esc(d.id)}).`).join(" ")}</div>`:""}
@@ -4443,8 +4469,8 @@ function crBatteries(){
     </div>
     <div class="row wrapr" style="margin-top:10px"><button class="btn small" id="csv">Export custody evidence (CSV)</button><button class="btn small sec" id="clr">Clear filters</button><span class="small muted">${rows.length} record${rows.length===1?"":"s"}</span></div>
     <div id="csvOut"></div></div>
-  <div class="tablewrap rt"><table><thead><tr><th>Battery</th><th>Status</th><th>Marks</th><th>Source</th><th>Partner</th><th>Picked up</th><th class="num">Pickup kg</th><th class="num">Yard kg</th><th class="num">Gate kg</th><th>Recycler</th></tr></thead><tbody>
-    ${rows.map(b=>`<tr class="click" data-open="${esc(b.id)}"><td class="lead">${sticker(b.id,1)}</td><td data-l="Status">${statusMark(b.status)}</td><td data-l="Marks">${flagMark(b)} ${custodyMark(b)}</td><td data-l="Source">${esc(T.en.src[b.source]||"—")}</td><td data-l="Partner">${esc(b.pickedUpBy||"—")}</td><td data-l="Picked up">${esc(fmtDs(b.pickedUpAt))}</td><td data-l="Pickup kg" class="num">${kg1(b.pickupKg)}</td><td data-l="Yard kg" class="num">${b.yardKg!=null?kg1(b.yardKg):""}</td><td data-l="Gate kg" class="num">${b.recyclerKg!=null?kg1(b.recyclerKg):""}</td><td data-l="Recycler">${esc(b.recyclerId||"")}</td></tr>`).join("")||`<tr><td colspan="10" class="muted">No records match.</td></tr>`}
+  <div class="tablewrap rt"><table><thead><tr><th scope="col">Battery</th><th scope="col">Status</th><th scope="col">Marks</th><th scope="col">Source</th><th scope="col">Partner</th><th scope="col">Picked up</th><th scope="col" class="num">Pickup kg</th><th scope="col" class="num">Yard kg</th><th scope="col" class="num">Gate kg</th><th scope="col">Recycler</th></tr></thead><tbody>
+    ${rows.map(b=>`<tr class="click" role="button" tabindex="0" data-open="${esc(b.id)}"><td class="lead">${sticker(b.id,1)}</td><td data-l="Status">${statusMark(b.status)}</td><td data-l="Marks">${flagMark(b)} ${custodyMark(b)}</td><td data-l="Source">${esc(T.en.src[b.source]||"—")}</td><td data-l="Partner">${esc(b.pickedUpBy||"—")}</td><td data-l="Picked up">${esc(fmtDs(b.pickedUpAt))}</td><td data-l="Pickup kg" class="num">${kg1(b.pickupKg)}</td><td data-l="Yard kg" class="num">${b.yardKg!=null?kg1(b.yardKg):""}</td><td data-l="Gate kg" class="num">${b.recyclerKg!=null?kg1(b.recyclerKg):""}</td><td data-l="Recycler">${esc(b.recyclerId||"")}</td></tr>`).join("")||`<tr><td colspan="10" class="muted">No records match.</td></tr>`}
   </tbody></table></div>`;
 }
 function crMoney(M){
@@ -4458,11 +4484,11 @@ function crMoney(M){
   <div class="grid2" style="margin-top:12px"><div class="sheet" style="margin:0"><h3>By recycler</h3>${cashBars(M)}</div>
    <div class="sheet" style="margin:0"><h3>Deductions from partners</h3>${M.deductions.length?M.deductions.map(d=>`<div class="row" style="justify-content:space-between;margin:8px 0;gap:8px"><span><b>${esc(d.id)}</b> ${esc(d.vendorId)}, ${esc(d.batteryId)}<div class="small muted">${esc(d.reason)}</div></span><span style="text-align:right"><b>${inr(d.amount)}</b><br>${payStatusMark(d)}</span></div>`).join(""):`<p class="small muted">None. A gate weight more than ±${thr()}% under the yard weight raises one.</p>`}</div></div>
   <h2>Settlement statements</h2>
-  <div class="tablewrap rt"><table><thead><tr><th>Statement</th><th>Recycler</th><th>Truckload</th><th class="num">Partner payments</th><th class="num">Fee</th><th class="num">Total</th><th>Status</th></tr></thead><tbody>
-   ${sts.map(s=>`<tr class="click" data-settle="${esc(s.id)}"><td class="lead">${esc(s.id)}</td><td data-l="Recycler">${esc(s.recyclerId)}</td><td data-l="Truckload">${esc(s.manifestNo)}</td><td data-l="Partner payments" class="num">${inr(s.vendorPayments)}</td><td data-l="Fee" class="num">${inr2(s.fee)}</td><td data-l="Total" class="num"><b>${inr2(s.total)}</b></td><td data-l="Status">${settleMark(s)}</td></tr>`).join("")||`<tr><td colspan="7">${emptyHTML("▤","No settlements yet","A statement is issued when every battery on a truckload has been gate-checked.")}</td></tr>`}
+  <div class="tablewrap rt"><table><thead><tr><th scope="col">Statement</th><th scope="col">Recycler</th><th scope="col">Truckload</th><th scope="col" class="num">Partner payments</th><th scope="col" class="num">Fee</th><th scope="col" class="num">Total</th><th scope="col">Status</th></tr></thead><tbody>
+   ${sts.map(s=>`<tr class="click" role="button" tabindex="0" data-settle="${esc(s.id)}"><td class="lead">${esc(s.id)}</td><td data-l="Recycler">${esc(s.recyclerId)}</td><td data-l="Truckload">${esc(s.manifestNo)}</td><td data-l="Partner payments" class="num">${inr(s.vendorPayments)}</td><td data-l="Fee" class="num">${inr2(s.fee)}</td><td data-l="Total" class="num"><b>${inr2(s.total)}</b></td><td data-l="Status">${settleMark(s)}</td></tr>`).join("")||`<tr><td colspan="7">${emptyHTML("▤","No settlements yet","A statement is issued when every battery on a truckload has been gate-checked.")}</td></tr>`}
   </tbody></table></div>
   <h2>Partner payout ledger</h2>
-  <div class="tablewrap rt"><table><thead><tr><th>Payout</th><th>Date</th><th>Partner</th><th>Battery</th><th>Yard</th><th class="num">kg</th><th class="num">Paid</th><th>UPI ref</th><th>Status</th></tr></thead><tbody>
+  <div class="tablewrap rt"><table><thead><tr><th scope="col">Payout</th><th scope="col">Date</th><th scope="col">Partner</th><th scope="col">Battery</th><th scope="col">Yard</th><th scope="col" class="num">kg</th><th scope="col" class="num">Paid</th><th scope="col">UPI ref</th><th scope="col">Status</th></tr></thead><tbody>
    ${pays.map(p=>`<tr><td class="lead">${esc(p.id)}</td><td data-l="Date">${fmtDs(p.at)}</td><td data-l="Partner">${esc(p.vendorId)}</td><td data-l="Battery">${esc(p.batteryId)}</td><td data-l="Yard">${esc(p.yardId||"")}</td><td data-l="kg" class="num">${p.kind==="payout"?kg1(p.kg):kg1(p.kgGap)}</td><td data-l="Paid" class="num">${p.kind==="payout"?inr(p.net):"− "+inr(p.amount)}</td><td data-l="UPI ref">${esc(p.upiRef||"")}</td><td data-l="Status">${payStatusMark(p)}</td></tr>`).join("")||`<tr><td colspan="9">${emptyHTML("₹","No partner payouts yet","Partners are paid at the yard weigh-in. Deductions for gate weight gaps appear here too.")}</td></tr>`}
   </tbody></table></div>`;
 }
@@ -4472,7 +4498,7 @@ function crPartners(){
   const pays=[...S.payouts.values()].filter(p=>p.kind==="payout");
   const tg=id=>[...S.batteries.values()].filter(b=>b.pickedUpBy===id&&b.yardAt).length;
   return crHead("Partners","Partner scrap vendors and dealers (phase 2): partner ID, safety kit, scale, the ₹10 per tagged battery and GST or Udyam help.")+
-  `<div class="tablewrap rt"><table><thead><tr><th>Partner</th><th>Area</th><th>Since</th><th>Safety kit</th><th>Scale</th><th>GST / Udyam</th><th class="num">Tagged, at yard</th><th class="num">₹${ALLOWANCE} per tagged battery</th><th class="num">Paid to date</th></tr></thead><tbody>
+  `<div class="tablewrap rt"><table><thead><tr><th scope="col">Partner</th><th scope="col">Area</th><th scope="col">Since</th><th scope="col">Safety kit</th><th scope="col">Scale</th><th scope="col">GST / Udyam</th><th scope="col" class="num">Tagged, at yard</th><th scope="col" class="num">₹${ALLOWANCE} per tagged battery</th><th scope="col" class="num">Paid to date</th></tr></thead><tbody>
   ${P.map(p=>{ const mine=pays.filter(x=>x.vendorId===p.id);
     return `<tr><td class="lead">${roleIcon(userById(p.id)?userById(p.id).role:"vendor").replace('<svg','<svg width="26" height="26" style="vertical-align:middle;margin-right:6px"')}<b>${esc(p.id)}</b> <span class="small muted">${esc(p.type)}</span></td><td data-l="Area">${esc(p.area)}</td><td data-l="Since">${fmtDs(p.joinedAt)}</td>
     <td data-l="Safety kit">${sel(p.id,"safetyKit",KIT,p.safetyKit)}</td><td data-l="Scale">${sel(p.id,"scale",SCALE,p.scale)}${p.scaleSerial?`<div class="small muted">${esc(p.scaleSerial)}</div>`:""}</td><td data-l="GST / Udyam">${sel(p.id,"taxStatus",TAX,p.taxStatus)}</td>
@@ -4501,11 +4527,11 @@ function crReports(){
   return crHead("Monthly report","Collection-centre figures in the shape the recycler files with CPCB. LeadLoop supplies the evidence; certificates come from the registered recycler.",
    `<div class="row"><select class="sel" id="repM" style="width:auto">${months.map(m=>`<option value="${m}" ${m===S.repMonth?"selected":""}>${monthName(m)}</option>`).join("")}</select><button class="btn small" id="cpcb" style="margin:0">Export CSV</button></div>`)+
   `<div id="csvOut"></div>
-  <div class="tablewrap rt"><table><thead><tr><th>Collection centre</th><th>For recycler</th><th class="num">Opening stock</th><th class="num">Received</th><th class="num">Sent to recycler</th><th class="num">Gate kg at recycler</th><th class="num">Closing stock</th><th class="num">Longest stored</th><th class="num">Over 90 d</th><th class="num">Weight flags</th><th class="num">Leaking</th></tr></thead><tbody>
+  <div class="tablewrap rt"><table><thead><tr><th scope="col">Collection centre</th><th scope="col">For recycler</th><th scope="col" class="num">Opening stock</th><th scope="col" class="num">Received</th><th scope="col" class="num">Sent to recycler</th><th scope="col" class="num">Gate kg at recycler</th><th scope="col" class="num">Closing stock</th><th scope="col" class="num">Longest stored</th><th scope="col" class="num">Over 90 d</th><th scope="col" class="num">Weight flags</th><th scope="col" class="num">Leaking</th></tr></thead><tbody>
   ${R.map(r=>`<tr><td class="lead">${r.centre}</td><td data-l="For recycler">${r.recycler}</td><td data-l="Opening stock" class="num">${r.openingN} / ${r.openingKg} kg</td><td data-l="Received" class="num">${r.recvN} / ${r.recvKg} kg</td><td data-l="Sent to recycler" class="num">${r.sentN} / ${r.sentKg} kg</td><td data-l="Gate kg" class="num">${r.gateKg} kg</td><td data-l="Closing stock" class="num">${r.closingN} / ${r.closingKg} kg</td><td data-l="Longest stored" class="num">${r.maxDays} d</td><td data-l="Over 90 d" class="num">${r.over90}</td><td data-l="Weight flags" class="num">${r.flags}</td><td data-l="Leaking" class="num">${r.leaking}</td></tr>`).join("")}
   </tbody></table></div>
   <div class="grid2" style="margin-top:14px"><div class="sheet" style="margin:0"><h3>kg received per month, by recycler</h3>${monthChartHTML()}</div>
-  <div class="sheet" style="margin:0"><h3>Closed records by month</h3><div class="tablewrap rt"><table><thead><tr><th>Month</th><th>Recycler</th><th class="num">Batteries</th><th class="num">Gate kg</th><th class="num">Flagged</th></tr></thead><tbody>
+  <div class="sheet" style="margin:0"><h3>Closed records by month</h3><div class="tablewrap rt"><table><thead><tr><th scope="col">Month</th><th scope="col">Recycler</th><th scope="col" class="num">Batteries</th><th scope="col" class="num">Gate kg</th><th scope="col" class="num">Flagged</th></tr></thead><tbody>
    ${M.map(r=>`<tr><td class="lead">${esc(monthName(r.month))}</td><td data-l="Recycler">${esc(r.recycler)}</td><td data-l="Batteries" class="num">${r.n}</td><td data-l="Gate kg" class="num">${(Math.round(r.kgR*10)/10).toLocaleString("en-IN")}</td><td data-l="Flagged" class="num">${r.flagged}</td></tr>`).join("")}
   </tbody></table></div></div></div>`;
 }
@@ -4525,7 +4551,7 @@ function crAudit(){
    <div id="fxErr"></div><button class="btn small" id="fxGo" style="margin-top:10px">Save correction</button>
    <div class="small muted" style="margin-top:6px">Weight corrections re-run the ±${thr()}% checks for that record.</div></div>
   <h2>Audit log</h2>
-  <div class="tablewrap rt"><table><thead><tr><th>When</th><th>Who</th><th>Action</th><th>Record</th><th>Detail</th><th>Before → after</th><th>Reason</th></tr></thead><tbody>
+  <div class="tablewrap rt"><table><thead><tr><th scope="col">When</th><th scope="col">Who</th><th scope="col">Action</th><th scope="col">Record</th><th scope="col">Detail</th><th scope="col">Before → after</th><th scope="col">Reason</th></tr></thead><tbody>
   ${L.map(a=>`<tr><td class="lead">${fmtDT(a.at)}</td><td data-l="Who">${esc(a.by)}</td><td data-l="Action">${esc(a.action)}</td><td data-l="Record">${esc(a.target)}</td><td data-l="Detail" class="wrap">${esc(a.detail)}</td><td data-l="Before → after">${a.before!=null||a.after!=null?esc((a.before??"")+" → "+(a.after??"")):""}</td><td data-l="Reason" class="wrap">${esc(a.reason||"")}</td></tr>`).join("")||`<tr><td colspan="7">${emptyHTML("✎","Nothing logged yet","Every scan, payment, correction and alert review writes a line here.")}</td></tr>`}
   </tbody></table></div>`;
 }
