@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 .vercel
 LeadLoop_demo_QR_sheet.pdf
+.cloud-attachments/
+.tmp-check/

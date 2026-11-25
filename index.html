@@ -4255,14 +4255,14 @@ function viewTimeline(app){
   }
   const po=b.payoutId&&S.payouts.get(b.payoutId);
   const money = b.status==="unused" ? "" : po ? `Partner ${esc(po.vendorId)} paid ${inr(po.net)} at the yard (${esc(po.id)}). ${b.status==="closed"?`The recycler repays ${inr(po.gross)} plus the LeadLoop fee of ${inr(FEE_PER_KG*(b.recyclerKg||0))}.`:`The LeadLoop fee is charged after the gate check.`}` : "The partner is paid when the battery is weighed in at the yard.";
-  app.innerHTML = `${slowNote()}${backBtn(tr&&S.ref===tr.id?"Back to the truckload":"Back")}
+  app.innerHTML = `${slowNote()}${backBtn(tr&&S.ref===tr.id?"Back to the truckload":"Back")}<h1 style="margin-top:4px">Custody trail</h1>
   ${trackHTML(b)}
   <div class="sheet tight"><div class="row wrapr" style="gap:8px">${flagMark(b)}${b.leaking?mk("warn","drop","Leaking at pickup"):""}${custodyMark(b)}${truckMark(b)}</div>
    ${b.recyclerId?`<div class="small muted" style="margin-top:8px">${esc(userLabel(b.yardId))}, collection centre for ${esc(userLabel(b.recyclerId))}</div>`:""}
    ${money?`<div class="small" style="margin-top:6px">${money}</div>`:""}
   </div>
   ${confirm}${flagsHTML(b)}
-  <h2>Custody trail</h2>${timelineHTML(b)}`;
+  <h2>Hand-offs</h2>${timelineHTML(b)}`;
   $("#back").onclick=()=>{ if(tr&&S.ref===tr.id&&S.user.role!=="vendor"&&S.user.role!=="dealer") return go("truck",tr.id); go(homeOf()); };
   if($("#rwt")) $("#rwt").oninput=e=>{ S.form.weight=e.target.value; setNeedle(e.target.value); $("#gdiff").innerHTML=diffBanner(b.yardKg,parseFloat(e.target.value),t,"Yard","gate","record will be flagged and the gap comes off the partner's next payout"); };
   if($("#close")) $("#close").onclick=()=>saveGate(b.id);
