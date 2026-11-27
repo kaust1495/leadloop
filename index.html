@@ -5714,6 +5714,7 @@ const T = {
      weight:"Weight on your scale (kg)",photo:"Photo of battery on the scale",tapPhoto:"Tap to take photo",retake:"Tap to retake",
      label:"Photo of the label or serial",labelHint:"Deck step 2. If the label is worn, photograph what is left of it",
      leaking:"Is it leaking?",yes:"Yes",no:"No",submit:"Save pickup",submitT:"Save take-back",
+     demoPhoto:"Use demo photos",demoPhotoHint:"No camera or photo files? This fills both photos with demo images.",demoPhotoOne:"Use a demo photo",demoPhotoOneHint:"No camera or photo file? This fills the photo with a demo image.",
      paid:"Amount paid to driver (₹)",rateHint:"Local rate ₹60–62/kg",exch:"Exchange: the driver's old battery is credited against the new one. A partner scrap vendor collects your crate weekly; you get ₹10 for each battery you tag.",saleT:"Batteries exchanged",upi:"UPI reference",upiHint:"From your payment app, e.g. 412345678901",sale:"Batteries in this sale",
      need:"Please fill:",auto:"Recorded by",time:"Time",gps:"Location",
      saved:"Saved",loggedIn:"Logged in",sec:"s",next:"Scan next battery",of:"of",done:"done",
@@ -5726,6 +5727,7 @@ const T = {
      weight:"आपके काँटे पर वज़न (किलो)",photo:"काँटे पर रखी बैटरी की फ़ोटो",tapPhoto:"फ़ोटो लेने के लिए दबाएँ",retake:"दोबारा फ़ोटो लें",
      label:"लेबल या सीरियल नंबर की फ़ोटो",labelHint:"लेबल घिसा हो तो जितना दिखे उतने की फ़ोटो लें",
      leaking:"क्या बैटरी लीक हो रही है?",yes:"हाँ",no:"नहीं",submit:"पिकअप सेव करें",submitT:"टेक-बैक सेव करें",
+     demoPhoto:"डेमो फ़ोटो लगाएँ",demoPhotoHint:"कैमरा या फ़ोटो फ़ाइल नहीं? इससे दोनों फ़ोटो डेमो तस्वीरों से भर जाती हैं।",demoPhotoOne:"डेमो फ़ोटो लगाएँ",demoPhotoOneHint:"फ़ोटो फ़ाइल नहीं? इससे फ़ोटो डेमो तस्वीर से भर जाती है।",
      paid:"ड्राइवर को दी गई रकम (₹)",rateHint:"लोकल रेट ₹60–62/किलो",exch:"एक्सचेंज: ड्राइवर की पुरानी बैटरी नई बैटरी में एडजस्ट होती है। पार्टनर स्क्रैप वेंडर हर हफ़्ते आपका क्रेट ले जाता है; हर टैग की गई बैटरी पर आपको ₹10 मिलते हैं।",saleT:"बदली गई बैटरियाँ",upi:"UPI रेफ़रेंस",upiHint:"पेमेंट ऐप से, जैसे 412345678901",sale:"इस सौदे में कितनी बैटरियाँ",
      need:"कृपया भरें:",auto:"दर्ज करने वाला",time:"समय",gps:"लोकेशन",
      saved:"सेव हो गया",loggedIn:"लगा समय",sec:"सेकंड",next:"अगली बैटरी स्कैन करें",of:"में से",done:"पूरे",
@@ -6062,6 +6064,13 @@ function svgQR(text,cell=4){
 function placeholderPhoto(){
   return `<div class="noph">${ICON.battery("#9aa59f","#e9ece6")}<span>Demo record, so no photo here. Live entries show the photo taken at this step.</span></div>`;
 }
+/* Demo photos for a laptop with no camera files to upload. SVG data URIs, so
+   they are tiny and say on their face that they are demo images. */
+const demoImg = svg => "data:image/svg+xml,"+encodeURIComponent(svg);
+const DEMO_PHOTO = {
+  battery: demoImg(`<svg xmlns='http://www.w3.org/2000/svg' width='320' height='240' viewBox='0 0 320 240'><rect width='320' height='240' fill='#eef1ea'/><rect x='118' y='60' width='84' height='18' rx='5' fill='#8a9490'/><rect x='74' y='78' width='172' height='96' rx='8' fill='#26332c'/><rect x='74' y='114' width='172' height='30' fill='#3f6b4f'/><rect x='40' y='174' width='240' height='12' rx='4' fill='#cbd3c8'/><text x='160' y='214' font-family='sans-serif' font-size='14' fill='#5b6a60' text-anchor='middle'>Demo photo — battery on scale</text></svg>`),
+  labelFor: id => demoImg(`<svg xmlns='http://www.w3.org/2000/svg' width='320' height='240' viewBox='0 0 320 240'><rect width='320' height='240' fill='#eef1ea'/><rect x='86' y='42' width='148' height='132' rx='8' fill='#ffffff' stroke='#cfd6cb'/><g fill='#26332c'><rect x='98' y='54' width='34' height='34'/><rect x='188' y='54' width='34' height='34'/><rect x='98' y='112' width='34' height='34'/><rect x='144' y='54' width='8' height='8'/><rect x='160' y='70' width='8' height='8'/><rect x='144' y='86' width='8' height='8'/><rect x='160' y='102' width='8' height='8'/><rect x='144' y='118' width='8' height='8'/><rect x='188' y='112' width='8' height='8'/><rect x='204' y='128' width='8' height='8'/><rect x='144' y='150' width='8' height='8'/><rect x='172' y='150' width='8' height='8'/></g><g fill='#ffffff'><rect x='106' y='62' width='18' height='18'/><rect x='196' y='62' width='18' height='18'/><rect x='106' y='120' width='18' height='18'/></g><text x='160' y='166' font-family='monospace' font-size='14' font-weight='700' fill='#26332c' text-anchor='middle'>${String(id).replace(/[^A-Za-z0-9-]/g,"")}</text><text x='160' y='214' font-family='sans-serif' font-size='14' fill='#5b6a60' text-anchor='middle'>Demo photo — sticker on the battery</text></svg>`)
+};
 /* ---------- header ---------- */
 function renderHeader(){
   const h=$("#hdActions");
@@ -6476,6 +6485,7 @@ function viewPickup(app){
   <button class="photo-box" id="ph">${f.photo?`<img src="${f.photo}" alt=""><span class="small muted">${esc(L.retake)}</span>`:`${ICON.camera()}<span>${esc(L.tapPhoto)}</span>`}</button>
   <label class="f">${esc(L.label)}</label>
   <button class="photo-box sm" id="lph">${f.label?`<img src="${f.label}" alt=""><span class="small muted">${esc(L.retake)}</span>`:`<span>${esc(L.tapPhoto)}</span><span class="small muted">${esc(L.labelHint)}</span>`}</button>
+  <div class="row wrapr" style="gap:8px;align-items:center;margin:8px 0 2px"><button class="btn small ghost" id="phDemo" style="margin:0;width:auto">${esc(L.demoPhoto)}</button><span class="small muted">${esc(L.demoPhotoHint)}</span></div>
   <label class="f">${esc(L.leaking)}</label>
   <div class="chips">${chip("leaking","yes",L.yes,true,`<span style="width:22px;height:22px;display:inline-flex;color:${C.saffron}">${ICN.drop}</span>`)}${chip("leaking","no",L.no)}</div>
   ${dealer?`<label class="f">${esc(L.saleT)}</label>
@@ -6513,6 +6523,7 @@ function viewPickup(app){
   if($("#upi")) $("#upi").oninput=e=>{ f.upi=e.target.value; prog(); };
   $("#ph").onclick=async()=>{ const file=await pickFile("filePhoto"); if(!file) return; try{ f.photo=await compressPhoto(file); }catch(e){ f.photo=null; } render(); };
   $("#lph").onclick=async()=>{ const file=await pickFile("filePhoto"); if(!file) return; try{ f.label=await compressPhoto(file,480,.6); }catch(e){ f.label=null; } render(); };
+  $("#phDemo").onclick=()=>{ f.photo=DEMO_PHOTO.battery; f.label=DEMO_PHOTO.labelFor(S.id); render(); };
   $("#cancel").onclick=()=>go("home");
   $("#save").onclick=savePickup;
 }
@@ -6578,7 +6589,7 @@ function payoutSlip(p){
 /* ----- scan 2: yard weigh-in + same-day payout ----- */
 const pendingDeductions = vid => [...S.payouts.values()].filter(p=>p.kind==="deduction"&&p.status==="pending"&&p.vendorId===vid);
 function viewYard(app){
-  const f=S.form, b=S.batteries.get(S.id);
+  const L=T[S.lang], f=S.form, b=S.batteries.get(S.id);
   if(!f||!b){ S.view="home"; return render(); }
   if(b.channel==="dealer"&&!f.collector) f.collector=DEALER_COLLECTOR[S.user.id]||"V-101";
   const payee=b.channel==="dealer"?f.collector:b.pickedUpBy;
@@ -6596,6 +6607,7 @@ function viewYard(app){
   ${b.channel==="dealer"?`<label class="f" for="coll">Brought in by partner scrap vendor</label><select class="t" id="coll">${USERS.filter(u=>u.role==="vendor").map(u=>`<option value="${u.id}" ${f.collector===u.id?"selected":""}>${u.id} · ${esc(u.area)}</option>`).join("")}</select>`:""}
   <label class="f">Photo on the yard scale</label>
   <button class="photo-box" id="ph">${f.photo?`<img src="${f.photo}" alt=""><span class="small muted">Tap to retake</span>`:`${ICON.camera()}<span>Tap to take photo</span>`}</button>
+  <div class="row wrapr" style="gap:8px;align-items:center;margin:8px 0 2px"><button class="btn small ghost" id="phDemo" style="margin:0;width:auto">${esc(L.demoPhotoOne)}</button><span class="small muted">${esc(L.demoPhotoOneHint)}</span></div>
   <label class="f">Condition check</label>
   <div class="chips">${conds.map(c=>`<button class="chip ${f.condition===c?"on":""} ${c==="Leaking"&&f.condition===c?"warn":""}" data-c="${c}" aria-pressed="${f.condition===c}">${c}</button>`).join("")}</div>
   <label class="f" for="upi">UPI reference of the payment to ${esc(payee)}</label>
@@ -6609,6 +6621,7 @@ function viewYard(app){
   $("#upi").oninput=e=>{ f.upi=e.target.value; };
   if($("#coll")) $("#coll").onchange=e=>{ f.collector=e.target.value; render(); };
   $("#ph").onclick=async()=>{ const file=await pickFile("filePhoto"); if(!file) return; try{ f.photo=await compressPhoto(file);}catch(e){} render(); };
+  $("#phDemo").onclick=()=>{ f.photo=DEMO_PHOTO.battery; render(); };
   app.querySelectorAll("[data-c]").forEach(x=>x.onclick=()=>{ f.condition=x.dataset.c; render(); });
   $("#cancel").onclick=()=>go("home");
   $("#save").onclick=saveYard;
@@ -7479,7 +7492,15 @@ function pickVoice(lang){
   return null;
 }
 function storyStop(){ clearTimeout(ST.timer); clearTimeout(ST.guard); ST.playing=false; ST.deadline=0; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} }
-function storyFinish(){ clearTimeout(ST.timer); clearTimeout(ST.guard); ST.playing=false; ST.ended=true; ST.deadline=0; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} if(S.view==="story") renderStoryStage(); }
+function storyFinish(){ clearTimeout(ST.timer); clearTimeout(ST.guard); ST.playing=false; ST.ended=true; ST.deadline=0; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} if(S.view==="story"){ renderStoryStage(); storyEndReveal(); } }
+/* the last beat should hand over, not leave the next step below the fold */
+function storyEndReveal(){
+  const el=$("#stEnd"); if(!el||el.classList.contains("hidden")) return;
+  const b=$("#stTry");
+  if(b){ try{ b.focus({preventScroll:true}); }catch(e){ try{ b.focus(); }catch(e2){} } }
+  const r=el.getBoundingClientRect();
+  if(r.top<0||r.bottom>window.innerHeight-8) el.scrollIntoView({block:"center"});
+}
 /* Hard stop so a throttled tab (timers clamped to ~1 s) still ends the story on time */
 function storyGuard(){ clearTimeout(ST.guard); if(!ST.playing||!ST.deadline) return;
   const left=Math.max(0,ST.deadline-Date.now());
@@ -7492,8 +7513,10 @@ function storyVoicePrompt(){
 }
 function storyBeat(i){
   clearTimeout(ST.timer); const token=++ST.token; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){}
+  const wasEnded=ST.ended;
   ST.i=Math.max(0,Math.min(BEATS.length-1,i)); ST.ended=false;
   if(S.view==="story") renderStoryStage();
+  if(wasEnded) try{ window.scrollTo(0,0); }catch(e0){}
   if(!ST.playing) return;
   if(!ST.deadline) ST.deadline=Date.now()+STORY_MS;
   storyGuard();
