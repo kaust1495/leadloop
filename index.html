@@ -2958,9 +2958,6 @@ tfoot td{background:var(--paper-2)}
 .landing .steps{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 0;padding:0;list-style:none;animation:none}
 .landing .steps li{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--forest);padding:5px 10px 5px 5px;border-radius:4px;background:#fff;border:1px solid var(--line)}
 .landing .steps li b{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:3px;background:var(--forest);color:var(--hivis);font-family:var(--slab);font-size:12px}
-.roles-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:24px 0 0}
-.roles-head h2{margin:0;font-size:14px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700}
-.roles-head span{font-size:12.5px;color:var(--muted)}
 
 /* ---- role cards ---- */
 .chain{gap:8px;margin-top:10px}
@@ -2968,9 +2965,6 @@ tfoot td{background:var(--paper-2)}
 .stage .sn{display:flex;gap:7px;align-items:baseline;padding-top:6px}
 .stage .sn b{font-family:var(--slab);font-size:12px;color:#8C8271;font-weight:700}
 .stage .sn small{display:block;font-size:11px;color:var(--muted);font-weight:600}
-.chain.landing-chain .stage{grid-template-columns:1fr;gap:6px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:8px;animation:none}
-.chain.landing-chain .stage .sn{padding-top:0;display:flex;align-items:baseline;gap:9px}
-.chain.landing-chain .stage .sn small{display:inline;margin-left:4px}
 .whob{min-height:52px;border:1px solid var(--line);border-radius:6px;background:#fff;padding:6px 10px 6px 6px;transition:border-color .12s,background .12s;box-shadow:none}
 .whob:hover{border-color:var(--forest);background:#fff;transform:none;box-shadow:none}
 .whob:active{transform:none}
@@ -2978,11 +2972,8 @@ tfoot td{background:var(--paper-2)}
 .whob span span{font-size:11.5px}
 .whob.cur{border-color:var(--forest);box-shadow:inset 0 0 0 1px var(--forest);background:#fff}
 .whob svg{width:30px;height:30px}
-@media (min-width:760px){.chain{grid-template-columns:repeat(2,1fr);gap:10px}.chain.landing-chain{grid-template-columns:1fr}.chain.landing-chain .stage{grid-template-columns:96px 1fr}.chain.landing-chain .whob{flex:1 1 112px;min-width:0}.chain.landing-chain .stage .sn{display:block}.chain.landing-chain .stage .sn b{display:inline-block;margin-right:7px}.chain.landing-chain .stage .sn small{display:block;margin-left:0}}
-@media (min-width:980px){.chain.landing-chain{grid-template-columns:1fr 1fr;align-content:start}.chain.landing-chain .stage{grid-template-columns:1fr}}
+@media (min-width:760px){.chain{grid-template-columns:repeat(2,1fr);gap:10px}}
 @media (min-width:700px){body.landing-on .wrap{max-width:none;padding-left:0;padding-right:0}body.landing-on header.top .in{max-width:1180px}}
-@media (min-width:980px){.chain.landing-chain .stage:last-child .whob{flex:0 1 196px}}
-@media (max-width:759px){.chain.landing-chain{grid-template-columns:1fr}}
 
 /* ---- responsive shell: laptop measure, phone tap targets ---- */
 @media (min-width:900px){
@@ -3121,12 +3112,6 @@ tfoot td{background:var(--paper-2)}
 .stn-row:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--hivis),rgba(216,240,74,.18));transform-origin:left;animation:clDraw .9s var(--ease) .15s both}
 @keyframes clDraw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes clDrawY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-/* what the trail is made of, under the roles */
-.ev-band{margin:28px 0 0;padding:20px 0 0;border-top:1px solid var(--line)}
-.ev-band h2{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700}
-.ev-chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}
-.ev-chips span{font-size:12.5px;font-weight:700;color:var(--forest);background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 10px}
-.ev-note{margin:12px 0 0;font-size:13px;color:var(--muted);max-width:70ch}
 
 .stn{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0;padding-top:18px}
 .stn:before{content:"";position:absolute;top:-4px;left:0;width:9px;height:9px;border-radius:50%;background:var(--hivis);box-shadow:0 0 0 3px var(--night)}
@@ -3141,12 +3126,22 @@ tfoot td{background:var(--paper-2)}
 .stn .stn-who,.stn .stn-ev{margin:0;max-width:none}
 .stn .stn-who{font-size:12.5px;font-weight:600;line-height:1.3;color:var(--steel)}
 .stn .stn-ev{font-size:11.5px;line-height:1.35;color:var(--chalkDim)}
+/* on the landing a station is the way in: the whole card is one button */
+.stn-li{display:flex;min-width:0}
+.stn-btn{flex:1 1 auto;width:100%;padding:18px 0 0;background:none;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:6px}
+.stn-btn:after{content:"→";position:absolute;top:15px;right:0;font-size:15px;line-height:1;color:var(--hivis);opacity:.5;transition:opacity .14s,transform .14s}
+.stn-btn:hover .stn-k{color:var(--hivis)}
+.stn-btn:hover:after{opacity:1;transform:translateX(3px)}
+.stn-btn:focus-visible{outline:2px solid var(--hivis);outline-offset:4px}
+.land-room{display:inline-flex;align-items:center;margin:2px 0 0;padding:9px 0;background:none;border:0;font:inherit;font-size:13px;font-weight:600;color:var(--steel);cursor:pointer;min-height:40px}
+.land-room:hover{color:var(--hivis)}
+.land-room:focus-visible{outline:2px solid var(--hivis);outline-offset:3px;border-radius:4px}
+.cl-stn{min-width:0}
 .landing.night .stn-who{color:var(--steel)}
 @media (max-width:700px){
   /* phones: keep the vertical trail, shrink the plates, and set the party on the
      number's line — that buys back the room the evidence line needs */
   .landing.night{padding:18px 16px 12px}
-  .landing .roles-head{margin-top:16px}
   .landing.night h1{font-size:clamp(27px,7.4vw,34px);line-height:1.04}
   .cl-hero{gap:12px}
   .stn-row{grid-template-columns:1fr;gap:0;margin-top:12px}
@@ -3159,6 +3154,7 @@ tfoot td{background:var(--paper-2)}
   .stn .stn-who{grid-area:1/2;font-size:11.5px;line-height:1.4}
   .stn-k{grid-area:2/1/3/3;font-size:14.5px;line-height:1.15}
   .stn .stn-ev{grid-column:1/-1;grid-row:2;font-size:11px;line-height:1.32}
+  .stn-btn:after{display:none}
   .how-band{padding:20px 16px 16px}
 }
 @media (min-width:701px){
@@ -3167,9 +3163,11 @@ tfoot td{background:var(--paper-2)}
   .land-inner{padding:0 24px}
 }
 @media (min-width:980px){
-  .landing.night{display:flex;align-items:center;min-height:min(760px,calc(100vh - 62px))}
+  /* the hero sets its own height from the content, so the roles start above the
+     fold instead of a screen of empty green */
+  .landing.night{display:flex;align-items:center;min-height:0}
   .cl-in{width:100%}
-  .cl-hero{grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:56px;align-items:center}
+  .cl-hero{grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:56px;align-items:start}
   .cl-copy{max-width:560px}
   .cl-hero .stn-row{grid-template-columns:1fr;gap:0;margin-top:0}
   .cl-hero .stn-row:before{left:0;right:auto;top:0;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,var(--hivis),rgba(216,240,74,.16));transform-origin:top;animation-name:clDrawY}
@@ -3236,8 +3234,8 @@ tfoot td{background:var(--paper-2)}
 </div></header>
 <main class="wrap" id="app" tabindex="-1"><section class="landing night">
  <span class="eyebrow"><b></b>One QR sticker per battery</span>
- <h1>Every dead battery, <em>scanned three times</em></h1><p>One QR sticker follows each battery from pickup to the recycler's gate, with weight, a photo and the money at every hand-off.</p>
- <div class="land-cta"><button class="btn hv" id="startStory">▶ Watch LeadLoop in 45 seconds</button><span class="land-meta">English or Hindi · nothing saved</span></div>
+ <h1>Every dead battery, <em>scanned three times</em></h1><p>One QR sticker follows each battery from pickup to the recycler's gate.</p>
+ <div class="land-cta"><button class="btn hv" id="startStory">▶ Watch LeadLoop in about a minute</button><span class="land-meta">English or Hindi · nothing saved</span></div>
  <ul class="steps" aria-label="The three scans"><li><b>1</b>Pickup</li><li><b>2</b>Yard weigh-in</li><li><b>3</b>Recycler gate</li></ul></section></main>
 <input type="file" id="fileScan" accept="image/*" capture="environment" class="hidden">
 <input type="file" id="filePhoto" accept="image/*" capture="environment" class="hidden">
@@ -5717,9 +5715,9 @@ const T = {
      label:"Photo of the label or serial",labelHint:"Deck step 2. If the label is worn, photograph what is left of it",
      leaking:"Is it leaking?",yes:"Yes",no:"No",submit:"Save pickup",submitT:"Save take-back",
      paid:"Amount paid to driver (₹)",rateHint:"Local rate ₹60–62/kg",exch:"Exchange: the driver's old battery is credited against the new one. A partner scrap vendor collects your crate weekly; you get ₹10 for each battery you tag.",saleT:"Batteries exchanged",upi:"UPI reference",upiHint:"From your payment app, e.g. 412345678901",sale:"Batteries in this sale",
-     need:"Please fill:",auto:"Recorded automatically",time:"Time",gps:"GPS",
+     need:"Please fill:",auto:"Recorded by",time:"Time",gps:"Location",
      saved:"Saved",loggedIn:"Logged in",sec:"s",next:"Scan next battery",of:"of",done:"done",
-     gpsWait:"getting location…",gpsNo:"not available on this host"},
+     gpsWait:"asking this phone…",gpsNo:"not shared — left blank"},
  hi:{pickupTitle:"बैटरी पिकअप",takebackTitle:"डीलर टेक-बैक",source:"बैटरी कहाँ से आई",
      src:{"e-rickshaw":"ई-रिक्शा",inverter:"इन्वर्टर",bike:"बाइक",car:"कार",other:"अन्य"},
      brand:"लेबल पर ब्रांड",brandO:{major:"बड़ा ब्रांड",regional:"क्षेत्रीय ब्रांड",local:"लोकल / बिना ब्रांड",unreadable:"लेबल पढ़ा नहीं जाता"},
@@ -5729,9 +5727,9 @@ const T = {
      label:"लेबल या सीरियल नंबर की फ़ोटो",labelHint:"लेबल घिसा हो तो जितना दिखे उतने की फ़ोटो लें",
      leaking:"क्या बैटरी लीक हो रही है?",yes:"हाँ",no:"नहीं",submit:"पिकअप सेव करें",submitT:"टेक-बैक सेव करें",
      paid:"ड्राइवर को दी गई रकम (₹)",rateHint:"लोकल रेट ₹60–62/किलो",exch:"एक्सचेंज: ड्राइवर की पुरानी बैटरी नई बैटरी में एडजस्ट होती है। पार्टनर स्क्रैप वेंडर हर हफ़्ते आपका क्रेट ले जाता है; हर टैग की गई बैटरी पर आपको ₹10 मिलते हैं।",saleT:"बदली गई बैटरियाँ",upi:"UPI रेफ़रेंस",upiHint:"पेमेंट ऐप से, जैसे 412345678901",sale:"इस सौदे में कितनी बैटरियाँ",
-     need:"कृपया भरें:",auto:"अपने-आप दर्ज",time:"समय",gps:"GPS",
+     need:"कृपया भरें:",auto:"दर्ज करने वाला",time:"समय",gps:"लोकेशन",
      saved:"सेव हो गया",loggedIn:"लगा समय",sec:"सेकंड",next:"अगली बैटरी स्कैन करें",of:"में से",done:"पूरे",
-     gpsWait:"लोकेशन ली जा रही है…",gpsNo:"इस होस्ट पर उपलब्ध नहीं"}
+     gpsWait:"फ़ोन से लोकेशन माँगी जा रही है…",gpsNo:"साझा नहीं हुई — खाली छोड़ी"}
 };
 
 /* ---------- state ---------- */
@@ -5799,12 +5797,16 @@ const PLATE = {
   yard:`<svg class="cl-art" viewBox="0 0 132 96" role="img" aria-label="A battery on the weigh bridge with a truck waiting behind"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 86h120"/><path d="M14 72h104M26 72v14M106 72v14"/><path d="M62 44h34v28H62z"/><path d="M96 52h12l8 10v10H96z"/><circle cx="74" cy="80" r="5"/><circle cx="104" cy="80" r="5"/><rect class="bat" x="24" y="54" width="26" height="18" rx="2"/><rect class="hv" x="29" y="58" width="8" height="8" rx="1"/><path d="M14 36h30M14 42h18"/></g></svg>`,
   gate:`<svg class="cl-art" viewBox="0 0 132 96" role="img" aria-label="A battery passing a recycler's gate, with a completed certificate"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 86h120"/><path d="M18 86V26h62v60"/><path d="M32 40l6 6 12-14"/><rect class="bat" x="32" y="58" width="26" height="18" rx="2"/><rect class="hv" x="37" y="62" width="8" height="8" rx="1"/><rect x="92" y="30" width="24" height="32" rx="2"/><path d="M97 38h14M97 44h14M97 50h9"/><circle cx="110" cy="56" r="4"/></g></svg>`
 };
-/* one source for the three-station spine, used by the landing and How it works */
-function stnRow(){
+/* one source for the three-station spine: on the landing each station opens its role; on How it works it stays a diagram */
+function stnRow(link){
+  const stn=(id,art,n,k,who,ev)=>{
+    const body=`<div class="stn-art">${art}</div><div class="stn-txt"><span class="stn-n">${n}</span><span class="stn-k">${k}</span><p class="stn-who">${who}</p></div><p class="stn-ev">${ev}</p>`;
+    return link ? `<li class="stn-li"><button class="stn stn-btn" data-u="${id}" aria-label="Open ${k} as ${who}">${body}</button></li>` : `<li class="stn">${body}</li>`;
+  };
   return `<ol class="stn-row" aria-label="The three scans">
-    <li class="stn"><div class="stn-art">${PLATE.pickup}</div><div class="stn-txt"><span class="stn-n">01 · Scan 1</span><span class="stn-k">Pickup</span><p class="stn-who">Partner scrap vendor</p></div><p class="stn-ev">Tagged, weighed, photographed; driver paid ₹60–62/kg.</p></li>
-    <li class="stn"><div class="stn-art">${PLATE.yard}</div><div class="stn-txt"><span class="stn-n">02 · Scan 2</span><span class="stn-k">Yard weigh-in</span><p class="stn-who">LeadLoop yard</p></div><p class="stn-ev">Re-weighed ±5%; ₹69/kg paid the same day.</p></li>
-    <li class="stn"><div class="stn-art">${PLATE.gate}</div><div class="stn-txt"><span class="stn-n">03 · Scan 3</span><span class="stn-k">Recycler gate</span><p class="stn-who">Registered recycler</p></div><p class="stn-ev">Re-weighed ±5%; settlement, recycler's certificate.</p></li>
+    ${stn("V-101",PLATE.pickup,"01 · Scan 1","Pickup","Partner scrap vendor","Tagged, weighed, photographed; driver paid ₹60–62/kg.")}
+    ${stn("Y-01",PLATE.yard,"02 · Scan 2","Yard weigh-in","LeadLoop yard","Re-weighed ±5%; ₹69/kg paid the same day.")}
+    ${stn("R-301",PLATE.gate,"03 · Scan 3","Recycler gate","Registered recycler","Re-weighed ±5%; settlement, recycler's certificate.")}
    </ol>`;
 }
 const ICN = {
@@ -6071,9 +6073,9 @@ function renderHeader(){
   $("#hDemo").onclick=openDemoChooser;
   if(u) $("#hWho").onclick=openSwitcher;
 }
-function chainHTML(cur,cls){
+function chainHTML(cur){
   const g=[["Pickup","Scan 1",["V-101","V-102","D-201"]],["Yard","Scan 2",["Y-01","Y-02"]],["Recycler","Scan 3",["R-301","R-302"]],["LeadLoop","Control room",["A-01"]]];
-  return `<div class="chain${cls?" "+cls:""}">${g.map(([n,s,ids],gi)=>`<div class="stage"><div class="sn"><b>0${gi+1}</b><span>${n}<small>${s}</small></span></div><div class="who-row">${ids.map(id=>{const u=userById(id);return `<button class="whob ${cur===id?"cur":""}" data-u="${id}" title="${esc(u.label)}">${roleIcon(u.role)}<span><b>${id}</b><span>${esc(u.area.split(",")[0])}</span></span></button>`}).join("")}</div></div>`).join("")}</div>`;
+  return `<div class="chain">${g.map(([n,s,ids],gi)=>`<div class="stage"><div class="sn"><b>0${gi+1}</b><span>${n}<small>${s}</small></span></div><div class="who-row">${ids.map(id=>{const u=userById(id);return `<button class="whob ${cur===id?"cur":""}" data-u="${id}" title="${esc(u.label)}">${roleIcon(u.role)}<span><b>${id}</b><span>${esc(u.area.split(",")[0])}</span></span></button>`}).join("")}</div></div>`).join("")}</div>`;
 }
 function openSwitcher(){
   modal(`<div class="switch"><h2>Switch role</h2><p class="small muted" style="margin:0">${S.id&&S.batteries.has(S.id)?`Battery ${sticker(S.id,1)} stays open in the new role.`:"Each role sees what its scanner would do."}</p>${chainHTML(S.user&&S.user.id)}
@@ -6190,19 +6192,16 @@ function viewLogin(app){
   const lk=S.pendingId||""; if(app.querySelector(".landing")&&app.dataset.lk===lk&&$("#startStory")) return; app.dataset.lk=lk;
   app.innerHTML = `<section class="landing night"><div class="cl-in"><div class="cl-hero"><div class="cl-copy">
    <span class="eyebrow"><b></b>One QR sticker per battery</span>
-   <h1>Every dead battery, <em>scanned three times</em></h1><p>One QR sticker follows each battery from pickup to the recycler's gate, with weight, a photo and the money at every hand-off.</p>
-   <div class="land-cta"><button class="btn hv" id="startStory">▶ Watch LeadLoop in 45 seconds</button><span class="land-meta">English or Hindi · nothing saved</span></div>
+   <h1>Every dead battery, <em>scanned three times</em></h1><p>One QR sticker follows each battery from pickup to the recycler's gate.</p>
+   <div class="land-cta"><button class="btn hv" id="startStory">▶ Watch LeadLoop in about a minute</button><span class="land-meta">English or Hindi · nothing saved</span></div>
    </div>
-   ${stnRow()}
+   <div class="cl-stn">
+   ${stnRow(true)}
+   <button class="land-room" data-u="A-01">LeadLoop control room — alerts, payouts, reports →</button>
+   </div>
   </div></div></section>
   <div class="land-inner">
-  ${S.pendingId?`<div class="banner info">You scanned ${sticker(S.pendingId,1)}. Choose who you are and it opens.</div>`:""}
-  <div class="roles-head"><h2>Open a demo role</h2><span>No account, no password — pick whose screen you want to see</span></div>
-  ${chainHTML(null,"landing-chain")}
-  <section class="ev-band"><h2>What every scan adds to the same record</h2>
-   <div class="ev-chips"><span>Battery ID</span><span>Who scanned</span><span>Time</span><span>Location</span><span>Weight</span><span>Photo</span><span>Payment or UPI reference</span></div>
-   <p class="ev-note">Three hand-offs, one trail: the pickup, the yard weigh-in and the gate check each append their own evidence to the battery, so a gap between any two weights stays visible.</p>
-  </section>
+  ${S.pendingId?`<div class="banner info">You scanned ${sticker(S.pendingId,1)}. Pick a station and it opens.</div>`:""}
   <div class="hidden" aria-hidden="true"><button id="startDemo" tabindex="-1">Try it yourself, step by step</button><button id="startTour" tabindex="-1">See the real screens (8 stops)</button><button id="seeScan" tabindex="-1">What a QR scan does</button><button id="seeCheat" tabindex="-1">What stops cheating</button></div>
   ${foot()}
   </div>`;
@@ -6243,7 +6242,7 @@ function viewHow(app){
     {k:9,t:"Settle",w:"Recycler",d:`Repays our battery payments plus ₹${FEE_PER_KG}/kg, about ${REPAY_DAYS} days after its gate check. A gap over ${thr()}% comes off the partner's next payment.`,demo:6,tl:"see the statement"},
     {k:10,t:"Certificate",w:"Recycler → producer",d:"Lead sold on a GST e-invoice earns EPR certificates, generated by the registered recycler, with our trail behind them. LeadLoop does not issue certificates."}],PLATE.gate)}
   </div>
-  <div class="sheet" style="margin-top:16px"><div class="grid2"><div><h3>What each sticker carries</h3><p class="small" style="margin:0">One QR is one battery and is never reused. Scanning it with a phone camera opens this app at that battery. Every hand-off adds who, when, where, weight and a photo to the trail.</p><button class="btn small sec" id="howScan" style="margin-top:10px">See what a scan does</button><button class="btn small sec" id="howCheat" style="margin-top:10px">What stops cheating</button></div>
+  <div class="sheet" style="margin-top:16px"><div class="grid2"><div><h3>What each sticker carries</h3><p class="small" style="margin:0">One QR is one battery and is never reused. Scanning it with a phone camera opens this app at that battery. Every hand-off adds who, when, weight and a photo to the trail. The phone is asked for its location, and that is saved only if the person allows it; the hand-off still saves without it.</p><button class="btn small sec" id="howScan" style="margin-top:10px">See what a scan does</button><button class="btn small sec" id="howCheat" style="margin-top:10px">What stops cheating</button></div>
   <div><h3>Money on one 30 kg battery</h3><p class="small" style="margin:0">Driver paid ~₹1,800–1,860 (₹60–62/kg) by the scrap vendor. We pay the scrap vendor ${inr(vendorPayout(30))} (₹2,010 + ₹60 match) the day it reaches the yard. The recycler repays ${inr(vendorPayout(30))} plus the ${inr(FEE_PER_KG*30)} fee in ~${REPAY_DAYS} days.</p></div></div></div>
   ${foot()}
   </div>`;
@@ -6268,7 +6267,7 @@ const ATTACKS = [
   c:"The label is photographed when the sticker goes on, and every scan carries its own weight and photo. The trail shows the label photo next to the sticker ID, so a swap is visible.",
   w:"Custody trail · Evidence CSV"},
  {a:"Last week's photo", t:"Reuse a photo instead of taking one at this hand-off.",
-  c:"Photos are taken inside the form and attached to that scan's time, place and weight, not to the battery in general. The evidence export counts photos per hand-off.",
+  c:"Photos are taken inside the form and attached to that scan's time and weight (and its location, when the phone shares it), not to the battery in general. The evidence export counts photos per hand-off.",
   w:"Pickup · Yard · CSV"},
  {a:"A scan dated last week", t:"Backdate a weigh-in so a slow battery looks like it moved within 10 days.",
   c:"The app writes the time when the record is saved, and every clock runs on those stamps: 10 days is amber, 90 days is the limit, and both are counted in the monthly report.",
@@ -6497,7 +6496,14 @@ function viewPickup(app){
   <button class="btn ghost" id="cancel">Cancel</button>`;
   const tick=()=>{ const el=$("#ring"); if(!el) return; el.innerHTML=ringHTML(Math.floor((Date.now()-(S.scanAt||Date.now()))/1000)); };
   if(S.timerInt) clearInterval(S.timerInt); S.timerInt=setInterval(tick,1000);
-  if(S.gpsPromise && S.gpsResult===undefined) S.gpsPromise.then(()=>{ const el=$("#gpsTxt"); if(el) el.textContent = S.gpsResult?gpsText(S.gpsResult):T[S.lang].gpsNo; });
+  /* The location line must never sit on "asking" forever: a denied prompt or a
+     suspended tab can leave the request unanswered, so read the shared result
+     until it settles instead of trusting one promise. */
+  if(S.gpsInt) clearInterval(S.gpsInt);
+  const gpsPaint=()=>{ const el=$("#gpsTxt"); if(!el){ clearInterval(S.gpsInt); S.gpsInt=0; return; }
+    el.textContent = S.gpsResult===undefined?L.gpsWait:S.gpsResult?gpsText(S.gpsResult):L.gpsNo; };
+  gpsPaint(); S.gpsInt=setInterval(gpsPaint,400);
+  setTimeout(()=>{ if(S.gpsInt){ clearInterval(S.gpsInt); S.gpsInt=0; } if(S.gpsResult===undefined) S.gpsResult=null; gpsPaint(); },14000);
   const prog=()=>{ const r=pickReq(f,dealer); $("#prog").textContent=`${r.filter(Boolean).length} ${L.of} ${r.length} ${L.done}`; };
   app.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{ S.lang=b.dataset.lang; try{localStorage.setItem("ll_lang",S.lang);}catch(e){} render(); });
   app.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{ f[b.dataset.k]=b.dataset.v; render(); });
@@ -7402,7 +7408,7 @@ function openDemoChooser(){
 const SCAN_STEPS = [
  {t:"The sticker", d:"Every battery gets one QR sticker at pickup. It holds this app's address plus the battery's ID, and is never reused."},
  {t:"Point a phone camera", d:"Any phone camera reads it; no special app. The phone opens LeadLoop straight at that battery."},
- {t:"The app knows who is scanning", d:"Your sign-in decides what opens: a scrap vendor gets the pickup form, the yard gets weigh-in, the recycler gets the gate check."},
+     {t:"The app knows who is scanning", d:"The role you picked decides what opens: a scrap vendor gets the pickup form, the yard gets weigh-in, the recycler gets the gate check."},
  {t:"One scan, one record", d:"Saving adds who, when, where, weight, photo and payment to the battery's custody trail. A used sticker can't start a second pickup."},
  {t:"Three scans, one trail", d:"The same sticker is scanned again at the yard (±5% vs pickup) and at the recycler's gate (±5% vs yard)."}
 ];
@@ -7463,7 +7469,7 @@ const BEATS = [
  {f:[0,1,2,3,4,5], en:"Built for the field: big buttons, Hindi or English, photos, any phone camera.",
   hi:"फ़ील्ड के लिए: बड़े बटन, हिंदी या अंग्रेज़ी, फ़ोटो, कोई भी फ़ोन कैमरा।", t:"Made for the field"}
 ];
-const STORY_MS = 43000;
+const STORY_MS = 70000;
 const ST = {i:0, playing:false, timer:null, guard:null, deadline:0, startedAt:0, lang:"en", sound:true, ended:false, voiceBlocked:false, token:0};
 try{ const l=localStorage.getItem("ll_story_lang"); if(l==="hi"||l==="en") ST.lang=l; const s=localStorage.getItem("ll_story_sound"); if(s==="0") ST.sound=false; }catch(e){}
 const canSpeak = () => { try{ return "speechSynthesis" in window && typeof SpeechSynthesisUtterance==="function"; }catch(e){ return false; } };
@@ -7474,7 +7480,7 @@ function pickVoice(lang){
 }
 function storyStop(){ clearTimeout(ST.timer); clearTimeout(ST.guard); ST.playing=false; ST.deadline=0; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} }
 function storyFinish(){ clearTimeout(ST.timer); clearTimeout(ST.guard); ST.playing=false; ST.ended=true; ST.deadline=0; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} if(S.view==="story") renderStoryStage(); }
-/* Hard stop so a throttled tab (timers clamped to ~1 s) still lands under 45 s */
+/* Hard stop so a throttled tab (timers clamped to ~1 s) still ends the story on time */
 function storyGuard(){ clearTimeout(ST.guard); if(!ST.playing||!ST.deadline) return;
   const left=Math.max(0,ST.deadline-Date.now());
   ST.guard=setTimeout(()=>{ if(ST.playing) storyFinish(); }, left+40); }
@@ -7495,13 +7501,15 @@ function storyBeat(i){
   const left=Math.max(700,ST.deadline-started), cap=Math.max(650,left/Math.max(1,BEATS.length-ST.i)-420);
   const minMs=Math.min(ST.lang==="hi"?3400:3000, cap);
   const next=()=>{ if(!ST.playing) return; if(Date.now()>=ST.deadline-150) return storyFinish();
-    const wait=Math.max(120,Math.min(cap,Math.max(0,minMs-(Date.now()-started))+200));
+    /* a breath between beats: at 1.5x speech the next line landed before the
+       last word was understood */
+    const wait=Math.max(400,Math.min(cap,Math.max(0,minMs-(Date.now()-started))+800));
     ST.timer=setTimeout(()=>{ if(!ST.playing) return; if(ST.i<BEATS.length-1) storyBeat(ST.i+1); else storyFinish(); },wait); };
   const voice = ST.sound && canSpeak() && !ST.voiceBlocked ? pickVoice(ST.lang) : null;
   const note=$("#stNote");
   if(note){ if(ST.voiceBlocked){ storyVoicePrompt(); } else { note.textContent = ST.sound && canSpeak() && !voice ? (ST.lang==="hi"?"This device has no Hindi voice installed, so Hindi plays as captions. Switch to EN for the voice.":"This device has no English voice installed, so the story plays as captions.") : ""; } }
   if(voice){
-    try{ const u=new SpeechSynthesisUtterance(txt.replace(/₹/g, ST.lang==="hi"?"रुपये ":"rupees ")); u.voice=voice; u.lang=ST.lang==="hi"?"hi-IN":"en-IN"; u.rate=1.5;
+    try{ const u=new SpeechSynthesisUtterance(txt.replace(/₹/g, ST.lang==="hi"?"रुपये ":"rupees ")); u.voice=voice; u.lang=ST.lang==="hi"?"hi-IN":"en-IN"; u.rate=0.95;
       let done=false, began=false;
       const fin=()=>{ if(done||token!==ST.token) return; done=true; clearTimeout(watch); next(); };
       const watch=setTimeout(()=>{ if(!done&&!began&&token===ST.token){ ST.voiceBlocked=true; storyVoicePrompt(); } },1400);
@@ -7551,7 +7559,7 @@ function renderStoryStage(){
 function viewStory(app){
   const sp=canSpeak();
   app.innerHTML=`${backBtn()}<div id="story" class="story">
-   <div class="st-head"><h1>LeadLoop in 45 seconds</h1>
+       <div class="st-head"><h1>LeadLoop in about a minute</h1>
     <div class="st-ctl"><div class="lang"><button data-sl="en" class="${ST.lang==="en"?"on":""}">EN</button><button data-sl="hi" class="${ST.lang==="hi"?"on":""}">हिंदी</button></div>
      ${sp?`<button class="hbtn2" id="stSnd" aria-pressed="${ST.sound}">${ST.sound?"🔊 Voice on":"🔇 Voice off"}</button>`:""}</div></div>
    <div class="flow" aria-hidden="true"></div>
