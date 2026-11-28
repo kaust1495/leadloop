@@ -3225,6 +3225,290 @@ tfoot td{background:var(--paper-2)}
   *,*:before,*:after{animation:none!important;transition:none!important}
 }
 </style>
+<style id="field-guide">
+/* ===== Field Guide: the landing page and a light typographic pass on the app.
+   Landing rules are scoped to .lp; app rules are listed last and kept small. ===== */
+:root{
+  --g-paper:#F2EEE4; --g-paper2:#E7E1D1; --g-bone:#FBF9F3; --g-rule:#D3CBB7;
+  --g-ink:#0E1612; --g-ink2:#26302B; --g-mute:#4D5952;
+  --g-graph:#111815; --g-graph2:#1B2420; --g-chalk:#EEF0E8; --g-chalk2:#B2BCB4;
+  --g-forest:#0F3D2A; --g-lime:#D8F04A; --g-oxide:#B4532A; --g-oxideInk:#7A3417;
+  --disp:"Bricolage Grotesque","Mukta",system-ui,sans-serif;
+}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body.landing-on .wrap{max-width:none;padding:0}
+body.landing-on{background:var(--g-paper)}
+.lp{--pad:clamp(18px,5vw,64px);color:var(--g-ink);font-size:16px}
+.lp-in{max-width:1240px;margin:0 auto;padding:0 var(--pad)}
+.lp-sec{padding:clamp(64px,9vw,120px) 0}
+.lp h1,.lp h2,.lp h3{font-family:var(--disp)}
+.lp-mono,.lp-kick,.lp-eyebrow{font-family:var(--mono)}
+.lp-dark :focus-visible,.lp-plate :focus-visible,.lp-foot :focus-visible,.pp-stage :focus-visible,.xp-story:focus-visible{outline-color:var(--g-lime)}
+.swap{animation:swapIn .38s var(--ease)}
+@keyframes swapIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---- buttons ---- */
+.lp-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 24px;border-radius:10px;border:1.5px solid transparent;font:inherit;font-size:16.5px;font-weight:700;cursor:pointer;text-align:center;transition:background .18s,color .18s,border-color .18s,transform .18s var(--ease)}
+.lp-btn:active{transform:translateY(1px)}
+.lp-btn-hv{background:var(--g-lime);color:var(--g-ink);border-color:#BFD63A}
+.lp-btn-hv:hover{background:#E4F86B}
+.lp-btn-line{background:transparent;color:var(--g-ink);border-color:var(--g-ink)}
+.lp-btn-line:hover{background:var(--g-ink);color:var(--g-paper)}
+.lp-dark .lp-btn-line{color:var(--g-chalk);border-color:rgba(238,240,232,.6)}
+.lp-dark .lp-btn-line:hover{background:var(--g-chalk);color:var(--g-ink);border-color:var(--g-chalk)}
+.lp-btn-quiet{min-height:44px;padding:0 16px;font-size:14.5px;background:var(--g-bone);color:var(--g-ink);border-color:var(--g-rule)}
+.lp-btn-quiet:hover{border-color:var(--g-ink)}
+.lp-link{background:none;border:0;padding:10px 0;min-height:44px;font:inherit;font-weight:700;color:var(--g-forest);cursor:pointer;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px;text-align:left}
+.lp-link:hover{color:var(--g-ink);text-decoration-color:var(--g-lime)}
+.lp-dark .lp-link{color:var(--g-lime)}
+
+/* ---- section furniture ---- */
+.lp-kick{display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--g-mute);margin:0 0 22px}
+.lp-kick span{display:inline-grid;place-items:center;min-width:34px;height:24px;padding:0 6px;border:1px solid currentColor;border-radius:4px;letter-spacing:.04em}
+.lp-dark .lp-kick{color:var(--g-chalk2)}
+.lp-h2{margin:0;font-weight:800;font-size:clamp(34px,4.7vw,62px);line-height:.98;letter-spacing:-.04em;max-width:17ch;color:var(--g-ink)}
+.lp-h2 em{font-style:normal;color:var(--g-forest)}
+.lp-dark .lp-h2{color:var(--g-chalk)}
+.lp-dark .lp-h2 em{color:var(--g-lime)}
+.lp-lede{margin:0;color:var(--g-mute);font-size:clamp(16px,1.3vw,18px);line-height:1.55;max-width:48ch}
+.lp-lede.lg{font-size:clamp(17px,1.45vw,20px)}
+.lp-dark .lp-lede{color:var(--g-chalk2)}
+.lp-split{display:grid;gap:20px}
+@media (min-width:960px){.lp-split{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:end;gap:56px}}
+.lp-fine{margin:18px 0 0;font-size:13.5px;color:var(--g-mute);max-width:72ch}
+.lp-dark{background:var(--g-graph);color:var(--g-chalk);background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px}
+
+/* ---- hero ---- */
+.lp-hero{position:relative;padding:clamp(30px,5vw,72px) 0 clamp(48px,7vw,96px);background:var(--g-paper);background-image:linear-gradient(var(--g-rule) 1px,transparent 1px);background-size:100% 40px;background-position:0 -1px;border-bottom:1px solid var(--g-rule)}
+.lp-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--g-paper) 0%,rgba(242,238,228,.86) 40%,var(--g-paper) 100%);pointer-events:none}
+.lp-hero-in{position:relative;display:grid;gap:28px}
+@media (min-width:980px){.lp-hero-in{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);align-items:start;column-gap:64px;row-gap:8px}.lp-head{grid-column:1/-1}.lp-copy{padding-top:28px}}
+.lp-eyebrow{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--g-mute)}
+.lp-eyebrow span{background:var(--g-ink);color:var(--g-lime);padding:4px 9px;border-radius:3px;letter-spacing:.14em}
+.lp-hero h1{margin:20px 0 0;font-weight:800;font-size:clamp(42px,6.5vw,94px);line-height:.92;letter-spacing:-.05em;color:var(--g-ink)}
+.lp-hero h1 em{font-style:normal;color:var(--g-forest);background:linear-gradient(transparent 70%,var(--g-lime) 70%,var(--g-lime) 90%,transparent 90%);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.lp-pend{margin:20px 0 0}
+.lp-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.lp-cta-meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin:14px 0 0;font-size:13.5px;color:var(--g-mute)}
+.lp-cta-meta b{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--g-ink);margin-right:6px}
+.lp-try{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--g-rule);max-width:520px}
+.lp-try small{display:block;font-size:13px;color:var(--g-mute);margin-top:-4px}
+@media (max-width:520px){.lp-ctas .lp-btn{flex:1 1 100%}}
+@media (max-width:979px){.lp-hero h1 br{display:none}}
+
+/* the plate: a technical figure of the battery */
+.lp-plate{position:relative;margin:0;padding:18px 18px 22px;border-radius:18px;color:var(--g-chalk);background:radial-gradient(120% 90% at 70% 10%,#1F2C26 0%,var(--g-graph) 62%);box-shadow:0 50px 90px -50px rgba(14,22,18,.7);overflow:hidden}
+.lp-plate:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
+.lp-plate>*{position:relative}
+.lp-plate-top{display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--g-chalk2)}
+.lp-art{position:relative;max-width:540px;margin:6px auto 0}
+.lp-anno{position:absolute;display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--g-chalk);white-space:nowrap}
+.lp-anno i{font-style:normal;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:3px;background:var(--g-lime);color:var(--g-ink);font-weight:800;font-size:10.5px}
+.lp-anno.a1{left:28%;top:2%}
+.lp-anno.a2{right:2%;bottom:4%}
+@media (max-width:440px){.lp-plate-top span:first-child{display:none}.lp-anno{font-size:10px}.lp-anno.a1{left:2%;top:0}.lp-anno.a2{display:none}}
+.lp-route{display:grid;grid-template-columns:repeat(3,1fr);margin-top:12px;position:relative}
+.lp-line{position:absolute;top:17px;left:16.66%;right:16.66%;height:2px;background:rgba(255,255,255,.16)}
+.lp-line i{display:block;height:100%;width:calc(var(--hs)*50%);background:var(--g-lime);transition:width .7s var(--ease)}
+.lp-cp{display:flex;flex-direction:column;align-items:center;gap:8px;min-height:72px;padding:0 4px;background:none;border:0;color:var(--g-chalk2);font:inherit;cursor:pointer}
+.lp-cp b{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--g-graph);border:2px solid rgba(255,255,255,.3);font-family:var(--mono);font-size:12px;color:var(--g-chalk);transition:background .3s,border-color .3s,box-shadow .3s,color .3s}
+.lp-cp span{font-size:13.5px;font-weight:700;line-height:1.15;text-align:center}
+.lp-cp.done b{border-color:var(--g-lime);color:var(--g-lime)}
+.lp-cp.on b{background:var(--g-lime);border-color:var(--g-lime);color:var(--g-ink);box-shadow:0 0 0 7px rgba(216,240,74,.16)}
+.lp-cp.on span{color:var(--g-chalk)}
+.lp-cp:hover b{border-color:var(--g-lime)}
+.lp-cap{margin:8px 0 0;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--g-chalk2);min-height:1.5em}
+
+/* ---- the battery (one drawing, used everywhere on the landing) ---- */
+.bat-art{display:block;width:100%;height:auto;overflow:visible}
+.bat-art .ba-shadow{fill:rgba(0,0,0,.32)}
+.bat-art .ba-top{fill:#34433B}.bat-art .ba-side{fill:#151D19}.bat-art .ba-front{fill:#222D27}.bat-art .ba-base{fill:#18211D}
+.bat-art .ba-hi{stroke:rgba(255,255,255,.24);stroke-width:1.5;fill:none}
+.bat-art .ba-rib{stroke:rgba(255,255,255,.07);stroke-width:3;fill:none}
+.bat-art .ba-vent{fill:#1B2520;stroke:rgba(255,255,255,.14)}
+.bat-art .ba-term .tb{fill:#3A4741}.bat-art .ba-term .tt{fill:#5D6D64}
+.bat-art .ba-pos .tb{fill:#87391C}.bat-art .ba-pos .tt{fill:#C9693D}
+.bat-art .ba-sign{fill:var(--g-chalk2);font:800 14px var(--mono)}
+.bat-art .ba-stk{fill:var(--g-lime)}
+.bat-art .ba-id{fill:var(--g-ink);font:800 11.5px var(--mono);letter-spacing:.02em}
+.bat-art .ba-sm{fill:#3E4C14;font:700 7.5px var(--mono);letter-spacing:.14em}
+.bat-art .pip{fill:transparent;stroke:var(--g-ink);stroke-width:1.4;transition:fill .4s}
+.bat-art.s0 .p1,.bat-art.s1 .p1,.bat-art.s1 .p2,.bat-art.s2 .pip{fill:var(--g-ink)}
+.bat-art .ba-spec{stroke:rgba(255,255,255,.14);stroke-width:3;stroke-linecap:round;fill:none}
+.bat-art .acc{opacity:0;transition:opacity .45s var(--ease),transform .6s var(--ease)}
+.bat-art .acc-pick{transform:translateX(-16px)}
+.bat-art .acc-yard{transform:translateY(12px)}
+.bat-art .acc-gate{transform:translateX(16px)}
+.bat-art.s0 .acc-pick,.bat-art.s1 .acc-yard,.bat-art.s2 .acc-gate{opacity:1;transform:none}
+.bat-art .ba-phone{fill:#0A0F0D;stroke:rgba(255,255,255,.28);stroke-width:1.5}
+.bat-art .ba-screen{fill:#163020}
+.bat-art .ba-vf{stroke:var(--g-lime);stroke-width:2.2;fill:none;stroke-linecap:round}
+.bat-art .ba-ptxt{fill:var(--g-lime);font:800 8.5px var(--mono);letter-spacing:.12em}
+.bat-art .ba-beam{fill:var(--g-lime);opacity:.16}
+.bat-art.s0 .ba-beam{animation:beam 1.9s ease-in-out infinite}
+@keyframes beam{0%,100%{opacity:.07}50%{opacity:.28}}
+.bat-art .ba-plat-top{fill:#3B4740}.bat-art .ba-plat-front{fill:#252F2A}.bat-art .ba-plat-side{fill:#19211D}
+.bat-art .ba-disp{fill:#0A0F0D;stroke:rgba(216,240,74,.45)}
+.bat-art .ba-read{fill:var(--g-lime);font:800 13px var(--mono)}
+.bat-art .ba-lead{stroke:rgba(255,255,255,.3);stroke-width:1.5}
+.bat-art .ba-post{fill:#6F7C74}
+.bat-art .ba-boom{stroke:var(--g-chalk);stroke-width:7}
+.bat-art .ba-boom-d{stroke:var(--g-oxide);stroke-width:7;stroke-dasharray:10 10}
+.bat-art .ba-stamp circle{fill:var(--g-lime)}
+.bat-art .ba-tick{stroke:var(--g-ink);stroke-width:3.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.bat-art.s2 .ba-stamp{transform-box:fill-box;transform-origin:center;animation:stamp .5s .25s var(--ease) both}
+@keyframes stamp{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+
+/* ---- 01 journey ---- */
+.jr{margin-top:56px}
+.jr-row{list-style:none;margin:0;padding:0;display:grid;gap:10px;position:relative}
+.jr-stop{width:100%;display:grid;grid-template-columns:104px 1fr;grid-template-rows:auto auto auto;column-gap:16px;align-items:center;text-align:left;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.02);color:var(--g-chalk);font:inherit;cursor:pointer;transition:border-color .25s,background .25s}
+.jr-stop:hover{border-color:rgba(216,240,74,.5)}
+.jr-stop[aria-pressed="true"]{border-color:var(--g-lime);background:rgba(216,240,74,.06)}
+.jr-art{grid-row:1/4}
+.jr-n{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--g-chalk2)}
+.jr-stop[aria-pressed="true"] .jr-n,.jr-stop.done .jr-n{color:var(--g-lime)}
+.jr-k{font-family:var(--disp);font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.jr-w{font-size:13.5px;color:var(--g-chalk2)}
+@media (min-width:760px){
+ .jr-row{grid-template-columns:repeat(3,1fr);gap:16px;padding-top:34px}
+ .jr-row:before{content:"";position:absolute;top:8px;left:16.66%;right:16.66%;height:2px;background:linear-gradient(90deg,var(--g-lime) calc(var(--jr)*50%),rgba(255,255,255,.16) calc(var(--jr)*50%));transition:background .5s}
+ .jr-row li{position:relative}
+ .jr-row li:before{content:"";position:absolute;top:-31px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--g-graph);border:2px solid rgba(255,255,255,.4);transition:background .3s,border-color .3s,box-shadow .3s}
+ .jr-row li:has(.done):before{border-color:var(--g-lime)}
+ .jr-row li:has([aria-pressed="true"]):before{background:var(--g-lime);border-color:var(--g-lime);box-shadow:0 0 0 6px rgba(216,240,74,.16)}
+ .jr-stop{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:18px 18px 20px;height:100%}
+ .jr-art{width:100%;max-width:230px;margin:0 auto 10px}
+}
+.jr-detail{margin-top:22px;padding-top:28px;border-top:1px solid rgba(255,255,255,.14);display:grid;gap:18px}
+@media (min-width:960px){.jr-detail{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);column-gap:56px}.jr-dh{grid-row:1/4}}
+.jr-dh{display:flex;gap:18px;align-items:flex-start}
+.jr-dn{font-family:var(--disp);font-weight:800;font-size:clamp(56px,6vw,84px);line-height:.8;color:var(--g-lime);letter-spacing:-.04em}
+.jr-dh h3{margin:0;font-size:clamp(24px,2.4vw,32px);font-weight:700;color:var(--g-chalk);letter-spacing:-.02em}
+.jr-dh p{margin:6px 0 0;color:var(--g-chalk2);font-size:14.5px}
+.jr-dd{margin:0;font-size:17px;line-height:1.6;color:var(--g-chalk);max-width:62ch}
+.jr-ev{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.jr-ev li{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid rgba(255,255,255,.2);border-radius:999px;font-size:13.5px;color:var(--g-chalk)}
+.jr-ev li:before{content:"";width:6px;height:6px;border-radius:1px;background:var(--g-lime)}
+.jr-act{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px}
+
+/* ---- 02 battery passport ---- */
+.lp-pp-sec{background:var(--g-paper2)}
+.pp{margin-top:52px;display:grid;border:1px solid var(--g-rule);border-radius:20px;overflow:hidden;background:var(--g-bone);box-shadow:0 40px 80px -50px rgba(14,22,18,.45)}
+@media (min-width:980px){.pp{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}}
+.pp-stage{position:relative;display:flex;align-items:center;justify-content:center;padding:28px 22px;min-height:260px;background:radial-gradient(110% 90% at 40% 20%,#22302A,var(--g-graph) 65%)}
+.pp-stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:28px 28px}
+.pp-stage .bat-art{position:relative;max-width:480px}
+.pp-doc{padding:clamp(20px,3vw,36px);display:flex;flex-direction:column;gap:20px;min-width:0}
+.pp-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:12px}
+.pp-top>div{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.pp-top .lp-mono{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--g-mute)}
+.pp-note{font-size:13px;font-weight:700;color:var(--g-oxideInk);background:#F5E2D6;border:1px solid #E7C3AE;padding:6px 10px;border-radius:6px;max-width:300px}
+.pp-tabs{position:relative;display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--g-rule)}
+.pp-tab{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:60px;padding:10px 8px 14px 0;background:none;border:0;font:inherit;font-size:15.5px;font-weight:700;color:var(--g-mute);cursor:pointer;text-align:left}
+.pp-tab b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;font-weight:700}
+.pp-tab:hover{color:var(--g-ink)}
+.pp-tab[aria-selected="true"]{color:var(--g-ink)}
+.pp-tab[aria-selected="true"] b,.pp-tab.done b{color:var(--g-forest)}
+.pp-bar{position:absolute;left:0;right:0;bottom:-1px;height:3px}
+.pp-bar i{display:block;width:33.333%;height:100%;background:var(--g-forest);transform:translateX(calc(var(--pp)*100%));transition:transform .45s var(--ease)}
+.pp-panel{outline-offset:6px}
+.pp-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px;align-items:center}
+.pp-n{font-family:var(--disp);font-weight:800;font-size:58px;line-height:.8;letter-spacing:-.05em;color:#CFC6AE}
+.pp-head h3{margin:0;font-size:clamp(24px,2.4vw,30px);font-weight:700;letter-spacing:-.025em}
+.pp-verb{margin:4px 0 0;font-size:14px;color:var(--g-mute)}
+.pp-big{text-align:right}
+.pp-big b{display:block;font-family:var(--disp);font-weight:800;font-size:clamp(38px,4vw,50px);line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--g-ink)}
+.pp-big span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--g-mute)}
+.pp-d{margin:16px 0 0;font-size:16px;line-height:1.6;color:var(--g-ink2)}
+.pp-ev{margin:16px 0 0}
+.pp-ev div{display:grid;grid-template-columns:minmax(120px,.75fr) minmax(0,1.25fr);gap:12px;padding:10px 0;border-top:1px dashed var(--g-rule)}
+.pp-ev dt{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--g-mute);padding-top:2px}
+.pp-ev dd{margin:0;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.pp-nav{display:flex;justify-content:space-between;gap:10px;margin-top:auto}
+@media (max-width:560px){.pp-head{grid-template-columns:auto minmax(0,1fr)}.pp-big{grid-column:1/-1;text-align:left;display:flex;align-items:baseline;gap:10px}.pp-ev div{grid-template-columns:1fr;gap:2px}.pp-n{font-size:46px}.pp-tab{font-size:14px}}
+
+/* ---- 03 evidence ledger ---- */
+.lp-paper{background:var(--g-paper)}
+.lp-ev{margin-top:48px;border-top:2px solid var(--g-ink)}
+.ev-r{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,minmax(0,1.25fr));gap:0 28px;padding:16px 0;border-bottom:1px solid var(--g-rule);align-items:start;font-size:15.5px;line-height:1.45;color:var(--g-ink2)}
+.ev-hd{padding:18px 0 14px}
+.ev-hd span{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--g-mute)}
+.ev-hd b{display:block;font-family:var(--disp);font-size:28px;line-height:1;letter-spacing:-.03em;color:var(--g-forest);margin-bottom:4px}
+.ev-h{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:-.015em;color:var(--g-ink)}
+.ev-none{color:#8E978F}
+.ev-r:not(.ev-hd):hover{background:linear-gradient(90deg,rgba(216,240,74,.16),transparent 70%)}
+@media (max-width:760px){
+ .ev-hd{display:none}
+ .ev-r{grid-template-columns:1fr;gap:6px;padding:18px 0}
+ .ev-r [role=cell]{display:grid;grid-template-columns:118px 1fr;gap:10px}
+ .ev-r [role=cell]:before{content:attr(data-l);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--g-mute);padding-top:3px}
+}
+
+/* ---- 04 three ways in ---- */
+.lp-explore{background:var(--g-paper)}
+.xp{margin-top:44px;display:grid;gap:14px}
+@media (min-width:900px){.xp{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-rows:auto auto}.xp-story{grid-row:1/3}}
+.xp-c{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-height:210px;padding:26px 84px 24px 26px;text-align:left;border:1px solid var(--g-rule);border-radius:18px;background:var(--g-bone);color:var(--g-ink);font:inherit;cursor:pointer;transition:border-color .2s,transform .25s var(--ease),box-shadow .25s}
+.xp-c:hover{border-color:var(--g-ink);transform:translateY(-2px);box-shadow:0 22px 40px -28px rgba(14,22,18,.45)}
+.xp-k{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--g-mute)}
+.xp-t{font-family:var(--disp);font-weight:800;font-size:clamp(28px,2.8vw,36px);line-height:1;letter-spacing:-.035em}
+.xp-d{font-size:15.5px;line-height:1.5;color:var(--g-mute);max-width:46ch}
+.xp-m{margin-top:auto;padding-top:10px;font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--g-forest);font-weight:700}
+.xp-go{position:absolute;right:22px;top:22px;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--g-ink);font-size:17px;transition:background .2s,color .2s}
+.xp-c:hover .xp-go{background:var(--g-ink);color:var(--g-paper)}
+.xp-story{min-height:300px;justify-content:flex-end;background:var(--g-forest);background-image:radial-gradient(100% 80% at 90% 0%,#1E5A3E,transparent 70%),linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:auto,28px 28px,28px 28px;color:var(--g-chalk);border-color:var(--g-forest)}
+.xp-story .xp-t{font-size:clamp(44px,5.4vw,76px)}
+.xp-beats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%;margin-top:14px}
+.xp-beats i{font-style:normal;display:flex;flex-direction:column;gap:4px;padding:8px 8px 9px;border-top:2px solid rgba(216,240,74,.55);background:rgba(255,255,255,.04);font-size:12px;line-height:1.25;color:var(--g-chalk)}
+.xp-beats b{font-family:var(--mono);font-size:10.5px;color:var(--g-lime)}
+.xp-story .xp-k,.xp-story .xp-d{color:#C4D2C8}
+.xp-story .xp-m{color:var(--g-lime)}
+.xp-story .xp-go{width:64px;height:64px;background:var(--g-lime);border-color:var(--g-lime);color:var(--g-ink);font-size:20px}
+.xp-story:hover{border-color:var(--g-lime)}
+.xp-story:hover .xp-go{background:#E4F86B;color:var(--g-ink)}
+.xp-c:last-child .xp-m{color:var(--g-oxideInk)}
+
+/* ---- 06 why: the figures ---- */
+.lp-why-lede{margin-top:22px}
+.facts{margin:48px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 24px;border-top:2px solid var(--g-lime);padding-top:30px}
+@media (min-width:980px){.facts{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.facts dt{font-family:var(--disp);font-weight:800;font-size:clamp(40px,4.4vw,60px);line-height:.95;letter-spacing:-.045em;color:var(--g-lime);font-variant-numeric:tabular-nums;white-space:nowrap}
+.facts dt small{font-size:.38em;letter-spacing:0;color:var(--g-chalk2);margin-left:2px}
+.facts dd{margin:10px 0 0;font-size:13.5px;line-height:1.45;color:var(--g-chalk2)}
+
+/* ---- 06 stations ---- */
+.lp-stations.lp-dark{background-color:var(--g-forest)}
+.lp-stations .banner{margin:22px 0 0}
+.lp-stations .lp-lede{margin-top:20px}
+@media (min-width:700px){.lp-stations .stn-k{font-size:24px}.lp-stations .stn .stn-who{font-size:14px}.lp-stations .stn .stn-ev{font-size:14px;line-height:1.45}.lp-stations .stn-n{font-size:11.5px}.lp-stations .stn-btn{padding-top:24px}.lp-stations .stn-row{gap:28px}}
+.lp-stn{margin-top:36px}
+.lp-stations .stn-row{margin-top:0}
+.lp-stations .land-room{color:var(--g-chalk);font-size:15.5px;font-weight:700;padding:14px 0;min-height:44px;margin-top:18px;border-bottom:1px solid rgba(216,240,74,.5)}
+.lp-stations .land-room:hover{color:var(--g-lime)}
+
+/* ---- footer ---- */
+.lp-foot{background:#0A0F0D;color:var(--g-chalk2);padding:64px 0 36px}
+.lp-foot-top{display:grid;gap:34px}
+@media (min-width:760px){.lp-foot-top{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)}}
+.lp-foot-brand{display:flex;flex-wrap:wrap;align-items:center;align-content:flex-start;gap:10px}
+.lp-foot-brand b{font-family:var(--disp);font-size:26px;letter-spacing:-.04em;color:var(--g-chalk)}
+.lp-foot-brand p{flex:1 1 100%;margin:4px 0 0;font-size:14px;max-width:34ch}
+.lp-foot-nav h3{margin:0 0 8px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--g-chalk2)}
+.lp-foot-nav button{display:block;min-height:44px;padding:0;background:none;border:0;font:inherit;font-size:15.5px;color:var(--g-chalk);cursor:pointer;text-align:left}
+.lp-foot-nav button:hover{color:var(--g-lime)}
+.lp-foot .foot{margin-top:44px;border-top:1px solid rgba(255,255,255,.14);padding-top:20px;color:var(--g-chalk2);font-size:13px}
+
+/* ===== the app: a light typographic pass, same tokens ===== */
+body:not(.landing-on) #app h1{font-family:var(--disp);font-weight:800;letter-spacing:-.035em}
+#app th{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.tilem .v{font-family:var(--disp);font-weight:800;letter-spacing:-.035em}
+.tilem .l{letter-spacing:.01em}
+.kv dt{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;padding-top:2px}
+.slip .amt{font-family:var(--disp);font-weight:800;letter-spacing:-.03em}
+.crhead h1{font-size:clamp(28px,3vw,38px)}
+.story h1{font-family:var(--disp);font-weight:800;letter-spacing:-.04em}
+</style>
 </head>
 <body class="landing-on">
 <a class="skip" href="#app">Skip to content</a>
@@ -3232,11 +3516,11 @@ tfoot td{background:var(--paper-2)}
   <button class="logo" id="logoBtn" aria-label="LeadLoop home"><svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="8" width="24" height="17" rx="4" fill="none" stroke="#fff" stroke-width="2.4"/><rect x="7" y="4" width="5" height="4" rx="1" fill="#fff"/><rect x="18" y="4" width="5" height="4" rx="1" fill="#fff"/><path d="M9 17.5a6 6 0 0 1 10.5-3.5M21 15.5a6 6 0 0 1-10.5 3.5" fill="none" stroke="#d8f04a" stroke-width="2.4" stroke-linecap="round"/></svg>LeadLoop</button>
   <div class="hd-actions" id="hdActions"></div>
 </div></header>
-<main class="wrap" id="app" tabindex="-1"><section class="landing night">
- <span class="eyebrow"><b></b>One QR sticker per battery</span>
- <h1>Every dead battery, <em>scanned three times</em></h1><p>One QR sticker follows each battery from pickup to the recycler's gate.</p>
- <div class="land-cta"><button class="btn hv" id="startStory">▶ Watch LeadLoop in about a minute</button><span class="land-meta">English or Hindi · nothing saved</span></div>
- <ul class="steps" aria-label="The three scans"><li><b>1</b>Pickup</li><li><b>2</b>Yard weigh-in</li><li><b>3</b>Recycler gate</li></ul></section></main>
+<main class="wrap" id="app" tabindex="-1"><div class="lp"><section class="lp-hero" aria-labelledby="lpH1"><div class="lp-in lp-hero-in"><div class="lp-head"><p class="lp-eyebrow"><span>Field guide</span>One battery · one QR identity · three checkpoints</p>
+ <h1 id="lpH1">Every dead battery,<br> <em>scanned three times.</em></h1></div><div class="lp-copy">
+ <p class="lp-lede lg">One QR sticker follows each battery from pickup to the recycler's gate, recording its weight, photos and the payment at every hand-off.</p>
+ <div class="lp-ctas"><button class="lp-btn lp-btn-hv" id="startStory"><span aria-hidden="true">▶</span> Watch the story</button><button class="lp-btn lp-btn-line">Explore the application</button></div>
+</div></div></section></div></main>
 <input type="file" id="fileScan" accept="image/*" capture="environment" class="hidden">
 <input type="file" id="filePhoto" accept="image/*" capture="environment" class="hidden">
 <div id="demoRoot"></div>
@@ -6194,36 +6478,229 @@ function foot(){ return `<div class="foot">${ICON.shield()}<span>LeadLoop is a n
 const backBtn = (txt) => `<button class="link" id="back">${ICON.back()}${esc(txt||"Back")}</button>`;
 function homeOf(){ return S.user&&S.user.role==="admin"?"admin":"home"; }
 
-/* ---------- login ---------- */
+/* ---------- login: the Field Guide landing ----------
+   One battery, one QR identity, three checkpoints. The battery drawing below is
+   the single source for every place the landing shows the battery, so the object
+   a visitor follows never changes shape. Nothing on this page writes data. */
+/* Illustrative passport: the values of demo record LL-0001 in this app's sample data */
+const PP = {id:"LL-0001", vendor:"V-101", yard:"Y-02", rec:"R-302", pickupKg:29.7, yardKg:29.3, gateKg:29.1,
+  driverPaid:1810, driverUpi:"446300087109", payout:"PO-0001", payoutUpi:"446300150461", manifest:"MF-Y02-260917", settle:"ST-0001"};
+const LP = {stage:0, hero:0, timer:null};
+const LP_STAGES = [
+ {n:"01", k:"Pickup", who:"Partner scrap vendor", u:"V-101", verb:"Identified, tagged and recorded",
+  d:"A partner scrap vendor buys the dead battery from the driver, sticks a fresh QR sticker on it, photographs the label and weighs it. The driver is paid by UPI at the local rate.",
+  ev:["QR identity","Label photo","Photo on the scale","Pickup weight","Driver payment and UPI ref","Time and GPS"]},
+ {n:"02", k:"Yard weigh-in", who:"LeadLoop yard", u:"Y-01", verb:"Re-weighed and compared",
+  d:"At the LeadLoop yard the same sticker is scanned again. The battery is re-weighed and checked against its pickup weight within ±5%, and the partner scrap vendor is paid the same day, on the recycler's behalf.",
+  ev:["QR identity","Yard weight","Weight vs pickup","Condition check","Photo on the yard scale","Partner payout and UPI ref"]},
+ {n:"03", k:"Recycler gate", who:"Registered recycler", u:"R-301", verb:"Verified at the gate",
+  d:"The truckload reaches the registered recycler. Each sticker is scanned at the gate and re-weighed against the yard weight within ±5%. When the last battery on the truck is checked, a settlement statement is issued.",
+  ev:["QR identity","Gate weight","Weight vs yard","Record closed","Settlement statement"]}
+];
+function batteryArt(stage, o){
+  o=o||{}; const id=esc(o.id||PP.id);
+  const qr=`<g transform="translate(112 146)" fill="none" stroke="#101A15" stroke-width="2.2"><path d="M0 0h8v8H0zM14 0h8v8h-8zM0 14h8v8H0z"/><path d="M3 3h2v2H3zM17 3h2v2h-2zM3 17h2v2H3zM14 14h3v3h-3zM19 19h3v3h-3zM19 14h3v2h-3zM14 19h2v3h-2z" fill="#101A15" stroke="none"/></g>`;
+  return `<svg class="bat-art s${stage}${o.mini?" mini":""}" viewBox="0 0 360 290" ${o.label?`role="img" aria-label="${esc(o.label)}"`:'aria-hidden="true"'}>
+  <ellipse class="ba-shadow" cx="196" cy="252" rx="150" ry="14"/>
+  <g class="acc acc-yard"><path d="M64 244l44-28h214l-44 28z" class="ba-plat-top"/><path d="M64 244h214v12H64z" class="ba-plat-front"/><path d="M278 244l44-28v12l-44 28z" class="ba-plat-side"/>
+   <g transform="translate(14 196)"><rect width="74" height="34" rx="5" class="ba-disp"/><text x="37" y="23" text-anchor="middle" class="ba-read" data-read="yard">${kg1(o.yardKg||PP.yardKg)} kg</text></g><path d="M88 214l10 6" class="ba-lead"/></g>
+  <g class="acc acc-pick"><g transform="translate(12 118)"><rect width="54" height="96" rx="9" class="ba-phone"/><rect x="5" y="10" width="44" height="72" rx="3" class="ba-screen"/><path d="M14 30h26M14 30v-6M40 30v-6M14 56h26M14 56v6M40 56v6" class="ba-vf"/><text x="27" y="47" text-anchor="middle" class="ba-ptxt">SCAN</text></g>
+   <path d="M66 150L104 140v54L66 182z" class="ba-beam"/></g>
+  <g class="acc acc-gate"><rect x="318" y="58" width="9" height="190" rx="2" class="ba-post"/><path d="M322 64L232 18" class="ba-boom"/><path d="M322 64L232 18" class="ba-boom-d"/>
+   <g transform="translate(54 104)"><g class="ba-stamp"><circle r="25"/><path d="M-10 0l7 7 13-14" class="ba-tick"/></g></g></g>
+  <g class="ba-body">
+   <path d="M90 120l44-26h160l-44 26z" class="ba-top"/>
+   <path d="M250 120l44-26v110l-44 26z" class="ba-side"/>
+   <path d="M262 117v104M274 110v104M286 103v104" class="ba-rib"/>
+   <rect x="90" y="120" width="160" height="110" rx="4" class="ba-front"/>
+   <rect x="90" y="219" width="160" height="11" class="ba-base"/>
+   <path d="M92 120.5h156" class="ba-hi"/>
+   ${[0.38,0.46,0.54,0.62].map(u=>`<ellipse cx="${90+u*160+22}" cy="107" rx="6.5" ry="3" class="ba-vent"/>`).join("")}
+   <g class="ba-term ba-neg"><path d="M131.8 93v14h18v-14z" class="tb"/><ellipse cx="140.8" cy="107" rx="9" ry="3.6" class="tb"/><ellipse cx="140.8" cy="93" rx="9" ry="3.6" class="tt"/></g>
+   <g class="ba-term ba-pos"><path d="M234.2 93v14h18v-14z" class="tb"/><ellipse cx="243.2" cy="107" rx="9" ry="3.6" class="tb"/><ellipse cx="243.2" cy="93" rx="9" ry="3.6" class="tt"/></g>
+   <text x="160" y="90" class="ba-sign">−</text><text x="262" y="90" class="ba-sign">+</text>
+   <g class="ba-tag"><rect x="104" y="138" width="88" height="60" rx="4" class="ba-stk"/>${qr}<text x="140" y="155" class="ba-id">${id}</text><text x="140" y="167" class="ba-sm">ONE QR</text>
+    <g transform="translate(112 182)"><rect width="18" height="8" rx="1.5" class="pip p1"/><rect x="24" width="18" height="8" rx="1.5" class="pip p2"/><rect x="48" width="18" height="8" rx="1.5" class="pip p3"/></g></g>
+   <path d="M204 142h34M204 152h26M204 162h30M204 182h34M204 190h20" class="ba-spec"/>
+  </g></svg>`;
+}
+function lpSet(stage, root){
+  root=root||document; LP.stage=(stage+3)%3; const st=LP_STAGES[LP.stage], i=LP.stage;
+  const pp=root.querySelector("#pp"); if(!pp) return;
+  pp.querySelectorAll(".pp-tab").forEach((t,k)=>{ t.setAttribute("aria-selected",k===i?"true":"false"); t.tabIndex=k===i?0:-1; t.classList.toggle("done",k<i); });
+  const art=pp.querySelector(".bat-art"); if(art) art.setAttribute("class","bat-art s"+i);
+  pp.style.setProperty("--pp",i);
+  const p1=pct(PP.pickupKg,PP.yardKg), p2=pct(PP.yardKg,PP.gateKg), fee=FEE_PER_KG*PP.gateKg, payout=Math.round(RATE*PP.yardKg);
+  const rows=[
+   [["Scanned by",`${PP.vendor} · ${ROLE_NAME.vendor}`],["Pickup weight",kg(PP.pickupKg)],["Photos","Battery on the scale, label"],["Paid to the driver",`${inr(PP.driverPaid)} by UPI, ref ${PP.driverUpi}`],["Rate band","₹60–62/kg, target 15 minutes or less"]],
+   [["Scanned by",`${PP.yard} · LeadLoop yard`],["Yard weight",kg(PP.yardKg)],["Vs pickup",`${p1>=0?"+":""}${p1.toFixed(1)}% · within ±5%`],["Paid to scrap vendor "+PP.vendor,`${inr(payout)} by UPI (${PP.payout}), same day`],["How",`₹${WHOLESALE_PER_KG} + ₹${MATCH_PER_KG} match = ₹${RATE}/kg of yard weight, on ${PP.rec}'s behalf`]],
+   [["Scanned by",`${PP.rec} · Registered recycler`],["Gate weight",kg(PP.gateKg)],["Vs yard",`${p2>=0?"+":""}${p2.toFixed(1)}% · within ±5%`],["Recycler repays LeadLoop",`${inr(payout)} + ${inr2(fee)} fee (₹${FEE_PER_KG}/kg of gate weight)`],["When",`About ${REPAY_DAYS} days after the gate check · ${PP.settle}`]]
+  ][i];
+  const big=[[kg1(PP.pickupKg),"kg at pickup"],[kg1(PP.yardKg),"kg at the yard"],[kg1(PP.gateKg),"kg at the gate"]][i];
+  const panel=pp.querySelector("#ppPanel");
+  panel.setAttribute("aria-labelledby","ppTab"+i);
+  panel.innerHTML=`<div class="pp-head"><span class="pp-n">${st.n}</span><div><h3>${esc(st.k)}</h3><p class="pp-verb">${esc(st.verb)}</p></div><div class="pp-big"><b>${big[0]}</b><span>${big[1]}</span></div></div>
+   <p class="pp-d">${esc(st.d)}</p>
+   <dl class="pp-ev">${rows.map(([a,b])=>`<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join("")}</dl>`;
+  panel.classList.remove("swap"); void panel.offsetWidth; panel.classList.add("swap");
+  const pv=pp.querySelector("#ppPrev"), nx=pp.querySelector("#ppNext");
+  pv.innerHTML=`<span aria-hidden="true">←</span> ${esc(LP_STAGES[(i+2)%3].k)}`; nx.innerHTML=`${esc(LP_STAGES[(i+1)%3].k)} <span aria-hidden="true">→</span>`;
+}
+function jrSet(i, root){
+  root=root||document; const j=root.querySelector("#jr"); if(!j) return; const st=LP_STAGES[i];
+  j.style.setProperty("--jr",i);
+  j.querySelectorAll(".jr-stop").forEach((b,k)=>{ b.setAttribute("aria-pressed",k===i?"true":"false"); b.classList.toggle("done",k<i); });
+  const d=j.querySelector("#jrDetail");
+  d.innerHTML=`<div class="jr-dh"><span class="jr-dn">${st.n}</span><div><h3>${esc(st.k)}</h3><p>${esc(st.who)} · ${esc(st.verb.toLowerCase())}</p></div></div>
+   <p class="jr-dd">${esc(st.d)}</p>
+   <ul class="jr-ev" aria-label="Evidence recorded at ${esc(st.k)}">${st.ev.map(e=>`<li>${esc(e)}</li>`).join("")}</ul>
+   <div class="jr-act"><button class="lp-btn lp-btn-line" data-u="${st.u}">Open this station as ${st.u} <span aria-hidden="true">→</span></button><button class="lp-link" data-pp="${i}">Inspect the evidence <span aria-hidden="true">↓</span></button></div>`;
+  d.querySelector("[data-u]").onclick=()=>lpOpenRole(st.u);
+  d.querySelector("[data-pp]").onclick=()=>{ lpSet(i); const p=$("#pp"); if(p) p.scrollIntoView({behavior:lpCalm()?"auto":"smooth",block:"start"}); };
+  d.classList.remove("swap"); void d.offsetWidth; d.classList.add("swap");
+}
+const lpCalm = () => { try{ return matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return false; } };
+function lpOpenRole(id){
+  S.user=userById(id); try{localStorage.setItem("ll_user",S.user.id);}catch(e){}
+  if(S.pendingId){ const pid=S.pendingId; S.pendingId=null; return routeBattery(pid,{quiet:true}); }
+  go(homeOf());
+}
+function lpHeroTick(){
+  clearTimeout(LP.timer);
+  const h=document.querySelector(".lp-plate"); if(!h||S.view!=="login") return;
+  if(lpCalm()) return;
+  LP.timer=setTimeout(()=>{ const h2=document.querySelector(".lp-plate"); if(!h2||S.view!=="login") return;
+    if(!h2.matches(":hover")&&!h2.contains(document.activeElement)){ LP.hero=(LP.hero+1)%3; lpHero(LP.hero); }
+    lpHeroTick(); },3400);
+}
+function lpHero(i){
+  const h=document.querySelector(".lp-plate"); if(!h) return;
+  h.style.setProperty("--hs",i); h.querySelector(".bat-art").setAttribute("class","bat-art s"+i);
+  h.querySelectorAll(".lp-cp").forEach((c,k)=>{ c.classList.toggle("on",k===i); c.classList.toggle("done",k<i); c.setAttribute("aria-pressed",k===i?"true":"false"); });
+  const cap=h.querySelector(".lp-cap"); if(cap) cap.textContent=`${LP_STAGES[i].n} · ${LP_STAGES[i].k} — ${LP_STAGES[i].verb}`;
+}
 function viewLogin(app){
-  const fresh=freshIds();
-  /* background data updates re-render this view; keep the existing landing so its entrance animation isn't restarted */
-  const lk=S.pendingId||""; if(app.querySelector(".landing")&&app.dataset.lk===lk&&$("#startStory")) return; app.dataset.lk=lk;
-  app.innerHTML = `<section class="landing night"><div class="cl-in"><div class="cl-hero"><div class="cl-copy">
-   <span class="eyebrow"><b></b>One QR sticker per battery</span>
-   <h1>Every dead battery, <em>scanned three times</em></h1><p>One QR sticker follows each battery from pickup to the recycler's gate.</p>
-   <div class="land-cta"><button class="btn hv" id="startStory">▶ Watch LeadLoop in about a minute</button><span class="land-meta">English or Hindi · nothing saved</span></div>
+  /* background data updates re-render this view; keep the existing landing so its state and animation aren't restarted */
+  const lk=S.pendingId||""; if(app.querySelector(".lp")&&app.dataset.lk===lk&&$("#startStory")) return; app.dataset.lk=lk;
+  const st=LP_STAGES, fee=FEE_PER_KG*30;
+  const stations=`<section class="lp-sec lp-dark lp-stations" id="lpStations" aria-labelledby="lpStH"><div class="lp-in">
+    <div class="lp-kick"><span>04</span>Open a station</div>
+    <h2 id="lpStH" class="lp-h2">Pick a role. <em>The scanner does the rest.</em></h2>
+    <p class="lp-lede">Each demo user sees what its scanner would do. A fresh sticker opens the pickup form for a scrap vendor; a used one opens its custody trail.</p>
+    ${S.pendingId?`<div class="banner info">You scanned ${sticker(S.pendingId,1)}. Pick a station and it opens.</div>`:""}
+    <div class="lp-stn">${stnRow(true)}<button class="land-room" data-u="A-01">LeadLoop control room — alerts, payouts, reports <span aria-hidden="true">→</span></button></div>
+  </div></section>`;
+  app.innerHTML = `<div class="lp">
+  <section class="lp-hero" aria-labelledby="lpH1"><div class="lp-in lp-hero-in">
+   <div class="lp-head"><p class="lp-eyebrow"><span>Field guide</span>One battery · one QR identity · three checkpoints</p>
+    <h1 id="lpH1">Every dead battery,<br> <em>scanned three times.</em></h1></div>
+   <div class="lp-copy">
+    <p class="lp-lede lg">One QR sticker follows each battery from pickup to the recycler's gate, recording its weight, photos and the payment at every hand-off.</p>
+    ${S.pendingId?`<div class="banner info lp-pend">You scanned ${sticker(S.pendingId,1)}. <button class="lp-link" id="lpGoSt">Pick a station and it opens ↓</button></div>`:""}
+    <div class="lp-ctas">
+     <button class="lp-btn lp-btn-hv" id="startStory"><span aria-hidden="true">▶</span> Watch the story</button>
+     <button class="lp-btn lp-btn-line" id="startTour">Explore the application</button>
+    </div>
+    <p class="lp-cta-meta"><span><b>Story</b> about a minute · English or हिंदी · nothing saved</span><span><b>Application</b> 8 real screens · about 45 s · nothing saved</span></p>
+    <p class="lp-try"><button class="lp-link" id="startDemo">Or try the workflow yourself, step by step <span aria-hidden="true">→</span></button><small>Creates demonstration records in this browser only.</small></p>
    </div>
-   <div class="cl-stn">
-   ${stnRow(true)}
-   <button class="land-room" data-u="A-01">LeadLoop control room — alerts, payouts, reports →</button>
+   <figure class="lp-plate" style="--hs:0">
+    <div class="lp-plate-top"><span class="lp-mono">FIG. 01</span><span class="lp-mono">${esc(PP.id)} · one sticker, three scans</span></div>
+    <div class="lp-art">${batteryArt(0,{label:"A used lead-acid battery carrying QR sticker "+PP.id+", shown at its pickup, yard and gate checkpoints"})}
+     <span class="lp-anno a1"><i>A</i>QR sticker · never reused</span><span class="lp-anno a2"><i>B</i>Weighed at every hand-off</span></div>
+    <div class="lp-route" role="group" aria-label="The three checkpoints">
+     <div class="lp-line"><i></i></div>
+     ${st.map((s,k)=>`<button class="lp-cp${k===0?" on":""}" data-hs="${k}" aria-pressed="${k===0}"><b>${s.n}</b><span>${esc(s.k)}</span></button>`).join("")}
+    </div>
+    <figcaption class="lp-cap" aria-live="polite">${st[0].n} · ${st[0].k} — ${st[0].verb}</figcaption>
+   </figure>
+  </div></section>
+  ${S.pendingId?stations:""}
+  <section class="lp-sec lp-dark" aria-labelledby="lpJH"><div class="lp-in">
+   <div class="lp-kick"><span>01</span>The journey</div>
+   <div class="lp-split"><h2 id="lpJH" class="lp-h2">One battery. <em>Three checkpoints.</em></h2>
+   <p class="lp-lede">The same sticker is scanned three times. Each scan adds a record to one trail, so every weight can be compared with the one before it.</p></div>
+   <div class="jr" id="jr" style="--jr:0">
+    <ol class="jr-row">${st.map((s,k)=>`<li><button class="jr-stop" data-jr="${k}" aria-pressed="${k===0}" aria-controls="jrDetail"><span class="jr-art">${batteryArt(k,{mini:true})}</span><span class="jr-n">${s.n}</span><span class="jr-k">${esc(s.k)}</span><span class="jr-w">${esc(s.who)}</span></button></li>`).join("")}</ol>
+    <div class="jr-detail" id="jrDetail" aria-live="polite"></div>
    </div>
-  </div></div></section>
-  <div class="land-inner">
-  ${S.pendingId?`<div class="banner info">You scanned ${sticker(S.pendingId,1)}. Pick a station and it opens.</div>`:""}
-  <div class="hidden" aria-hidden="true"><button id="startDemo" tabindex="-1">Try it yourself, step by step</button><button id="startTour" tabindex="-1">See the real screens (8 stops)</button><button id="seeScan" tabindex="-1">What a QR scan does</button><button id="seeCheat" tabindex="-1">What stops cheating</button></div>
-  ${foot()}
+  </div></section>
+  <section class="lp-sec lp-pp-sec" aria-labelledby="lpPH"><div class="lp-in">
+   <div class="lp-kick"><span>02</span>Battery passport</div>
+   <div class="lp-split"><h2 id="lpPH" class="lp-h2">One sticker. Three scans. <em>One custody record.</em></h2>
+   <p class="lp-lede">Step through what each scan writes against the same battery. These are the values of a sample record in this demo.</p></div>
+   <div class="pp" id="pp" style="--pp:0">
+    <div class="pp-stage">${batteryArt(0,{label:"Battery "+PP.id+" at the selected checkpoint"})}</div>
+    <div class="pp-doc">
+     <div class="pp-top"><div><span class="lp-mono">Battery passport</span>${sticker(PP.id,1)}</div><span class="pp-note">Illustrative demo data — not a live transaction.</span></div>
+     <div class="pp-tabs" role="tablist" aria-label="Checkpoints">${st.map((s,k)=>`<button class="pp-tab" role="tab" id="ppTab${k}" aria-controls="ppPanel" aria-selected="${k===0}" tabindex="${k===0?0:-1}" data-pp="${k}"><b>${s.n}</b>${esc(s.k)}</button>`).join("")}<span class="pp-bar" aria-hidden="true"><i></i></span></div>
+     <div class="pp-panel" id="ppPanel" role="tabpanel" tabindex="0"></div>
+     <div class="pp-nav"><button class="lp-btn lp-btn-quiet" id="ppPrev"></button><button class="lp-btn lp-btn-quiet" id="ppNext"></button></div>
+    </div>
+   </div>
+  </div></section>
+  <section class="lp-sec lp-paper" aria-labelledby="lpEH"><div class="lp-in">
+   <div class="lp-kick"><span>03</span>The evidence</div>
+   <div class="lp-split"><h2 id="lpEH" class="lp-h2">What each scan <em>actually records.</em></h2>
+   <p class="lp-lede">Traceability is built one hand-off at a time. A dash means that scan doesn't record it.</p></div>
+   <div class="lp-ev" role="table" aria-label="Evidence recorded at each scan">
+    <div class="ev-r ev-hd" role="row"><span role="columnheader">Evidence</span>${st.map(s=>`<span role="columnheader"><b>${s.n}</b>${esc(s.k)}</span>`).join("")}</div>
+    ${[["QR identity","Fresh sticker tagged; a used one is refused","Same sticker scanned","Same sticker scanned"],
+       ["Weight","On the partner's scale","On the yard scale","On the recycler's scale"],
+       ["Comparison","—","Vs pickup, within ±5%","Vs yard, within ±5%"],
+       ["Photo","Battery on the scale, and its label","Battery on the yard scale","—"],
+       ["Who, when, where","Scrap vendor, time, GPS","Yard, time, GPS","Recycler, time, GPS"],
+       ["Money",`Driver paid ₹60–62/kg by UPI; amount and ref saved`,`Scrap vendor paid ₹${RATE}/kg the same day; payout and UPI ref`,`Settlement: payouts + ₹${FEE_PER_KG}/kg, due ~${REPAY_DAYS} days after the gate`]
+      ].map(([h,...c])=>`<div class="ev-r" role="row"><span class="ev-h" role="rowheader">${esc(h)}</span>${c.map((x,k)=>`<span role="cell" class="${x==="—"?"ev-none":""}" data-l="${esc(st[k].n+" "+st[k].k)}">${x==="—"?'<span aria-hidden="true">—</span><span class="vh">Not recorded</span>':esc(x)}</span>`).join("")}</div>`).join("")}
+   </div>
+   <p class="lp-fine">GPS is saved where the phone allows it. A gap over ±5% flags the record; a short weight at the gate comes off the partner's next payout.</p>
+  </div></section>
+  ${S.pendingId?"":stations}
+  <section class="lp-sec lp-explore" aria-labelledby="lpXH"><div class="lp-in">
+   <div class="lp-kick"><span>05</span>See it work</div>
+   <h2 id="lpXH" class="lp-h2">Three ways in. <em>Pick the one you have time for.</em></h2>
+   <div class="xp">
+    <button class="xp-c xp-story" data-x="story"><span class="xp-k">A · Watch</span><span class="xp-t">The story</span><span class="xp-d">Eight short beats on one screen, narrated in English or Hindi. Read-only.</span><span class="xp-beats" aria-hidden="true">${BEATS.map((b,k)=>`<i><b>${k+1}</b>${esc(b.t)}</i>`).join("")}</span><span class="xp-m">About a minute · nothing saved</span><span class="xp-go" aria-hidden="true">▶</span></button>
+    <button class="xp-c" data-x="screens"><span class="xp-k">B · Explore</span><span class="xp-t">The application</span><span class="xp-d">The app plays through eight of its own screens: pickup, weigh-in, payouts, gate check, settlement and the control room.</span><span class="xp-m">8 stops · about 45 s · nothing saved</span><span class="xp-go" aria-hidden="true">→</span></button>
+    <button class="xp-c" data-x="demo"><span class="xp-k">C · Try</span><span class="xp-t">The workflow</span><span class="xp-d">Tag a fresh sticker, weigh it in, dispatch it and gate-check it yourself. A bar at the bottom tells you what to tap.</span><span class="xp-m">Creates demonstration records in this browser. Not verified production transactions.</span><span class="xp-go" aria-hidden="true">→</span></button>
+   </div>
+  </div></section>
+  <section class="lp-sec lp-dark lp-why" aria-labelledby="lpWH"><div class="lp-in">
+   <div class="lp-kick"><span>06</span>Why the trail matters</div>
+   <h2 id="lpWH" class="lp-h2">Weight, money and custody <em>on one record.</em></h2>
+   <p class="lp-lede lp-why-lede">Every figure below is built into this demo. LeadLoop keeps the evidence trail; EPR certificates are generated by registered recyclers.</p>
+   <dl class="facts">
+    <div><dt>±5%</dt><dd>weight tolerance at the yard and the gate</dd></div>
+    <div><dt>₹${RATE}<small>/kg</small></dt><dd>to the scrap vendor, same day: ₹${WHOLESALE_PER_KG} + ₹${MATCH_PER_KG} match (${inr(RATE*30)} for 30 kg)</dd></div>
+    <div><dt>+₹${FEE_PER_KG}<small>/kg</small></dt><dd>repaid by the recycler on top (${inr(fee)} for 30 kg), about ${REPAY_DAYS} days after the gate</dd></div>
+    <div><dt>₹${ALLOWANCE}</dt><dd>per tagged battery that reaches the yard</dd></div>
+    <div><dt>${STORAGE_LIMIT_DAYS}<small> days</small></dt><dd>storage limit; LeadLoop's target is about ${TARGET_DAYS}</dd></div>
+   </dl>
+  </div></section>
+  <footer class="lp-foot"><div class="lp-in">
+   <div class="lp-foot-top">
+    <div class="lp-foot-brand">${ICON.logo()}<b>LeadLoop</b><p>Checkpoint demo MVP. All records are dummy demo data.</p></div>
+    <nav class="lp-foot-nav" aria-label="Explore"><h3>Explore</h3><button data-x="story">The story</button><button data-x="screens">The application tour</button><button data-x="demo">Try the workflow</button><button data-x="how">How it works: ten steps</button><button id="seeScan">What a QR scan does</button><button id="seeCheat">What stops cheating</button></nav>
+    <nav class="lp-foot-nav" aria-label="Stations"><h3>Stations</h3><button data-u="V-101">Scrap vendor V-101</button><button data-u="Y-01">LeadLoop yard Y-01</button><button data-u="R-301">Recycler R-301</button><button data-u="A-01">Control room A-01</button></nav>
+   </div>
+   ${foot()}
+  </div></footer>
   </div>`;
   $("#startDemo").onclick=()=>{ demoStart(); demoGo(0); };
   $("#startTour").onclick=tourStart;
   $("#startStory").onclick=storyStart;
   $("#seeScan").onclick=()=>{ SD.i=0; SD.paused=false; go("scan"); };
   $("#seeCheat").onclick=()=>go("cheat");
-  app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{
-    S.user=userById(b.dataset.u); try{localStorage.setItem("ll_user",S.user.id);}catch(e){}
-    if(S.pendingId){ const id=S.pendingId; S.pendingId=null; return routeBattery(id,{quiet:true}); }
-    go(homeOf());
-  });
+  if($("#lpGoSt")) $("#lpGoSt").onclick=()=>{ const s=$("#lpStations"); if(s) s.scrollIntoView({behavior:lpCalm()?"auto":"smooth",block:"start"}); };
+  app.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{ const x=b.dataset.x; if(x==="story") return storyStart(); if(x==="screens") return tourStart(); if(x==="how") return go("how"); demoStart(); demoGo(0); });
+  app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>lpOpenRole(b.dataset.u));
+  app.querySelectorAll("[data-hs]").forEach(b=>b.onclick=()=>{ LP.hero=+b.dataset.hs; lpHero(LP.hero); });
+  app.querySelectorAll("[data-jr]").forEach(b=>b.onclick=()=>jrSet(+b.dataset.jr,app));
+  app.querySelectorAll(".pp-tab").forEach(b=>{ b.onclick=()=>lpSet(+b.dataset.pp,app);
+    b.onkeydown=e=>{ const k=e.key; let n=null; if(k==="ArrowRight") n=LP.stage+1; else if(k==="ArrowLeft") n=LP.stage-1; else if(k==="Home") n=0; else if(k==="End") n=2; if(n==null) return; e.preventDefault(); lpSet(n,app); const t=$("#ppTab"+LP.stage); if(t) t.focus(); }; });
+  $("#ppPrev").onclick=()=>lpSet(LP.stage-1,app);
+  $("#ppNext").onclick=()=>lpSet(LP.stage+1,app);
+  lpSet(LP.stage,app); jrSet(0,app); lpHero(LP.hero); lpHeroTick();
 }
 
 /* ---------- how it works: deck slide 7's ten steps on the three scans ---------- */
@@ -7401,12 +7878,12 @@ document.addEventListener("click",e=>{
 },true);
 function openDemoChooser(){
   modal(`<h2>See LeadLoop work</h2>
-   <button class="btn hv" id="chStory">▶ Watch the 45-second story</button>
+   <button class="btn hv" id="chStory">▶ Watch the story · about a minute</button>
    <p class="small muted" style="margin:2px 0 10px">One screen, eight short steps, with a voice in English or Hindi.</p>
    <button class="btn sec" id="chTour">See the real screens<span class="small" style="font-weight:600;opacity:.8">· 8 stops, about 45 s</span></button>
    <p class="small muted" style="margin:2px 0 10px">Plays through the app's own screens on its own. Nothing is saved.</p>
    <button class="btn sec" id="chDemo">Try it yourself, step by step</button>
-   <p class="small muted" style="margin:2px 0 10px">You tag fresh sticker ${esc(freshIds()[0]||"")}, weigh it in, dispatch it and gate-check it, switching role with one tap at each step. Saves real records.</p>
+   <p class="small muted" style="margin:2px 0 10px">You tag fresh sticker ${esc(freshIds()[0]||"")}, weigh it in, dispatch it and gate-check it, switching role with one tap at each step. Demo activity creates demonstration records in this browser. It does not create verified production transactions.</p>
    <button class="btn sec" id="chCheat">What stops cheating</button>
    <p class="small muted" style="margin:2px 0 10px">Twelve attacks, and the counter for each, in the order a sceptical investor asks them.</p>
    ${S.demo.on?`<button class="btn ghost" id="chOff">Close the step-by-step demo</button>`:""}`);
@@ -7462,33 +7939,42 @@ function viewScanDemo(app){
   if(!SD.paused) SD.timer=setTimeout(()=>{ if(S.view==="scan"){ SD.i=(SD.i+1)%SCAN_STEPS.length; render(); } },TT.on?2300/TT.speed:3200);
 }
 
-/* ---------- The 45-second story: one screen, 8 beats, optional narration (EN / हिंदी) ---------- */
+/* ---------- The one-minute story: one screen, 8 beats, optional narration (EN / हिंदी) ---------- */
 const FLOW = [["driver","Driver"],["vendor","Scrap vendor"],["yard","LeadLoop yard"],["truck","Truck"],["recycler","Recycler"],["admin","Control room"]];
 const BEATS = [
- {f:[0,1], en:"A driver sells a dead battery to a partner scrap vendor, paid by UPI in minutes.",
-  hi:"ड्राइवर खराब बैटरी पार्टनर स्क्रैप वेंडर को बेचता है, UPI से मिनटों में पैसे पाता है।", t:"Sell"},
- {f:[1], en:"Scan one. The vendor tags it and logs weight and photos.",
-  hi:"स्कैन एक। वेंडर स्टिकर लगाता है, वज़न और फ़ोटो दर्ज करता है।", t:"Scan 1 · Tag", p:"pickup"},
- {f:[2], en:"Scan two. The yard re-weighs. Within five percent, the vendor is paid sixty-nine rupees a kilo.",
-  hi:"स्कैन दो। यार्ड फिर तौलता है। पाँच प्रतिशत के अंदर, वेंडर को उनहत्तर रुपये किलो मिलते हैं।", t:"Scan 2 · Weigh + pay", p:"yard"},
- {f:[3], en:"The yard loads truckloads under one manifest.",
-  hi:"यार्ड ट्रक-लोड भेजता है, हर ट्रक एक मैनिफ़ेस्ट पर।", t:"Dispatch"},
- {f:[4], en:"Scan three. The recycler re-weighs. Over five percent is flagged.",
-  hi:"स्कैन तीन। रीसाइक्लर फिर तौलता है। पाँच प्रतिशत से ज़्यादा फ़र्क फ़्लैग होता है।", t:"Scan 3 · Gate check", p:"gate"},
- {f:[4,2], en:"The recycler repays LeadLoop in ten days, plus four rupees a kilo.",
-  hi:"रीसाइक्लर दस दिन में लौटाता है, साथ में चार रुपये किलो।", t:"Settle"},
- {f:[5], en:"Control room flags weight gaps, ageing batteries and missing scans.",
-  hi:"कंट्रोल रूम वज़न के फ़र्क, रुकी बैटरी और छूटे स्कैन दिखाता है।", t:"Control room"},
- {f:[0,1,2,3,4,5], en:"Built for the field: big buttons, Hindi or English, photos, any phone camera.",
-  hi:"फ़ील्ड के लिए: बड़े बटन, हिंदी या अंग्रेज़ी, फ़ोटो, कोई भी फ़ोन कैमरा।", t:"Made for the field"}
+ {f:[0,1], en:"A driver sells a dead battery to a partner scrap vendor, and is paid by UPI in minutes.",
+  hi:"ड्राइवर खराब बैटरी पार्टनर स्क्रैप वेंडर को बेचता है, और मिनटों में UPI से पैसे पाता है।", t:"Sell"},
+ {f:[1], en:"Checkpoint one, pickup. The vendor sticks on a QR sticker, then records weight and photos.",
+  hi:"पहला चेकपॉइंट, पिकअप। वेंडर QR स्टिकर लगाता है, फिर वज़न और फ़ोटो दर्ज करता है।", t:"Scan 1 · Tag", p:"pickup"},
+ {f:[2], en:"Checkpoint two, the yard. It is weighed again. Within five percent, the vendor gets sixty-nine rupees a kilo, the same day.",
+  hi:"दूसरा चेकपॉइंट, यार्ड। बैटरी फिर तौली जाती है। पाँच प्रतिशत के अंदर, वेंडर को उसी दिन उनहत्तर रुपये किलो मिलते हैं।", t:"Scan 2 · Weigh + pay", p:"yard"},
+ {f:[3], en:"Full truckloads go to the recycler, each under one manifest number.",
+  hi:"पूरे ट्रक-लोड रीसाइक्लर को जाते हैं, हर ट्रक एक मैनिफ़ेस्ट नंबर पर।", t:"Dispatch"},
+ {f:[4], en:"Checkpoint three, the recycler's gate. One last weigh-in. A gap over five percent is flagged.",
+  hi:"तीसरा चेकपॉइंट, रीसाइक्लर का गेट। आख़िरी बार तौल। पाँच प्रतिशत से ज़्यादा फ़र्क फ़्लैग होता है।", t:"Scan 3 · Gate check", p:"gate"},
+ {f:[4,2], en:"The recycler repays LeadLoop in about ten days, plus four rupees a kilo.",
+  hi:"रीसाइक्लर लगभग दस दिन में पैसे लौटाता है, साथ में चार रुपये किलो फ़ीस।", t:"Settle"},
+ {f:[5], en:"The control room flags weight gaps, batteries held too long, and missed checkpoints.",
+  hi:"कंट्रोल रूम वज़न के फ़र्क, ज़्यादा दिन रुकी बैटरी और छूटे चेकपॉइंट दिखाता है।", t:"Control room"},
+ {f:[0,1,2,3,4,5], en:"Built for the field: big buttons, Hindi or English, photos, and any phone camera.",
+  hi:"फ़ील्ड के लिए बना: बड़े बटन, हिंदी या अंग्रेज़ी, फ़ोटो, और कोई भी फ़ोन कैमरा।", t:"Made for the field"}
 ];
+/* What the voice reads: captions stay as written; acronyms are spelled out so
+   no engine guesses at "QR" or "UPI", and each sentence is queued on its own so
+   the voice pauses at every full stop instead of running lines together. */
+function storySpoken(txt,lang){
+  const hi=lang==="hi";
+  return txt.replace(/₹/g, hi?"रुपये ":"rupees ").replace(/\bQR\b/g, hi?"क्यू आर":"Q R").replace(/\bUPI\b/g, hi?"यू पी आई":"U P I");
+}
+const storySentences = t => t.split(/(?<=[.!?।])\s+/).map(x=>x.trim()).filter(Boolean);
 const STORY_MS = 70000;
 const ST = {i:0, playing:false, timer:null, guard:null, deadline:0, startedAt:0, lang:"en", sound:true, ended:false, voiceBlocked:false, token:0};
 try{ const l=localStorage.getItem("ll_story_lang"); if(l==="hi"||l==="en") ST.lang=l; const s=localStorage.getItem("ll_story_sound"); if(s==="0") ST.sound=false; }catch(e){}
 const canSpeak = () => { try{ return "speechSynthesis" in window && typeof SpeechSynthesisUtterance==="function"; }catch(e){ return false; } };
 function pickVoice(lang){
   try{ const vs=speechSynthesis.getVoices()||[]; const want=lang==="hi"?["hi-IN","hi"]:["en-IN","en-GB","en-US","en"];
-    for(const w of want){ const v=vs.find(v=>(v.lang||"").toLowerCase().startsWith(w.toLowerCase())); if(v) return v; } }catch(e){}
+    const good=v=>/natural|neural|premium|enhanced|online|google/i.test(v.name||"")?1:0;
+    for(const w of want){ const m=vs.filter(v=>(v.lang||"").toLowerCase().replace("_","-").startsWith(w.toLowerCase())); if(m.length){ m.sort((a,c)=>good(c)-good(a)||(c.localService===false)-(a.localService===false)); return m[0]; } } }catch(e){}
   return null;
 }
 function storyStop(){ clearTimeout(ST.timer); clearTimeout(ST.guard); ST.playing=false; ST.deadline=0; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} }
@@ -7532,15 +8018,17 @@ function storyBeat(i){
   const note=$("#stNote");
   if(note){ if(ST.voiceBlocked){ storyVoicePrompt(); } else { note.textContent = ST.sound && canSpeak() && !voice ? (ST.lang==="hi"?"This device has no Hindi voice installed, so Hindi plays as captions. Switch to EN for the voice.":"This device has no English voice installed, so the story plays as captions.") : ""; } }
   if(voice){
-    try{ const u=new SpeechSynthesisUtterance(txt.replace(/₹/g, ST.lang==="hi"?"रुपये ":"rupees ")); u.voice=voice; u.lang=ST.lang==="hi"?"hi-IN":"en-IN"; u.rate=0.95;
+    try{ const spoken=storySpoken(txt,ST.lang), parts=storySentences(spoken);
       let done=false, began=false;
       const fin=()=>{ if(done||token!==ST.token) return; done=true; clearTimeout(watch); next(); };
       const watch=setTimeout(()=>{ if(!done&&!began&&token===ST.token){ ST.voiceBlocked=true; storyVoicePrompt(); } },1400);
-      u.onstart=()=>{ began=true; clearTimeout(watch); };
-      u.onend=fin;
-      u.onerror=()=>{ if(!began&&token===ST.token){ ST.voiceBlocked=true; storyVoicePrompt(); } fin(); };
-      ST.timer=setTimeout(fin, Math.min(Math.max(minMs, txt.length*80), Math.max(700,left-250))); // fallback if the browser never fires onend
-      speechSynthesis.speak(u); return; }catch(e){}
+      parts.forEach((part,k)=>{ const u=new SpeechSynthesisUtterance(part); u.voice=voice; u.lang=voice.lang||(ST.lang==="hi"?"hi-IN":"en-IN");
+        u.rate=ST.lang==="hi"?0.9:0.92; u.pitch=1; u.volume=1;
+        if(k===0){ u.onstart=()=>{ began=true; clearTimeout(watch); }; u.onerror=()=>{ if(!began&&token===ST.token){ ST.voiceBlocked=true; storyVoicePrompt(); } fin(); }; }
+        if(k===parts.length-1){ u.onend=fin; if(k>0) u.onerror=fin; }
+        speechSynthesis.speak(u); });
+      ST.timer=setTimeout(fin, Math.min(Math.max(minMs, spoken.length*95+parts.length*350), Math.max(700,left-250))); // fallback if the browser never fires onend
+      return; }catch(e){}
   }
   ST.timer=setTimeout(next, 0);
 }
@@ -7612,7 +8100,7 @@ initDB().then(()=>{});
 /* once records arrive, honour a #LL-xxxx deep link */
 const hashIs = h => (location.hash||"").toLowerCase()===h;
 const wantsTour = () => hashIs("#screens");
-/* #tour is the printed QR destination: play the 45-second story at once. #story stays paused as before. */
+/* #tour is the printed QR destination: play the one-minute story at once. #story stays paused as before. */
 const openStory = (autoplay) => {
   if(autoplay){ clearTimeout(ST.timer); ST.token++; try{ if(canSpeak()) speechSynthesis.cancel(); }catch(e){} }
   ST.i=0; ST.playing=!!autoplay; ST.ended=false; S.view="story"; render();
