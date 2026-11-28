@@ -5,13 +5,22 @@ sticker per battery, three scans (scrap vendor pickup, LeadLoop yard weigh-in,
 recycler gate), the money at each step, and LeadLoop's control room. Dummy data
 only; not production software.
 
-- **The 45-second story:** the landing button plays eight beats with a voice in
-  English or Hindi, or open `…/#tour` directly. It saves nothing.
-- **The tour:** *See the real screens* (in the Demo menu, or `…/#screens`) plays
-  through the app's own screens on its own, eight stops, about 45 seconds.
-- **Try it step by step:** a real pickup → weigh-in → dispatch → gate check →
-  settlement on a fresh sticker, switching role with one tap. This one saves
-  records.
+- **The landing page:** one battery followed through the three checkpoints, an
+  interactive battery passport (sample record LL-0001, labelled illustrative,
+  saves nothing), what each scan records, the business figures, and the three
+  ways in below.
+- **The story (about a minute):** *Watch the story* plays eight beats with a
+  voice in English or Hindi, or open `…/#tour` directly (`…/#story` opens it
+  paused). It saves nothing. The voice says "checkpoint one/two/three" rather
+  than a bare "scan", spells out QR and UPI, and speaks one sentence at a time;
+  it finishes in about 60 seconds, inside a 70-second hard stop.
+- **The application tour:** *Explore the application* (or `…/#screens`) plays
+  through the app's own screens on its own, eight stops, about 45 seconds. It
+  saves nothing.
+- **Try the workflow:** a pickup → weigh-in → dispatch → gate check →
+  settlement on a fresh sticker, switching role with one tap. This creates
+  demonstration records in this browser; they are not verified production
+  transactions.
 - **What stops cheating:** Demo menu → *What stops cheating*, or control room →
   Demo → *What stops cheating*. Twelve attacks, the counter for each, and what
   the design does not stop.
